@@ -1,0 +1,22 @@
+{
+  "name": "hord-orderbook-dex-contracts",
+  "version": "1.0.0",
+  "description": "This repository contains implementation of the protocol to exchange ERC20 compliant tokens using fully decentralized, on-chain order book and matching engine. The protocol is used by OasisDEX, eth2dai.com and many other DeFi projects.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hord/hord-orderbook-dex-contracts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hord/hord-orderbook-dex-contracts/issues"
+  },
+  "homepage": "https://github.com/hord/hord-orderbook-dex-contracts#readme"
+}
