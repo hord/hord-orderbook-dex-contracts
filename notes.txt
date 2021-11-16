@@ -5,9 +5,11 @@ First deployment => UniswapSimplePriceOracle:
 
 Second deployment => MatchingMarket: 
 - takes dustToken (for us BUSD) as first parameter in constructor
+  1. BSC Testnet: https://testnet.bscscan.com/token/0x8301f2213c0eed49a7e28ae4c3e91722919b8b47
+  2. BSC Mainnet: TODO!
 - dustLimit (for now 100, 100 in wei: 100000000000000000000) as second parameter in constructor
 - priceOracle address (from the first deploy) as third parameter in constructor
 
 
 Exmamples:
-- Mainnet: https://etherscan.io/address/0x5e3e0548935a83ad29fb2a9153d331dc6d49020f#code
+- Mainnet: https://etherscan.io/address/0x5e3e0548935a83ad29fb2a9153d331dc6d49020f#codes
