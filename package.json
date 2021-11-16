@@ -7,7 +7,10 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "run-local-blockchain": "npx hardhat node",
+    "deploy-locally": "npx hardhat run scripts/deploy.js --network localhost",
+    "deploy-testnet": "npx hardhat run --network bsc_testnet scripts/deploy.js",
+    "deploy-mainnet": "npx hardhat run --network bsc_mainnet scripts/deploy.js"
   },
   "repository": {
     "type": "git",
