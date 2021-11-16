@@ -88,6 +88,14 @@ contract DSMath {
     }
 }
 
+/// erc20.sol -- API for the ERC20 token standard
+
+// See <https://github.com/ethereum/EIPs/issues/20>.
+
+// This file likely does not meet the threshold of originality
+// required for copyright to apply.  As a result, this is free and
+// unencumbered software belonging to the public domain.
+
 contract ERC20Events {
     event Approval(address indexed src, address indexed guy, uint wad);
     event Transfer(address indexed src, address indexed dst, uint wad);
@@ -104,9 +112,6 @@ contract ERC20 is ERC20Events {
         address src, address dst, uint wad
     ) public returns (bool);
 }
-
-// import "ds-math/math.sol";
-// import "erc20/erc20.sol";
 
 contract EventfulMarket {
     event LogItemUpdate(uint id);
