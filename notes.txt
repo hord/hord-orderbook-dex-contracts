@@ -1,0 +1,13 @@
+First deployment => UniswapSimplePriceOracle: 
+- takes UniswapV2Factory as parameter in constructor
+- Mainnet UniswapV2Factory for ETH is: 0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f => find out for BSC
+- Testnet addresses for BSC (from this tweet: https://twitter.com/PancakeSwap/status/1369547285160370182): Factory: 0x6725F303b657a9451d8BA641348b6761A6CC7a17
+
+Second deployment => MatchingMarket: 
+- takes dustToken (for us BUSD) as first parameter in constructor
+- dustLimit (for now 100, 100 in wei: 100000000000000000000) as second parameter in constructor
+- priceOracle address (from the first deploy) as third parameter in constructor
+
+
+Exmamples:
+- Mainnet: https://etherscan.io/address/0x5e3e0548935a83ad29fb2a9153d331dc6d49020f#code
