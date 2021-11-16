@@ -13,14 +13,43 @@ async function main() {
   const balance = await deployer.getBalance();
   console.log(`Account balance: ${balance.toString()}`);
 
+  /* STEP 1 deploy UniswapSimplePriceOracle (Pancakeswap) */
+  const uniswapSimplePriceOracle = await ethers.getContractFactory(
+    "UniswapSimplePriceOracle"
+  );
+  const UniswapSimplePriceOracle = await uniswapSimplePriceOracle.deploy(
+    "0x6725F303b657a9451d8BA641348b6761A6CC7a17" // Testnet Pancakeswap factory
+  );
+  console.log(
+    `UniswapSimplePriceOracle address: ${UniswapSimplePriceOracle.address}`
+  );
+  const UniswapSimplePriceOracleData = {
+    address: UniswapSimplePriceOracle.address,
+    abi: JSON.parse(UniswapSimplePriceOracle.interface.format("json")),
+  };
+  fs.writeFileSync(
+    "deployment/UniswapSimplePriceOracle.json",
+    JSON.stringify(UniswapSimplePriceOracleData)
+  );
 
-  // // We get the contract to deploy
-  // const MatchingMarket = await ethers.getContractFactory("MatchingMarket");
-  // const matchingMarket = await MatchingMarket.deploy("parameter");
-
-  // await matchingMarket.deployed();
-
-  // console.log("matchingMarket deployed to:", matchingMarket.address);
+  /* STEP 2 deploy MatchingMarket */
+  const matchingMarket = await ethers.getContractFactory(
+    "UniswapSimplePriceOracle"
+  );
+  const MatchingMarket = await matchingMarket.deploy(
+    "0x8301f2213c0eed49a7e28ae4c3e91722919b8b47", // Testnet BUSD address dust token
+    100000000000000000000, // 100 dust limit
+    UniswapSimplePriceOracle.address // from step 1 deployed UniswapSimplePriceOracle
+  );
+  console.log(`MatchingMarket address: ${MatchingMarket.address}`);
+  const MatchingMarketData = {
+    address: MatchingMarket.address,
+    abi: JSON.parse(MatchingMarket.interface.format("json")),
+  };
+  fs.writeFileSync(
+    "deployment/MatchingMarket.json",
+    JSON.stringify(MatchingMarketData)
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
