@@ -48,6 +48,23 @@ async function main() {
     "deployment/MatchingMarket.json",
     JSON.stringify(MatchingMarketData)
   );
+
+  /* STEP 3 deploy MakerOtcSupportMethods */
+  const makerOtcSupportMethods = await ethers.getContractFactory(
+    "MakerOtcSupportMethods"
+  );
+  const MakerOtcSupportMethods = await makerOtcSupportMethods.deploy();
+  console.log(
+    `MakerOtcSupportMethods address: ${MakerOtcSupportMethods.address}`
+  );
+  const MakerOtcSupportMethodsData = {
+    address: MakerOtcSupportMethods.address,
+    abi: JSON.parse(MakerOtcSupportMethods.interface.format("json")),
+  };
+  fs.writeFileSync(
+    "deployment/makerOtcSupportMethods.json",
+    JSON.stringify(MakerOtcSupportMethodsData)
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
