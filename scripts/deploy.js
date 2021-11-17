@@ -36,7 +36,7 @@ async function main() {
   const matchingMarket = await ethers.getContractFactory("MatchingMarket");
   const MatchingMarket = await matchingMarket.deploy(
     "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7", // Testnet BUSD address dust token
-    ethers.utils.parseEther("100"), // 100 dust limit (100000000000000000000 in wei), BUSD has 18 decimals (https://testnet.bscscan.com/token/0x8301f2213c0eed49a7e28ae4c3e91722919b8b47)
+    ethers.utils.parseEther("1"), // 1 dust limit (1000000000000000000 in wei), BUSD has 18 decimals (https://testnet.bscscan.com/token/0x8301f2213c0eed49a7e28ae4c3e91722919b8b47)
     UniswapSimplePriceOracle.address // from step 1 deployed UniswapSimplePriceOracle
   );
   console.log(`MatchingMarket address: ${MatchingMarket.address}`);
