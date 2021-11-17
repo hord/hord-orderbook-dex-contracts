@@ -62,7 +62,7 @@ async function main() {
     abi: JSON.parse(MakerOtcSupportMethods.interface.format("json")),
   };
   fs.writeFileSync(
-    "deployment/makerOtcSupportMethods.json",
+    "deployment/MakerOtcSupportMethods.json",
     JSON.stringify(MakerOtcSupportMethodsData)
   );
 }
