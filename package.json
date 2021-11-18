@@ -9,6 +9,7 @@
   "scripts": {
     "run-local-blockchain": "npx hardhat node",
     "deploy-locally": "npx hardhat run scripts/deploy.js --network localhost",
+    "deploy-ropsten": "npx hardhat run --network ropsten scripts/deploy.js",
     "deploy-bsc-testnet": "npx hardhat run --network bsc_testnet scripts/deploy.js",
     "deploy-bsc-mainnet": "npx hardhat run --network bsc_mainnet scripts/deploy.js",
     "deploy-matic-testnet": "npx hardhat run --network matic_testnet scripts/deploy.js",

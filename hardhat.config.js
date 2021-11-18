@@ -28,6 +28,9 @@ module.exports = {
       url: process.env.ROPSTEN_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      chainId: 3,
+      gasPrice: 40000000000,
+      timeout: 500000,
     },
     bsc_testnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
