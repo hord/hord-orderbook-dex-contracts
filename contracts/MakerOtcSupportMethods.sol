@@ -1,16 +1,16 @@
 pragma solidity ^0.5.12;
 
 import "./libraries/DSMath.sol";
-import "./interfaces/OtcInterface.sol";
+import "./interfaces/IOtc.sol";
 
 contract MakerOtcSupportMethods is DSMath {
-    function getOffers(OtcInterface otc, address payToken, address buyToken) public view
+    function getOffers(IOtc otc, address payToken, address buyToken) public view
         returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
         (ids, payAmts, buyAmts, owners, timestamps) = getOffers(otc, otc.getBestOffer(payToken, buyToken));
     }
 
-    function getOffers(OtcInterface otc, uint offerId) public view
+    function getOffers(IOtc otc, uint offerId) public view
         returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
         uint i = 0;
@@ -22,7 +22,7 @@ contract MakerOtcSupportMethods is DSMath {
         } while (++i < 100);
     }
 
-    function getOffersAmountToSellAll(OtcInterface otc, address payToken, uint payAmt, address buyToken) public view returns (uint ordersToTake, bool takesPartialOrder) {
+    function getOffersAmountToSellAll(IOtc otc, address payToken, uint payAmt, address buyToken) public view returns (uint ordersToTake, bool takesPartialOrder) {
         uint offerId = otc.getBestOffer(buyToken, payToken);                        // Get best offer for the token pair
         ordersToTake = 0;
         uint payAmt2 = payAmt;
@@ -42,7 +42,7 @@ contract MakerOtcSupportMethods is DSMath {
         takesPartialOrder = payAmt2 < orderBuyAmt;                                  // If the remaining amount is lower than the latest order, then it will take a partial order
     }
 
-    function getOffersAmountToBuyAll(OtcInterface otc, address buyToken, uint buyAmt, address payToken) public view returns (uint ordersToTake, bool takesPartialOrder) {
+    function getOffersAmountToBuyAll(IOtc otc, address buyToken, uint buyAmt, address payToken) public view returns (uint ordersToTake, bool takesPartialOrder) {
         uint offerId = otc.getBestOffer(buyToken, payToken);                        // Get best offer for the token pair
         ordersToTake = 0;
         uint buyAmt2 = buyAmt;

@@ -1,6 +1,6 @@
 pragma solidity ^0.5.12;
 
-contract OtcInterface {
+contract IOtc {
     struct OfferInfo {
         uint              pay_amt;
         address           pay_gem;

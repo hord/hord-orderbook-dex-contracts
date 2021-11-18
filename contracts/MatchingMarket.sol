@@ -21,10 +21,7 @@
 pragma solidity ^0.5.12;
 
 import "./SimpleMarket.sol";
-
-interface PriceOracleLike {
-  function getPriceFor(address, address, uint256) external view returns (uint256);
-}
+import "./interfaces/IUniswapSimplePriceOracle.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
@@ -218,7 +215,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         require(msg.sender == tx.origin, "No indirect calls please");
         require(address(pay_gem) != dustToken, "Can't set dust for the dustToken");
 
-        uint256 dust = PriceOracleLike(priceOracle).getPriceFor(dustToken, address(pay_gem), dustLimit);
+        uint256 dust = IUniswapSimplePriceOracle(priceOracle).getPriceFor(dustToken, address(pay_gem), dustLimit);
 
         _setMinSell(pay_gem, dust);
     }
