@@ -20,7 +20,7 @@
 
 pragma solidity ^0.5.12;
 
-import "./simple_market.sol";
+import "./SimpleMarket.sol";
 
 interface PriceOracleLike {
   function getPriceFor(address, address, uint256) external view returns (uint256);
