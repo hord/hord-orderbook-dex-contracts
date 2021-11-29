@@ -58,6 +58,15 @@ module.exports = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    local: {
+      url: 'http://localhost:8545',
+    },
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
