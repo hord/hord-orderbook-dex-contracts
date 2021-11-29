@@ -34,10 +34,10 @@ jobs:
       - name: Install solc-select
         run: |
           pip3 install solc-select
-      - name: Install solc 0.6.12
+      - name: Install solc 0.8.10
         run: |
-          solc-select install 0.6.12
-          solc-select use 0.6.12
+          solc-select install 0.8.10
+          solc-select use 0.8.10
       - name: Operations
         run: |
           mkdir fcontracts &&
@@ -59,7 +59,7 @@ jobs:
             --async \
             --create-group \
             --group-name "@hord/smart-contracts@${{ github.sha }}" \
-            --solc-version 0.6.12 \
+            --solc-version 0.8.10 \
             --check-properties \
             fcontracts/HordConfiguration.sol --include HordConfiguration \
             fcontracts/HordTicketFactory.sol --include HordTicketFactory \
