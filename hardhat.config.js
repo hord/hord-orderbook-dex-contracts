@@ -22,7 +22,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.5.12",
+  solidity: "0.8.10",
   networks: {
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
