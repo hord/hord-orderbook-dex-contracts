@@ -1,7 +1,21 @@
 {
-  "extends": "solhint:recommended",
+  "extends": "solhint:default",
+  "plugins": [],
   "rules": {
-    "compiler-version": ["error", "0.8.10"],
-    "func-visibility": ["warn", { "ignoreConstructors": true }]
+    "avoid-sha3": "warn",
+    "avoid-suicide": "error",
+    "state-visibility": "warn",
+    "reentrancy": "warn",
+    "multiple-sends": "warn",
+    "func-visibility": ["warn",{"ignoreConstructors":false}],
+    "visibility-modifier-order": "warn",
+    "imports-on-top": "warn",
+    "func-name-mixedcase": "warn",
+    "event-name-camelcase": "warn",
+    "const-name-snakecase": "warn",
+    "payable-fallback": "warn",
+    "no-unused-vars": "warn",
+    "no-empty-blocks": "warn",
+    "max-line-length": ["warn",145]
   }
 }
