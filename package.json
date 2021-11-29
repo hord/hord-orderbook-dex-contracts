@@ -13,7 +13,8 @@
     "deploy-bsc-testnet": "npx hardhat run --network bsc_testnet scripts/deploy.js",
     "deploy-bsc-mainnet": "npx hardhat run --network bsc_mainnet scripts/deploy.js",
     "deploy-matic-testnet": "npx hardhat run --network matic_testnet scripts/deploy.js",
-    "deploy-matic-mainnet": "npx hardhat run --network matic_mainnet scripts/deploy.js"
+    "deploy-matic-mainnet": "npx hardhat run --network matic_mainnet scripts/deploy.js",
+    "test": "npx hardhat coverage --network local --testfiles test/"
   },
   "repository": {
     "type": "git",
