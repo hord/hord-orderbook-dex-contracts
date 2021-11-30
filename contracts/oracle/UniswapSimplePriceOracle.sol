@@ -677,12 +677,12 @@ Public License instead of this License.  But first, please read
 
  */
 
-pragma solidity ^0.5.12;
+pragma solidity 0.8.10;
 
 import "./UniswapLibrary.sol";
 
 contract UniswapSimplePriceOracle {
-    address uniswapFactory;
+    address public uniswapFactory;
 
     constructor(address _uniswapFactory) public {
         uniswapFactory = _uniswapFactory;

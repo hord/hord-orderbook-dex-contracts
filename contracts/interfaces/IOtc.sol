@@ -1,6 +1,6 @@
-pragma solidity ^0.5.12;
+pragma solidity 0.8.10;
 
-contract IOtc {
+abstract contract IOtc {
     struct OfferInfo {
         uint              pay_amt;
         address           pay_gem;
@@ -10,6 +10,6 @@ contract IOtc {
         uint64            timestamp;
     }
     mapping (uint => OfferInfo) public offers;
-    function getBestOffer(address, address) public view returns (uint);
-    function getWorseOffer(uint) public view returns (uint);
+    function getBestOffer(address, address) public virtual view returns (uint);
+    function getWorseOffer(uint) public virtual view returns (uint);
 }

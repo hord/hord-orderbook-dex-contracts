@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pragma solidity ^0.5.12;
+pragma solidity 0.8.10;
 
 import "./SimpleMarket.sol";
 import "./interfaces/IUniswapSimplePriceOracle.sol";
@@ -42,7 +42,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     mapping(address => mapping(address => uint)) public _span;  //number of offers stored for token pair in sorted orderbook
     mapping(address => uint) public _dust;                      //minimum sell amount for a token to avoid dust offers
     mapping(uint => uint) public _near;         //next unsorted offer id
-    uint _head;                                 //first unsorted offer id
+    uint public _head;                                 //first unsorted offer id
 
     // dust management
     address public dustToken;

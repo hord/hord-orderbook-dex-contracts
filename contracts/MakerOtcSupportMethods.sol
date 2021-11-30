@@ -1,4 +1,4 @@
-pragma solidity ^0.5.12;
+pragma solidity 0.8.10;
 
 import "./libraries/DSMath.sol";
 import "./interfaces/IOtc.sol";
