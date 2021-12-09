@@ -167,7 +167,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         } else {
             require(_hide(id));
         }
-        return super.cancel(id);    //delete the offer.
+        return cancel_simple_market(id);    //delete the offer.
     }
 
     //insert offer into the sorted list
@@ -386,7 +386,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                 _hide(id);
             }
         }
-        require(super.buy(id, amount));
+        require(buy_simple_market(id, amount));
         // If offer has become dust during buy, we cancel it
         if (isActive(id) && offers[id].pay_amt < _dust[address(offers[id].pay_gem)]) {
             cancel(id);
@@ -519,7 +519,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
 
         if (t_buy_amt > 0 && t_pay_amt > 0 && t_pay_amt >= _dust[address(t_pay_gem)]) {
             //new offer should be created
-            id = super.offer(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem);
+            id = offer_simple_market(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem);
             //insert offer into the sorted list
             _sort(id, pos);
         }
@@ -539,7 +539,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         returns (uint id)
     {
         require(_dust[address(pay_gem)] <= pay_amt);
-        id = super.offer(pay_amt, pay_gem, buy_amt, buy_gem);
+        id = offer_simple_market(pay_amt, pay_gem, buy_amt, buy_gem);
         _near[id] = _head;
         _head = id;
         emit LogUnsortedOffer(id);
