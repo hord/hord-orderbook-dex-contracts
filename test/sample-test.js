@@ -10,6 +10,9 @@ async function setupContractAndAccounts () {
 
   const MatchingMarket = await hre.ethers.getContractFactory("MatchingMarket");
   MatchingMarketContract = await MatchingMarket.deploy(
+    "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+    ethers.utils.parseEther("1"),
+    "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7"
   );
   await MatchingMarketContract.deployed()
 }
