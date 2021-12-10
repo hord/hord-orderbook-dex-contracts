@@ -21,5 +21,6 @@ Get BNB test tokens:
 - https://testnet.binance.org/faucet-smart (request 1 bnb every 24 hours)
 
 Get BUSD test tokens
-- go to https://pancake.kiemtienonline360.com/#/swap
+- just create mock ERC20 token
+- or go to https://pancake.kiemtienonline360.com/#/swap
 - swap your BNB against BUSD
