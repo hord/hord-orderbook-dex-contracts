@@ -55,10 +55,6 @@ jobs:
             --group-name "@hord/smart-contracts@${{ github.sha }}" \
             --solc-version 0.8.10 \
             --check-properties \
-            fcontracts/HordConfiguration.sol --include HordConfiguration \
-            fcontracts/HordTicketFactory.sol --include HordTicketFactory \
-            fcontracts/HordTicketManager.sol --include HordTicketManager \
-            fcontracts/HordTreasury.sol --include HordTreasury \
-            fcontracts/HPool.sol --include HPool \
-            fcontracts/HPoolFactory.sol --include HPoolFactory \
-            fcontracts/HPoolManager.sol --include HPoolManager
+            fcontracts/MakerOtcSupportMethods.sol --include MakerOtcSupportMethods \
+            fcontracts/MatchingMarket.sol --include MatchingMarket \
+            fcontracts/SimpleMarket.sol --include SimpleMarket
