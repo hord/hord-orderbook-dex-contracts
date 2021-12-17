@@ -52,7 +52,7 @@ jobs:
             --mode quick \
             --async \
             --create-group \
-            --group-name "@hord/smart-contracts@${{ github.sha }}" \
+            --group-name "@hord/hord-orderbook-dex-contracts@${{ github.sha }}" \
             --solc-version 0.8.10 \
             --check-properties \
             fcontracts/MakerOtcSupportMethods.sol --include MakerOtcSupportMethods \
