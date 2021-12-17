@@ -41,15 +41,9 @@ jobs:
       - name: Operations
         run: |
           mkdir fcontracts &&
-          npx hardhat flatten contracts/HordConfiguration.sol | grep -v "SPDX" > fcontracts/HordConfiguration.sol &&
-          npx hardhat flatten contracts/HordTicketFactory.sol | grep -v "SPDX" > fcontracts/HordTicketFactory.sol &&
-          npx hardhat flatten contracts/HordTicketManager.sol | grep -v "SPDX" > fcontracts/HordTicketManager.sol &&
-          npx hardhat flatten contracts/HordTreasury.sol | grep -v "SPDX" > fcontracts/HordTreasury.sol &&
-          npx hardhat flatten contracts/hPools/HPool.sol > fcontracts/HPool1.sol &&
-          grep -v "SPDX" fcontracts/HPool1.sol > fcontracts/HPool.sol &&
-          npx hardhat flatten contracts/hPools/HPoolFactory.sol | grep -v "SPDX" > fcontracts/HPoolFactory.sol &&
-          npx hardhat flatten contracts/hPools/HPoolManager.sol > fcontracts/HPoolManager1.sol &&
-          grep -v "SPDX" fcontracts/HPoolManager1.sol > fcontracts/HPoolManager.sol
+          npx hardhat flatten contracts/MakerOtcSupportMethods.sol | grep -v "SPDX" > fcontracts/MakerOtcSupportMethods.sol &&
+          npx hardhat flatten contracts/MatchingMarket.sol | grep -v "SPDX" > fcontracts/MatchingMarket.sol &&
+          npx hardhat flatten contracts/SimpleMarket.sol | grep -v "SPDX" > fcontracts/SimpleMarket.sol
       - name: Submit code to Mythx
         run: |
           mythx --api-key ${{ secrets.MYTHX_SECRET }} \
