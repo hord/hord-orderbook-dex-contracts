@@ -22,8 +22,9 @@ pragma solidity 0.8.10;
 
 import "./SimpleMarket.sol";
 import "./interfaces/IUniswapSimplePriceOracle.sol";
+import "./system/OrderBookUpgradable.sol";
 
-contract MatchingEvents {
+contract MatchingEvents is OrderBookUpgradable {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
@@ -31,7 +32,7 @@ contract MatchingEvents {
     event LogDelete(address keeper, uint id);
 }
 
-contract MatchingMarket is MatchingEvents, SimpleMarket, OrderBookUpgradable {
+contract MatchingMarket is MatchingEvents, SimpleMarket {
     struct sortInfo {
         uint next;  //points to id of next higher offer
         uint prev;  //points to id of previous lower offer
