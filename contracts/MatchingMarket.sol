@@ -31,7 +31,7 @@ contract MatchingEvents {
     event LogDelete(address keeper, uint id);
 }
 
-contract MatchingMarket is MatchingEvents, SimpleMarket {
+contract MatchingMarket is MatchingEvents, SimpleMarket, OrderBookUpgradable {
     struct sortInfo {
         uint next;  //points to id of next higher offer
         uint prev;  //points to id of previous lower offer

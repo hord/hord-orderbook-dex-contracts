@@ -22,6 +22,7 @@ pragma solidity 0.8.10;
 
 import "./ERC20.sol";
 import "./libraries/DSMath.sol";
+import "./system/OrderBookUpgradable.sol";
 
 contract EventfulMarket {
     event LogItemUpdate(uint id);
@@ -74,7 +75,7 @@ contract EventfulMarket {
     );
 }
 
-contract SimpleMarket is EventfulMarket, DSMath {
+contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable {
 
     uint public last_offer_id;
 

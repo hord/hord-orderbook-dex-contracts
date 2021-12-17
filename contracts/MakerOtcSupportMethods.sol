@@ -2,8 +2,9 @@ pragma solidity 0.8.10;
 
 import "./libraries/DSMath.sol";
 import "./interfaces/IOtc.sol";
+import "./system/OrderBookUpgradable.sol";
 
-contract MakerOtcSupportMethods is DSMath {
+contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
     function getOffers(IOtc otc, address payToken, address buyToken) public view
         returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
