@@ -60,8 +60,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable {
     public
     initializer
     {
-        require(_dustToken != address(0), "Dust token can not be 0x0 address");
-        require(_priceOracle != address(0), "Price oracle can not be 0x0 address");
+        require(_dustToken != address(0), "Dust token can't be 0x0 address");
+        require(_priceOracle != address(0), "Price oracle can't be 0x0 address");
 
         // Set hord congress and maintainers registry
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);

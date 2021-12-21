@@ -23,6 +23,8 @@ contract OrderBookUpgradable {
     )
     internal
     {
+        require(_hordCongress != address(0), "Hord congress can't be 0x0 address");
+        require(_maintainersRegistry != address(0), "Maintainers regsitry can't be 0x0 address");
         hordCongress = _hordCongress;
         maintainersRegistry = IMaintainersRegistry(_maintainersRegistry);
     }
