@@ -59,9 +59,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
     uint256 public dustLimit;
     address public priceOracle;
 
+    event UniswapRouterSet(address uniswapRouter);
+
     function initialize (
         address _hordCongress,
         address _maintainersRegistry,
+        address _uniswapRouter,
         address _dustToken,
         uint256 _dustLimit,
         address _priceOracle
@@ -79,6 +82,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
         dustLimit = _dustLimit;
         priceOracle = _priceOracle;
 
+        setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(ERC20(dustToken), dustLimit);
     }
 
