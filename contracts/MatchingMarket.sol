@@ -20,11 +20,11 @@
 
 pragma solidity 0.8.10;
 
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./SimpleMarket.sol";
 import "./interfaces/IUniswapSimplePriceOracle.sol";
-import "./system/OrderBookUpgradable.sol";
 
-contract MatchingEvents is OrderBookUpgradable {
+contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
@@ -32,7 +32,7 @@ contract MatchingEvents is OrderBookUpgradable {
     event LogDelete(address keeper, uint id);
 }
 
-contract MatchingMarket is MatchingEvents, SimpleMarket {
+contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable {
     struct sortInfo {
         uint next;  //points to id of next higher offer
         uint prev;  //points to id of previous lower offer
@@ -50,7 +50,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     uint256 public dustLimit;
     address public priceOracle;
 
-    constructor(address _dustToken, uint256 _dustLimit, address _priceOracle) public {
+    function initialize (
+        address _hordCongress,
+        address _maintainersRegistry,
+        address _dustToken,
+        uint256 _dustLimit,
+        address _priceOracle
+    )
+    public
+    initializer
+    {
+        setCongressAndMaintainers(_hordCongress, _maintainersRegistry);
+
         dustToken = _dustToken;
         dustLimit = _dustLimit;
         priceOracle = _priceOracle;
