@@ -670,4 +670,29 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
     }
+     /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouter(
+        address _uniswapRouter
+    )
+    external
+    onlyHordCongress
+    {
+        setUniswapRouterInternal(_uniswapRouter);
+    }
+
+     /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouterInternal(
+        address
+        _uniswapRouter
+    )
+    internal
+    {
+        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
+        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
+        emit UniswapRouterSet(_uniswapRouter);
+    }
 }
