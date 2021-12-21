@@ -39,6 +39,13 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
         uint prev;  //points to id of previous lower offer
         uint delb;  //the blocknumber where this entry was marked for delete
     }
+    struct PlatformFee {
+        uint256 feesAvailable;
+        uint256 feesWithdrawn;
+    }
+
+    PlatformFee platformFee;// Struct representing platform fee and it's withdrawal history
+
     mapping(uint => sortInfo) public _rank;                     //doubly linked lists of sorted offer ids
     mapping(address => mapping(address => uint)) public _best;  //id of the highest offer for a token pair
     mapping(address => mapping(address => uint)) public _span;  //number of offers stored for token pair in sorted orderbook
