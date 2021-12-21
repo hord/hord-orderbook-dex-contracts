@@ -50,12 +50,30 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     uint256 public dustLimit;
     address public priceOracle;
 
-    constructor(address _dustToken, uint256 _dustLimit, address _priceOracle) public {
+     /**
+     * @notice          Initializer function
+     */
+    function initialize(
+        address _dustToken,
+        uint256 _dustLimit,
+        address _priceOracle,
+        address _hordCongress,
+        address _maintainersRegistry
+    ) 
+    external 
+    initializer {
+        require(_dustToken != address(0), "0x0 address");
+        require(_priceOracle != address(0), "0x0 address");
+        require(_hordCongress != address(0), "0x0 address");
+        require(_maintainersRegistry != address(0), "0x0 address");
+        
         dustToken = _dustToken;
         dustLimit = _dustLimit;
         priceOracle = _priceOracle;
 
         _setMinSell(ERC20(dustToken), dustLimit);
+        // Set hord congress and maintainers registry
+        setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
     }
 
     // If owner, can cancel an offer
