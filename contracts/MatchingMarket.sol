@@ -60,14 +60,17 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable {
     public
     initializer
     {
+        require(_dustToken != address(0), "Dust token can not be 0x0 address");
+        require(_priceOracle != address(0), "Price oracle can not be 0x0 address");
+
+        // Set hord congress and maintainers registry
+        setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
+
         dustToken = _dustToken;
         dustLimit = _dustLimit;
         priceOracle = _priceOracle;
 
         _setMinSell(ERC20(dustToken), dustLimit);
-        
-        // Set hord congress and maintainers registry
-        setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
     }
 
     // If owner, can cancel an offer
