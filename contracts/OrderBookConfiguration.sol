@@ -29,12 +29,30 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         emit ConfigurationChanged("dustLimit", dustLimit);
     }
 
-    function getDustLimit()
+    // exitFeeAmount getter function
+    function exitFeeAmount(uint256 usdAmountWei)
     external
     view
     returns (uint256)
     {
-        return dustLimit;
+        return (sqrt(usdAmountWei) * 10**9) / 5;
     }
 
+    /**
+    * @notice Function to compute square root of a number
+    */
+    function sqrt(
+        uint256 x
+    )
+    internal
+    pure
+    returns (uint256 y)
+    {
+        uint256 z = (x + 1) / 2;
+        y = x;
+        while (z < y) {
+            y = z;
+            z = (x / z + z) / 2;
+        }
+    }
 }
