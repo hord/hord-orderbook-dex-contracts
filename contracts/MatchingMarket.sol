@@ -69,16 +69,23 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
         address _uniswapRouter,
         address _dustToken,
         uint256 _dustLimit,
-        address _priceOracle
+        address _priceOracle,
+        address _hordConfiguration
     )
     public
     initializer
     {
         require(_dustToken != address(0), "Dust token can't be 0x0 address");
         require(_priceOracle != address(0), "Price oracle can't be 0x0 address");
+        require(_hordConfiguration != address(0), "HordConfiguration can not be 0x0 address");
 
         // Set hord congress and maintainers registry
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
+
+        __ReentrancyGuard_init();
+        
+        hordConfiguration = IHordConfiguration(_hordConfiguration);
+        hordToken = hordConfiguration.hordToken();
 
         dustToken = _dustToken;
         dustLimit = _dustLimit;
