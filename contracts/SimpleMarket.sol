@@ -224,7 +224,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable {
 
     // Make a new offer. Takes funds from the caller into market escrow.
     function offer_simple_market(uint pay_amt, ERC20 pay_gem, uint buy_amt, ERC20 buy_gem)
-        public
+        internal
         can_offer
         synchronized
         returns (uint id)

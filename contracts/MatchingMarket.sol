@@ -23,8 +23,6 @@ pragma solidity 0.8.10;
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
-import "./interfaces/IUniswapSimplePriceOracle.sol";
-import "../interfaces/IHordConfiguration.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
@@ -47,6 +45,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     PlatformFee platformFee; // Struct representing platform fee and it's withdrawal history
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
+    IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
     mapping(uint => sortInfo) public _rank;                     //doubly linked lists of sorted offer ids
@@ -57,7 +56,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     uint public _head;                                 //first unsorted offer id
 
     // dust management
-    address public dustToken;
+    ERC20 public dustToken;
     uint256 public dustLimit;
 
     event UniswapRouterSet(address uniswapRouter);
@@ -68,13 +67,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _uniswapRouter,
         address _dustToken,
         uint256 _dustLimit,
-        address _hordConfiguration
+        address _hPoolManager,
+        address _hordToken
     )
     public
     initializer
     {
         require(_dustToken != address(0), "Dust token can't be 0x0 address");
-        require(_hordConfiguration != address(0), "HordConfiguration can not be 0x0 address");
+        require(_hordToken != address(0), "Hord token can not be 0x0 address");
+        require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address");
 
         // Set hord congress and maintainers registry
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
@@ -82,13 +83,20 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         __ReentrancyGuard_init();
         
         hordConfiguration = IHordConfiguration(_hordConfiguration);
-        hordToken = hordConfiguration.hordToken();
+        hPoolManager = IHPoolManager(_hPoolManager);
+        hordToken = _hordToken;
 
-        dustToken = _dustToken;
+        dustToken = ERC20(_dustToken);
         dustLimit = _dustLimit;
 
         setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(ERC20(dustToken), dustLimit);
+    }
+
+    // only HPool tokens are tradeable
+    modifier isHPoolToken(ERC20 tokenA, ERC20 tokenB) {
+        require(hPoolManager.allHPoolTokens[tokenA] && tokenB == dustToken || hPoolManager.allHPoolTokens[tokenB] && tokenA == dustToken);
+        _;
     }
 
     // If owner, can cancel an offer
@@ -112,6 +120,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint128  buy_amt
     )
         public
+        isHPoolToken(pay_gem, buy_gem)
         returns (bytes32)
     {
         return bytes32(offer(pay_amt, pay_gem, buy_amt, buy_gem));
@@ -140,6 +149,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         ERC20 buy_gem    //taker (ask) buy which token
     )
         public
+        isHPoolToken(pay_gem, buy_gem)
         returns (uint)
     {
         require(!locked, "Reentrancy attempt");
@@ -156,6 +166,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     )
         public
         can_offer
+        isHPoolToken(pay_gem, buy_gem)
         returns (uint)
     {
         return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
@@ -171,6 +182,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     )
         public
         can_offer
+        isHPoolToken(pay_gem, buy_gem)
         returns (uint)
     {
         require(!locked, "Reentrancy attempt");
