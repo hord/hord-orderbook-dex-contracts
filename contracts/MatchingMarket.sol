@@ -23,6 +23,8 @@ pragma solidity 0.8.10;
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
+import "./interfaces/IHPoolManager.sol";
+import "./interfaces/IOrderbookConfiguration.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
@@ -43,7 +45,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint256 feesWithdrawn;
     }
 
-    PlatformFee platformFee; // Struct representing platform fee and it's withdrawal history
+    PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
@@ -62,13 +64,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     event UniswapRouterSet(address uniswapRouter);
 
     function initialize (
+        uint256 _dustLimit,
         address _hordCongress,
         address _maintainersRegistry,
         address _uniswapRouter,
         address _dustToken,
-        uint256 _dustLimit,
         address _hPoolManager,
-        address _hordToken
+        address _hordToken,
+        address _hordConfiguration
     )
     public
     initializer
@@ -76,6 +79,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(_dustToken != address(0), "Dust token can't be 0x0 address");
         require(_hordToken != address(0), "Hord token can not be 0x0 address");
         require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address");
+        require(_hordConfiguration != address(0), "HordConfiguration can not be 0x0 address");
 
         // Set hord congress and maintainers registry
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
