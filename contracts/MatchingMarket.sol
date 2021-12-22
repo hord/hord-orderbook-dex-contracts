@@ -24,6 +24,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "./SimpleMarket.sol";
 import "./interfaces/IUniswapSimplePriceOracle.sol";
+import "../interfaces/IHordConfiguration.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
