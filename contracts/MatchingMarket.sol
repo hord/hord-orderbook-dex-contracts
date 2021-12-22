@@ -47,6 +47,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
+    IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
@@ -64,34 +65,29 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     event UniswapRouterSet(address uniswapRouter);
 
     function initialize (
-        uint256 _dustLimit,
         address _hordCongress,
         address _maintainersRegistry,
+        address _orderbookConfiguration,
         address _uniswapRouter,
-        address _dustToken,
-        address _hPoolManager,
-        address _hordToken,
-        address _hordConfiguration
+        address _hPoolManager
     )
     public
     initializer
     {
-        require(_dustToken != address(0), "Dust token can't be 0x0 address");
-        require(_hordToken != address(0), "Hord token can not be 0x0 address");
         require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address");
-        require(_hordConfiguration != address(0), "HordConfiguration can not be 0x0 address");
+        require(_orderbookConfiguration != address(0), "OrderbookConfiguration can not be 0x0 address");
 
         // Set hord congress and maintainers registry
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
 
         __ReentrancyGuard_init();
         
-        hordConfiguration = IHordConfiguration(_hordConfiguration);
+        orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
-        hordToken = _hordToken;
+        hordToken = orderbookConfiguration.hordToken();
 
-        dustToken = ERC20(_dustToken);
-        dustLimit = _dustLimit;
+        dustToken = ERC20(orderbookConfiguration.dustToken());
+        dustLimit = orderbookConfiguration.dustLimit();
 
         setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(ERC20(dustToken), dustLimit);
@@ -99,7 +95,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     // only HPool tokens are tradeable
     modifier isHPoolToken(ERC20 tokenA, ERC20 tokenB) {
-        require(hPoolManager.allHPoolTokens[tokenA] && tokenB == dustToken || hPoolManager.allHPoolTokens[tokenB] && tokenA == dustToken);
+        require(hPoolManager.allHPoolTokens(address(tokenA)) && tokenB == dustToken || hPoolManager.allHPoolTokens(address(tokenB)) && tokenA == dustToken);
         _;
     }
 
