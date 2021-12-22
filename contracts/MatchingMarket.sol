@@ -47,6 +47,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, Reentran
 
     PlatformFee platformFee; // Struct representing platform fee and it's withdrawal history
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
+    address public hordToken; // Address for HORD token
 
     mapping(uint => sortInfo) public _rank;                     //doubly linked lists of sorted offer ids
     mapping(address => mapping(address => uint)) public _best;  //id of the highest offer for a token pair
