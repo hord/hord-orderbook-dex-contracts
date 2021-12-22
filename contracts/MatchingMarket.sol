@@ -20,8 +20,8 @@
 
 pragma solidity 0.8.10;
 
-import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
 import "./interfaces/IUniswapSimplePriceOracle.sol";
 import "../interfaces/IHordConfiguration.sol";
@@ -34,7 +34,7 @@ contract MatchingEvents {
     event LogDelete(address keeper, uint id);
 }
 
-contract MatchingMarket is MatchingEvents, SimpleMarket, Initializable, ReentrancyGuardUpgradeable {
+contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradeable {
     struct sortInfo {
         uint next;  //points to id of next higher offer
         uint prev;  //points to id of previous lower offer
