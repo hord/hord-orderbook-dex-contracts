@@ -59,7 +59,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // dust management
     address public dustToken;
     uint256 public dustLimit;
-    address public priceOracle;
 
     event UniswapRouterSet(address uniswapRouter);
 
@@ -69,14 +68,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _uniswapRouter,
         address _dustToken,
         uint256 _dustLimit,
-        address _priceOracle,
         address _hordConfiguration
     )
     public
     initializer
     {
         require(_dustToken != address(0), "Dust token can't be 0x0 address");
-        require(_priceOracle != address(0), "Price oracle can't be 0x0 address");
         require(_hordConfiguration != address(0), "HordConfiguration can not be 0x0 address");
 
         // Set hord congress and maintainers registry
@@ -89,7 +86,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         dustToken = _dustToken;
         dustLimit = _dustLimit;
-        priceOracle = _priceOracle;
 
         setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(ERC20(dustToken), dustLimit);
@@ -238,24 +234,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         delete _rank[id];
         emit LogDelete(msg.sender, id);
         return true;
-    }
-
-    //set the minimum sell amount for a token. Uses Uniswap as a price oracle.
-    //    Function is used to avoid "dust offers" that have
-    //    very small amount of tokens to sell, and it would
-    //    cost more gas to accept the offer, than the value
-    //    of tokens received.
-    function setMinSell(
-        ERC20 pay_gem     //token to assign minimum sell amount to
-    )
-        public
-    {
-        require(msg.sender == tx.origin, "No indirect calls please");
-        require(address(pay_gem) != dustToken, "Can't set dust for the dustToken");
-
-        uint256 dust = IUniswapSimplePriceOracle(priceOracle).getPriceFor(dustToken, address(pay_gem), dustLimit);
-
-        _setMinSell(pay_gem, dust);
     }
 
     //returns the minimum sell amount for an offer
