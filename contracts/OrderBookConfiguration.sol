@@ -14,6 +14,9 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     // Represents limit of dust token
     uint256 private _dustLimit;
 
+    // Represents protocol fee that is taking on each trade
+    uint256 private _protocolFee;
+
     event HordTokenAddressChanged(string parameter, address newValue);
     event DustTokenAddressChanged(string parameter, address newValue);
     event ConfigurationChanged(string parameter, uint256 newValue);
@@ -31,6 +34,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         _hordToken = addresses[2];
         _dustToken = addresses[3];
         _dustLimit = configValues[0];
+        _protocolFee = configValues[1];
     }
 
     function setDustLimit(uint256 dustLimit_)
@@ -39,6 +43,14 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     {
         _dustLimit = dustLimit_;
         emit ConfigurationChanged("_dustLimit", _dustLimit);
+    }
+
+    function setProtocolFee(uint256 dustLimit_)
+    external
+    onlyHordCongress
+    {
+        _protocolFee = protocolFee_;
+        emit ConfigurationChanged("_protocolFee", _protocolFee);
     }
 
     function setHordTokenAddress(
@@ -70,6 +82,15 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     returns (uint256)
     {
         return _dustLimit;
+    }
+
+    // _protocolFee getter function
+    function protocolFee()
+    external
+    view
+    returns (uint256)
+    {
+        return _protocolFee;
     }
 
 
