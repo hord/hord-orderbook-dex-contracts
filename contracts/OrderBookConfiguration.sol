@@ -45,7 +45,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         emit ConfigurationChanged("_dustLimit", _dustLimit);
     }
 
-    function setProtocolFee(uint256 dustLimit_)
+    function setProtocolFee(uint256 protocolFee_)
     external
     onlyHordCongress
     {
