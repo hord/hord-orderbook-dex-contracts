@@ -46,11 +46,10 @@
     "prettier": "^2.3.2",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
     "solhint": "^3.3.6",
-    "solidity-coverage": "^0.7.16"
-  },
-  "dependencies": {
+    "solidity-coverage": "^0.7.16",
     "@openzeppelin/contracts": "^4.4.1",
     "@openzeppelin/contracts-upgradeable": "^4.4.1",
+    "@openzeppelin/hardhat-upgrades": "^1.12.0",
     "@uniswap/v2-periphery": "^1.1.0-beta.0"
   }
 }
