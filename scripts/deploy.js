@@ -19,6 +19,13 @@ async function main() {
             contractProxies['HordConfiguration']
     ]);
     await matchingMarket.deployed();
+
+    let admin = await upgrades.admin.getInstance();
+
+    let matchingMarketImplementation = await admin.getProxyImplementation(matchingMarket.address);
+    console.log('Maintainers Implementation: ', matchingMarketImplementation);
+    saveContractAddress(hre.network.name, 'MaintainersRegistry', matchingMarketImplementation);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
