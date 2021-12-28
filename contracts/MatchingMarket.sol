@@ -24,7 +24,6 @@ import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
 import "./interfaces/IHPoolManager.sol";
-import "./interfaces/IOrderbookConfiguration.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
@@ -42,14 +41,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint prev;  //points to id of previous lower offer
         uint delb;  //the blocknumber where this entry was marked for delete
     }
-    struct PlatformFee {
-        uint256 feesAvailable;
-        uint256 feesWithdrawn;
-    }
 
-    PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
-    IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
@@ -61,10 +54,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     uint public _head;                                 //first unsorted offer id
 
     // dust management
-    ERC20 public dustToken;
     uint256 public dustLimit;
 
-    event UniswapRouterSet(address uniswapRouter);
 
     function initialize (
         address _hordCongress,
