@@ -93,9 +93,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _setMinSell(ERC20(dustToken), dustLimit);
     }
 
-    // only HPool tokens are tradeable
+    // make only HPool tokens tradeable
     modifier isHPoolToken(ERC20 tokenA, ERC20 tokenB) {
-        require(hPoolManager.allHPoolTokens(address(tokenA)) && tokenB == dustToken || hPoolManager.allHPoolTokens(address(tokenB)) && tokenA == dustToken);
+        require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
     }
 
