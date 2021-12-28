@@ -32,6 +32,8 @@ contract MatchingEvents {
     event LogSortedOffer(uint id);
     event LogInsert(address keeper, uint id);
     event LogDelete(address keeper, uint id);
+    event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
+    event UniswapRouterSet(address uniswapRouter);
 }
 
 contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradeable {
