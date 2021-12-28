@@ -698,4 +698,37 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uniswapRouter = IUniswapV2Router02(_uniswapRouter);
         emit UniswapRouterSet(_uniswapRouter);
     }
+    
+    function burnPlatformFees(
+        uint256 amount
+    )
+    external
+    onlyHordCongress
+    nonReentrant
+    {
+        require(amount <= platformFee.feesAvailable, "Amount is above threshold.");
+
+        platformFee.feesAvailable = platformFee.feesAvailable - amount;
+        platformFee.feesWithdrawn = platformFee.feesWithdrawn + amount;
+
+        address[] memory path = new address[](2);
+
+        path[0] = address(dustToken);
+        path[1] = uniswapRouter.WETH();
+        path[2] = hordToken;
+
+        uint256 deadline = block.timestamp.add(300);
+
+        uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
+
+        uint256[] memory amounts = uniswapRouter.swapExactETHForTokens{value: amount} (
+            amountOutMin[1],
+            path,
+            address(1), // burn address
+            deadline
+        );
+
+        // Trigger event that buy&burn was executed over hord token
+        emit BuyAndBurn(amounts[0], amounts[1]);
+    }
 }
