@@ -148,6 +148,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     function bump(bytes32 id_)
         public
+        whenNotPaused
         can_buy(uint256(id_))
     {
         uint256 id = uint256(id_);
@@ -167,6 +168,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // offer maker, and from market to caller.
     function buy_simple_market(uint id, uint quantity)
         public
+        whenNotPaused
         can_buy(id)
         synchronized
         returns (bool)
@@ -256,6 +258,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // Cancel an offer. Refunds offer maker.
     function cancel_simple_market(uint id)
         public
+        whenNotPaused
         can_cancel_simple_market(id)
         synchronized
         returns (bool success)
@@ -346,5 +349,27 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         if (returndata.length > 0) { // Return data is optional
             require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
+    }
+
+     /**
+        * @notice  Function allowing congress to pause the smart-contract
+        * @dev     Can be only called by HordCongress
+     */
+    function pause()
+    external
+    onlyHordCongress
+    {
+        _pause();
+    }
+
+    /**
+        * @notice  Function allowing congress to unpause the smart-contract
+        * @dev     Can be only called by HordCongress 
+     */
+    function unpause()
+    external
+    onlyHordCongress
+    {
+        _unpause();
     }
 }
