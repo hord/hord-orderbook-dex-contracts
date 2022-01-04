@@ -24,6 +24,7 @@ import "./ERC20.sol";
 import "./libraries/DSMath.sol";
 import "./system/OrderBookUpgradable.sol";
 import "./interfaces/IOrderbookConfiguration.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 contract EventfulMarket {
     event LogItemUpdate(uint id);
@@ -81,7 +82,7 @@ contract EventfulMarket {
     );
 }
 
-contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable {
+contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUpgradeable {
 
     uint public last_offer_id;
 
