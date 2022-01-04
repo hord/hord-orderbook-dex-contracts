@@ -113,6 +113,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint128  buy_amt
     )
         public
+        whenNotPaused
         isHPoolToken(pay_gem, buy_gem)
         returns (bytes32)
     {
@@ -142,6 +143,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         ERC20 buy_gem    //taker (ask) buy which token
     )
         public
+        whenNotPaused
         isHPoolToken(pay_gem, buy_gem)
         returns (uint)
     {
@@ -158,6 +160,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint pos         //position to insert offer, 0 should be used if unknown
     )
         public
+        whenNotPaused
         can_offer
         isHPoolToken(pay_gem, buy_gem)
         returns (uint)
@@ -174,6 +177,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         bool rounding    //match "close enough" orders?
     )
         public
+        whenNotPaused
         can_offer
         isHPoolToken(pay_gem, buy_gem)
         returns (uint)
@@ -187,6 +191,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //Transfers funds from caller to offer maker, and from market to caller.
     function buy(uint id, uint amount)
         public
+        whenNotPaused
         can_buy(id)
         returns (bool)
     {
@@ -197,6 +202,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // Cancel an offer. Refunds offer maker.
     function cancel(uint id)
         public
+        whenNotPaused
         can_cancel(id)
         returns (bool success)
     {
@@ -216,6 +222,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint pos   //position to insert into
     )
         public
+        whenNotPaused
         returns (bool)
     {
         require(!locked, "Reentrancy attempt");
@@ -232,6 +239,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //  Function should be called by keepers.
     function del_rank(uint id)
         public
+        whenNotPaused
         returns (bool)
     {
         require(!locked, "Reentrancy attempt");
@@ -304,6 +312,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     function sellAllAmount(ERC20 pay_gem, uint pay_amt, ERC20 buy_gem, uint min_fill_amount)
         public
+        whenNotPaused
         returns (uint fill_amt)
     {
         require(!locked, "Reentrancy attempt");
@@ -332,6 +341,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     function buyAllAmount(ERC20 buy_gem, uint buy_amt, ERC20 pay_gem, uint max_fill_amount)
         public
+        whenNotPaused
         returns (uint fill_amt)
     {
         require(!locked, "Reentrancy attempt");
