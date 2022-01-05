@@ -37,7 +37,7 @@ contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
                 require(offerId != 0);                                              // Fails if there are not enough offers to complete
                 (,,orderBuyAmt,,,) = otc.offers(offerId);
             }
-            
+
         }
         ordersToTake = payAmt2 == orderBuyAmt ? ordersToTake + 1 : ordersToTake;    // If the remaining amount is equal than the latest order, then it will also be taken completely
         takesPartialOrder = payAmt2 < orderBuyAmt;                                  // If the remaining amount is lower than the latest order, then it will take a partial order

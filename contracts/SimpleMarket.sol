@@ -193,13 +193,13 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(spend);
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
-       
+
             uint256 updatedSpend = spend - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
+
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
             // send champion fee to champion
-            safeTransferFrom(offer.buy_gem, msg.sender, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
+            //safeTransferFrom(offer.buy_gem, msg.sender, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
 
             safeTransferFrom(offer.buy_gem, msg.sender, address(this), protocolFee); // send protocol fee to this address
 
@@ -216,12 +216,12 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
+
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
             // send champion fee to champion
-            safeTransfer(offer.pay_gem, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
-            
+            //safeTransfer(offer.pay_gem, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
+
             emit FeesTaken(
                 championFee,
                 protocolFee

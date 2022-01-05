@@ -74,7 +74,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         setCongressAndMaintainers( _hordCongress, _maintainersRegistry);
 
         __ReentrancyGuard_init();
-        
+
         orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
         hordToken = orderbookConfiguration.hordToken();
@@ -701,7 +701,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uniswapRouter = IUniswapV2Router02(_uniswapRouter);
         emit UniswapRouterSet(_uniswapRouter);
     }
-    
+
     function burnPlatformFees(
         uint256 amount
     )
@@ -720,7 +720,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         path[1] = uniswapRouter.WETH();
         path[2] = hordToken;
 
-        uint256 deadline = block.timestamp.add(300);
+        uint256 deadline = block.timestamp + 300;
 
         uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
 
