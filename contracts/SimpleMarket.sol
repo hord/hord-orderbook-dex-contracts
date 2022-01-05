@@ -23,6 +23,7 @@ import "./ERC20.sol";
 import "./libraries/DSMath.sol";
 import "./system/OrderBookUpgradable.sol";
 import "./interfaces/IOrderbookConfiguration.sol";
+import "./interfaces/IHPool.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 contract EventfulMarket {
@@ -197,6 +198,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
+            address championAddress = IHPool(address(offer.pay_gem)).hPool().championAddress;
             // send champion fee to champion
             safeTransferFrom(offer.buy_gem, msg.sender, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
 
@@ -216,6 +218,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
             
+            address championAddress = IHPool(address(offer.buy_gem)).hPool().championAddress;
+
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
             // send champion fee to champion
