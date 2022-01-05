@@ -720,7 +720,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         path[1] = uniswapRouter.WETH();
         path[2] = hordToken;
 
-        uint256 deadline = block.timestamp.add(300);
+        uint256 deadline = block.timestamp + 300;
 
         uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
 
