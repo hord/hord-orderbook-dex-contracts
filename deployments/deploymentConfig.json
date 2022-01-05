@@ -1,0 +1,8 @@
+{
+  "bscTestnet" : {
+    "dustLimit" : 100
+  },
+  "local": {
+    "dustLimit" : 100
+  }
+}

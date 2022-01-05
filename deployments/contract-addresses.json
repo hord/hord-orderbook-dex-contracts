@@ -1,0 +1,15 @@
+{
+    "bscTestnet": {
+        "HordCongress": "0x25072e276E292004DbdA01910ed73340B018dA14",
+        "DustToken": "",
+        "UniswapRouter": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+        "AggregatorV3Interface": "0xBeEE5c010318f2258e8FC774B128411586Fd4dB4"
+    },
+
+    "local": {
+        "HordCongress": "0x25072e276E292004DbdA01910ed73340B018dA14",
+        "DustToken": "",
+        "UniswapRouter": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+        "AggregatorV3Interface": "0xBeEE5c010318f2258e8FC774B128411586Fd4dB4"
+    }
+}
