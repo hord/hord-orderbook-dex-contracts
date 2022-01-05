@@ -23,8 +23,8 @@ async function main() {
     let admin = await upgrades.admin.getInstance();
 
     let matchingMarketImplementation = await admin.getProxyImplementation(matchingMarket.address);
-    console.log('Maintainers Implementation: ', matchingMarketImplementation);
-    saveContractAddress(hre.network.name, 'MaintainersRegistry', matchingMarketImplementation);
+    console.log('MatchingMarket Implementation: ', matchingMarketImplementation);
+    saveContractAddress(hre.network.name, 'MatchingMarket', matchingMarketImplementation);
 
 }
 
