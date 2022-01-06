@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 const { hexify, toHordDenomination } = require('../test/setup');
 const { getSavedContractAddresses, saveContractAddress, saveContractProxies, getSavedContractProxies } = require('./utils');
+let c = require('../deployments/deploymentConfig.json');
 
 async function main() {
     await hre.run('compile');
@@ -10,7 +11,7 @@ async function main() {
 
     const MatchingMarket = await ethers.getContractFactory('MatchingMarket');
     const matchingMarket = await upgrades.deployProxy(MatchingMarket, [
-            toHordDenomination(config['dustLimit']),
+            ethers.utils.parseEther(config['dustLimit']),
             contracts['HordCongress'],
             contractProxies['MaintainersRegistry'],
             contracts['UniswapRouter'],
