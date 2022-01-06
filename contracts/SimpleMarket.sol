@@ -19,11 +19,11 @@
 
 pragma solidity 0.8.10;
 
-import "./ERC20.sol";
 import "./libraries/DSMath.sol";
 import "./system/OrderBookUpgradable.sol";
 import "./interfaces/IOrderbookConfiguration.sol";
 import "./interfaces/IHPool.sol";
+import "./interfaces/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 contract EventfulMarket {
@@ -35,8 +35,8 @@ contract EventfulMarket {
         bytes32  indexed  id,
         bytes32  indexed  pair,
         address  indexed  maker,
-        ERC20             pay_gem,
-        ERC20             buy_gem,
+        IERC20             pay_gem,
+        IERC20             buy_gem,
         uint128           pay_amt,
         uint128           buy_amt,
         uint64            timestamp
@@ -46,8 +46,8 @@ contract EventfulMarket {
         bytes32  indexed  id,
         bytes32  indexed  pair,
         address  indexed  maker,
-        ERC20             pay_gem,
-        ERC20             buy_gem,
+        IERC20            pay_gem,
+        IERC20            buy_gem,
         uint128           pay_amt,
         uint128           buy_amt,
         uint64            timestamp
@@ -57,8 +57,8 @@ contract EventfulMarket {
         bytes32           id,
         bytes32  indexed  pair,
         address  indexed  maker,
-        ERC20             pay_gem,
-        ERC20             buy_gem,
+        IERC20            pay_gem,
+        IERC20            buy_gem,
         address  indexed  taker,
         uint128           take_amt,
         uint128           give_amt,
@@ -69,8 +69,8 @@ contract EventfulMarket {
         bytes32  indexed  id,
         bytes32  indexed  pair,
         address  indexed  maker,
-        ERC20             pay_gem,
-        ERC20             buy_gem,
+        IERC20             pay_gem,
+        IERC20             buy_gem,
         uint128           pay_amt,
         uint128           buy_amt,
         uint64            timestamp
@@ -92,9 +92,9 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     struct OfferInfo {
         uint     pay_amt;
-        ERC20    pay_gem;
+        IERC20    pay_gem;
         uint     buy_amt;
-        ERC20    buy_gem;
+        IERC20    buy_gem;
         address  owner;
         uint64   timestamp;
     }
@@ -106,7 +106,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
-    ERC20 public dustToken;
+    IERC20 public dustToken;
 
     modifier can_buy(uint id) {
         require(isActive(id));
@@ -138,7 +138,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         return offers[id].owner;
     }
 
-    function getOffer(uint id) public view returns (uint, ERC20, uint, ERC20) {
+    function getOffer(uint id) public view returns (uint, IERC20, uint, IERC20) {
       OfferInfo memory offer = offers[id];
       return (offer.pay_amt, offer.pay_gem,
               offer.buy_amt, offer.buy_gem);
@@ -288,7 +288,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     // Make a new offer. Takes funds from the caller into market escrow.
-    function offer_simple_market(uint pay_amt, ERC20 pay_gem, uint buy_amt, ERC20 buy_gem)
+    function offer_simple_market(uint pay_amt, IERC20 pay_gem, uint buy_amt, IERC20 buy_gem)
         internal
         can_offer
         synchronized
@@ -297,9 +297,9 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         require(uint128(pay_amt) == pay_amt);
         require(uint128(buy_amt) == buy_amt);
         require(pay_amt > 0);
-        require(pay_gem != ERC20(address(0)));
+        require(pay_gem != IERC20(address(0)));
         require(buy_amt > 0);
-        require(buy_gem != ERC20(address(0)));
+        require(buy_gem != IERC20(address(0)));
         require(pay_gem != buy_gem);
 
         OfferInfo memory info;
@@ -334,15 +334,15 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         last_offer_id++; return last_offer_id;
     }
 
-    function safeTransfer(ERC20 token, address to, uint256 value) internal {
+    function safeTransfer(IERC20 token, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
 
-    function safeTransferFrom(ERC20 token, address from, address to, uint256 value) internal {
+    function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
     }
 
-    function _callOptionalReturn(ERC20 token, bytes memory data) private {
+    function _callOptionalReturn(IERC20 token, bytes memory data) private {
         uint256 size;
         assembly { size := extcodesize(token) }
         require(size > 0, "Not a contract");

@@ -79,15 +79,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         hPoolManager = IHPoolManager(_hPoolManager);
         hordToken = orderbookConfiguration.hordToken();
 
-        dustToken = ERC20(orderbookConfiguration.dustToken());
+        dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
 
         setUniswapRouterInternal(_uniswapRouter);
-        _setMinSell(ERC20(dustToken), dustLimit);
+        _setMinSell(IERC20(dustToken), dustLimit);
     }
 
     // make only HPool tokens tradeable
-    modifier isHPoolToken(ERC20 tokenA, ERC20 tokenB) {
+    modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
         require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
     }
@@ -107,8 +107,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // ---- Public entrypoints ---- //
 
     function make(
-        ERC20    pay_gem,
-        ERC20    buy_gem,
+        IERC20    pay_gem,
+        IERC20    buy_gem,
         uint128  pay_amt,
         uint128  buy_amt
     )
@@ -138,9 +138,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //
     function offer(
         uint pay_amt,    //maker (ask) sell how much
-        ERC20 pay_gem,   //maker (ask) sell which token
+        IERC20 pay_gem,   //maker (ask) sell which token
         uint buy_amt,    //taker (ask) buy how much
-        ERC20 buy_gem    //taker (ask) buy which token
+        IERC20 buy_gem    //taker (ask) buy which token
     )
         public
         whenNotPaused
@@ -154,9 +154,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // Make a new offer. Takes funds from the caller into market escrow.
     function offer(
         uint pay_amt,    //maker (ask) sell how much
-        ERC20 pay_gem,   //maker (ask) sell which token
+        IERC20 pay_gem,   //maker (ask) sell which token
         uint buy_amt,    //maker (ask) buy how much
-        ERC20 buy_gem,   //maker (ask) buy which token
+        IERC20 buy_gem,   //maker (ask) buy which token
         uint pos         //position to insert offer, 0 should be used if unknown
     )
         public
@@ -170,9 +170,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     function offer(
         uint pay_amt,    //maker (ask) sell how much
-        ERC20 pay_gem,   //maker (ask) sell which token
+        IERC20 pay_gem,   //maker (ask) sell which token
         uint buy_amt,    //maker (ask) buy how much
-        ERC20 buy_gem,   //maker (ask) buy which token
+        IERC20 buy_gem,   //maker (ask) buy which token
         uint pos,        //position to insert offer, 0 should be used if unknown
         bool rounding    //match "close enough" orders?
     )
@@ -251,7 +251,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     //returns the minimum sell amount for an offer
     function getMinSell(
-        ERC20 pay_gem      //token for which minimum sell amount is queried
+        IERC20 pay_gem      //token for which minimum sell amount is queried
     )
         public
         view
@@ -263,7 +263,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //return the best offer for a token pair
     //      the best offer is the lowest one if it's an ask,
     //      and highest one if it's a bid offer
-    function getBestOffer(ERC20 sell_gem, ERC20 buy_gem) public view returns(uint) {
+    function getBestOffer(IERC20 sell_gem, IERC20 buy_gem) public view returns(uint) {
         return _best[address(sell_gem)][address(buy_gem)];
     }
 
@@ -285,7 +285,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     }
 
     //return the amount of better offers for a token pair
-    function getOfferCount(ERC20 sell_gem, ERC20 buy_gem) public view returns(uint) {
+    function getOfferCount(IERC20 sell_gem, IERC20 buy_gem) public view returns(uint) {
         return _span[address(sell_gem)][address(buy_gem)];
     }
 
@@ -310,7 +310,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
                || _best[address(offers[id].pay_gem)][address(offers[id].buy_gem)] == id;
     }
 
-    function sellAllAmount(ERC20 pay_gem, uint pay_amt, ERC20 buy_gem, uint min_fill_amount)
+    function sellAllAmount(IERC20 pay_gem, uint pay_amt, IERC20 buy_gem, uint min_fill_amount)
         public
         whenNotPaused
         returns (uint fill_amt)
@@ -339,7 +339,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(fill_amt >= min_fill_amount);
     }
 
-    function buyAllAmount(ERC20 buy_gem, uint buy_amt, ERC20 pay_gem, uint max_fill_amount)
+    function buyAllAmount(IERC20 buy_gem, uint buy_amt, IERC20 pay_gem, uint max_fill_amount)
         public
         whenNotPaused
         returns (uint fill_amt)
@@ -367,7 +367,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(fill_amt <= max_fill_amount);
     }
 
-    function getBuyAmount(ERC20 buy_gem, ERC20 pay_gem, uint pay_amt) public view returns (uint fill_amt) {
+    function getBuyAmount(IERC20 buy_gem, IERC20 pay_gem, uint pay_amt) public view returns (uint fill_amt) {
         uint256 offerId = getBestOffer(buy_gem, pay_gem);           //Get best offer for the token pair
         while (pay_amt > offers[offerId].buy_amt) {
             fill_amt = add(fill_amt, offers[offerId].pay_amt);  //Add amount to buy accumulator
@@ -380,7 +380,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         fill_amt = add(fill_amt, rmul(pay_amt * 10 ** 9, rdiv(offers[offerId].pay_amt, offers[offerId].buy_amt)) / 10 ** 9); //Add proportional amount of last offer to buy accumulator
     }
 
-    function getPayAmount(ERC20 pay_gem, ERC20 buy_gem, uint buy_amt) public view returns (uint fill_amt) {
+    function getPayAmount(IERC20 pay_gem, IERC20 buy_gem, uint buy_amt) public view returns (uint fill_amt) {
         uint256 offerId = getBestOffer(buy_gem, pay_gem);           //Get best offer for the token pair
         while (buy_amt > offers[offerId].pay_amt) {
             fill_amt = add(fill_amt, offers[offerId].buy_amt);  //Add amount to pay accumulator
@@ -396,7 +396,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // ---- Internal Functions ---- //
 
     function _setMinSell(
-        ERC20 pay_gem,     //token to assign minimum sell amount to
+        IERC20 pay_gem,     //token to assign minimum sell amount to
         uint256 dust
     )
         internal
@@ -505,9 +505,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //match offers with taker offer, and execute token transactions
     function _matcho(
         uint t_pay_amt,    //taker sell how much
-        ERC20 t_pay_gem,   //taker sell which token
+        IERC20 t_pay_gem,   //taker sell which token
         uint t_buy_amt,    //taker buy how much
-        ERC20 t_buy_gem,   //taker buy which token
+        IERC20 t_buy_gem,   //taker buy which token
         uint pos,          //position id
         bool rounding      //match "close enough" orders?
     )
@@ -562,9 +562,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     // Keepers should call insert(id,pos) to put offer in the sorted list.
     function _offeru(
         uint pay_amt,      //maker (ask) sell how much
-        ERC20 pay_gem,     //maker (ask) sell which token
+        IERC20 pay_gem,     //maker (ask) sell which token
         uint buy_amt,      //maker (ask) buy how much
-        ERC20 buy_gem      //maker (ask) buy which token
+        IERC20 buy_gem      //maker (ask) buy which token
     )
         internal
         returns (uint id)
@@ -585,8 +585,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     {
         require(isActive(id));
 
-        ERC20 buy_gem = offers[id].buy_gem;
-        ERC20 pay_gem = offers[id].pay_gem;
+        IERC20 buy_gem = offers[id].buy_gem;
+        IERC20 pay_gem = offers[id].pay_gem;
         uint prev_id;                                      //maker (ask) id
 
         pos = pos == 0 || offers[pos].pay_gem != pay_gem || offers[pos].buy_gem != buy_gem || !isOfferSorted(pos)
