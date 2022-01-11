@@ -1,0 +1,32 @@
+{
+  "version": {
+      "gitTag" : "0.0.2-master",
+      "date": "15.07.2021",
+      "description": "Upgrade HordTicketFactory contract + set 6000 HORD as minimal amount of tokens to stake in HordTicketManager.",
+      "proposal": {
+      "targets": ["0x8b3558B725e941dAd8f587A40E86721cb3082125", "0x3083f888A3b9Fd334dBe230c9AEE5555da754f04"],
+      "signatures": ["upgrade(address,address)", "setMinAmountToStake(uint256)"],
+      "methodArgumentsPerAction": {
+          "upgrade" : {
+            "proxyContract" : "0x32AA07E6ebF2340eeF1f717197ade6982B815536",
+            "newImplementation": "0x0B063cef5906259B0bd494c56e3DB8c18A487007"
+          },
+          "setNumberOfTickets": {
+            "newAmountOfTokens": "6000000000000000000000"
+          }
+        },
+      "values": [0,0],
+      "calldatas": [
+        "0x00000000000000000000000032aa07e6ebf2340eef1f717197ade6982b8155360000000000000000000000000b063cef5906259b0bd494c56e3db8c18a487007",
+        "0x00000000000000000000000000000000000000000000014542ba12a337c00000"
+      ],
+      "description": "Upgrade HordTicketFactory contract + set 6000 HORD as minimal amount of tokens to stake in HordTicketManager."
+      },
+      "execution": {
+        "proposeTxHash": "",
+        "vote1TxHash": "",
+        "vote2TxHash": "",
+        "executeTxHash": ""
+      }
+    }
+}
