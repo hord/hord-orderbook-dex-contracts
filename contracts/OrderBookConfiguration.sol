@@ -103,7 +103,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         return _hordToken;
     }
 
-     // _dustToken getter function
+    // _dustToken getter function
     function dustToken()
     external
     view
@@ -112,15 +112,15 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         return _dustToken;
     }
 
-    function calculateTotalFee(uint256 amount) external view returns (uint256){
+    function calculateTotalFee(uint256 amount) internal view returns (uint256){
         return (amount / 10000) * _totalFeePercent;
     }
 
-    function calculateChampionFee(uint256 amount) external view returns (uint256){
+    function calculateChampionFee(uint256 amount) internal pure returns (uint256){
         return (amount / 3) * 2;
     }
 
-    function calculateOrderbookFee(uint256 amount) external view returns (uint256){
+    function calculateOrderbookFee(uint256 amount) internal pure returns (uint256){
         return amount / 3;
     }
 }

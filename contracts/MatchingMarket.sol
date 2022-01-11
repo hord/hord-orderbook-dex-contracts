@@ -112,10 +112,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint128  pay_amt,
         uint128  buy_amt
     )
-        public
-        whenNotPaused
-        isHPoolToken(pay_gem, buy_gem)
-        returns (bytes32)
+    public
+    whenNotPaused
+    isHPoolToken(pay_gem, buy_gem)
+    returns (bytes32)
     {
         return bytes32(offer(pay_amt, pay_gem, buy_amt, buy_gem));
     }
@@ -142,10 +142,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint buy_amt,    //taker (ask) buy how much
         IERC20 buy_gem    //taker (ask) buy which token
     )
-        public
-        whenNotPaused
-        isHPoolToken(pay_gem, buy_gem)
-        returns (uint)
+    public
+    whenNotPaused
+    isHPoolToken(pay_gem, buy_gem)
+    returns (uint)
     {
         require(!locked, "Reentrancy attempt");
         return _offeru(pay_amt, pay_gem, buy_amt, buy_gem);
@@ -159,11 +159,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         IERC20 buy_gem,   //maker (ask) buy which token
         uint pos         //position to insert offer, 0 should be used if unknown
     )
-        public
-        whenNotPaused
-        can_offer
-        isHPoolToken(pay_gem, buy_gem)
-        returns (uint)
+    public
+    whenNotPaused
+    can_offer
+    isHPoolToken(pay_gem, buy_gem)
+    returns (uint)
     {
         return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
     }
@@ -176,11 +176,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint pos,        //position to insert offer, 0 should be used if unknown
         bool rounding    //match "close enough" orders?
     )
-        public
-        whenNotPaused
-        can_offer
-        isHPoolToken(pay_gem, buy_gem)
-        returns (uint)
+    public
+    whenNotPaused
+    can_offer
+    isHPoolToken(pay_gem, buy_gem)
+    returns (uint)
     {
         require(!locked, "Reentrancy attempt");
         require(_dust[address(pay_gem)] <= pay_amt);
@@ -190,10 +190,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     //Transfers funds from caller to offer maker, and from market to caller.
     function buy(uint id, uint amount)
-        public
-        whenNotPaused
-        can_buy(id)
-        returns (bool)
+    public
+    whenNotPaused
+    can_buy(id)
+    returns (bool)
     {
         require(!locked, "Reentrancy attempt");
         return _buys(id, amount);
@@ -201,10 +201,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     // Cancel an offer. Refunds offer maker.
     function cancel(uint id)
-        public
-        whenNotPaused
-        can_cancel(id)
-        returns (bool success)
+    public
+    whenNotPaused
+    can_cancel(id)
+    returns (bool success)
     {
         require(!locked, "Reentrancy attempt");
         if (isOfferSorted(id)) {
@@ -221,9 +221,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint id,   //maker (ask) id
         uint pos   //position to insert into
     )
-        public
-        whenNotPaused
-        returns (bool)
+    public
+    whenNotPaused
+    returns (bool)
     {
         require(!locked, "Reentrancy attempt");
         require(!isOfferSorted(id));    //make sure offers[id] is not yet sorted
@@ -238,9 +238,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     //deletes _rank [id]
     //  Function should be called by keepers.
     function del_rank(uint id)
-        public
-        whenNotPaused
-        returns (bool)
+    public
+    whenNotPaused
+    returns (bool)
     {
         require(!locked, "Reentrancy attempt");
         require(!isActive(id) && _rank[id].delb != 0 && _rank[id].delb < block.number - 10);
@@ -253,9 +253,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     function getMinSell(
         IERC20 pay_gem      //token for which minimum sell amount is queried
     )
-        public
-        view
-        returns (uint)
+    public
+    view
+    returns (uint)
     {
         return _dust[address(pay_gem)];
     }
@@ -306,14 +306,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     function isOfferSorted(uint id) public view returns(bool) {
         return _rank[id].next != 0
-               || _rank[id].prev != 0
-               || _best[address(offers[id].pay_gem)][address(offers[id].buy_gem)] == id;
+        || _rank[id].prev != 0
+        || _best[address(offers[id].pay_gem)][address(offers[id].buy_gem)] == id;
     }
 
     function sellAllAmount(IERC20 pay_gem, uint pay_amt, IERC20 buy_gem, uint min_fill_amount)
-        public
-        whenNotPaused
-        returns (uint fill_amt)
+    public
+    whenNotPaused
+    returns (uint fill_amt)
     {
         require(!locked, "Reentrancy attempt");
         uint offerId;
@@ -340,9 +340,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     }
 
     function buyAllAmount(IERC20 buy_gem, uint buy_amt, IERC20 pay_gem, uint max_fill_amount)
-        public
-        whenNotPaused
-        returns (uint fill_amt)
+    public
+    whenNotPaused
+    returns (uint fill_amt)
     {
         require(!locked, "Reentrancy attempt");
         uint offerId;
@@ -399,15 +399,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         IERC20 pay_gem,     //token to assign minimum sell amount to
         uint256 dust
     )
-        internal
+    internal
     {
         _dust[address(pay_gem)] = dust;
         emit LogMinSell(address(pay_gem), dust);
     }
 
     function _buys(uint id, uint amount)
-        internal
-        returns (bool)
+    internal
+    returns (bool)
     {
         if (amount == offers[id].pay_amt) {
             if (isOfferSorted(id)) {
@@ -427,9 +427,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     //find the id of the next higher offer after offers[id]
     function _find(uint id)
-        internal
-        view
-        returns (uint)
+    internal
+    view
+    returns (uint)
     {
         require( id > 0 );
 
@@ -448,9 +448,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     //find the id of the next higher offer after offers[id]
     function _findpos(uint id, uint pos)
-        internal
-        view
-        returns (uint)
+    internal
+    view
+    returns (uint)
     {
         require(id > 0);
 
@@ -477,7 +477,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
                 }
                 return old_pos;
 
-            // ...or walk it up.
+                // ...or walk it up.
             } else {
                 while (pos != 0 && !_isPricedLtOrEq(id, pos)) {
                     pos = _rank[pos].next;
@@ -492,12 +492,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint low,   //lower priced offer's id
         uint high   //higher priced offer's id
     )
-        internal
-        view
-        returns (bool)
+    internal
+    view
+    returns (bool)
     {
         return mul(offers[low].buy_amt, offers[high].pay_amt)
-          >= mul(offers[high].buy_amt, offers[low].pay_amt);
+        >= mul(offers[high].buy_amt, offers[low].pay_amt);
     }
 
     //these variables are global only because of solidity local variable limit
@@ -511,8 +511,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint pos,          //position id
         bool rounding      //match "close enough" orders?
     )
-        internal
-        returns (uint id)
+    internal
+    returns (uint id)
     {
         uint best_maker_id;    //highest maker id
         uint t_buy_amt_old;    //taker buy how much saved
@@ -532,7 +532,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             // Since (c - 1) * (d - 1) > (a + 1) * (b + 1) is equivalent to
             // c * d > a * b + a + b + c + d, we write...
             if (mul(m_buy_amt, t_buy_amt) > mul(t_pay_amt, m_pay_amt) +
-                (rounding ? m_buy_amt + t_buy_amt + t_pay_amt + m_pay_amt : 0))
+            (rounding ? m_buy_amt + t_buy_amt + t_pay_amt + m_pay_amt : 0))
             {
                 break;
             }
@@ -566,8 +566,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint buy_amt,      //maker (ask) buy how much
         IERC20 buy_gem      //maker (ask) buy which token
     )
-        internal
-        returns (uint id)
+    internal
+    returns (uint id)
     {
         require(_dust[address(pay_gem)] <= pay_amt);
         id = offer_simple_market(pay_amt, pay_gem, buy_amt, buy_gem);
@@ -581,7 +581,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         uint id,    //maker (ask) id
         uint pos    //position to insert into
     )
-        internal
+    internal
     {
         require(isActive(id));
 
@@ -591,9 +591,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         pos = pos == 0 || offers[pos].pay_gem != pay_gem || offers[pos].buy_gem != buy_gem || !isOfferSorted(pos)
         ?
-            _find(id)
+        _find(id)
         :
-            _findpos(id, pos);
+        _findpos(id, pos);
 
         if (pos != 0) {                                    //offers[id] is not the highest offer
             //requirement below is satisfied by statements above
@@ -621,15 +621,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     function _unsort(
         uint id    //id of maker (ask) offer to remove from sorted list
     )
-        internal
-        returns (bool)
+    internal
+    returns (bool)
     {
         address buy_gem = address(offers[id].buy_gem);
         address pay_gem = address(offers[id].pay_gem);
         require(_span[pay_gem][buy_gem] > 0);
 
         require(_rank[id].delb == 0 &&                    //assert id is in the sorted list
-                 isOfferSorted(id));
+            isOfferSorted(id));
 
         if (id != _best[pay_gem][buy_gem]) {              // offers[id] is not the highest offer
             require(_rank[_rank[id].next].prev == id);
@@ -652,8 +652,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     function _hide(
         uint id     //id of maker offer to remove from unsorted list
     )
-        internal
-        returns (bool)
+    internal
+    returns (bool)
     {
         uint uid = _head;               //id of an offer in unsorted offers list
         uint pre = uid;                 //id of previous offer in unsorted offers list
@@ -676,9 +676,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
     }
-     /**
-     * @notice          Function to set uniswap router
-     */
+    /**
+    * @notice          Function to set uniswap router
+    */
     function setUniswapRouter(
         address _uniswapRouter
     )
@@ -688,9 +688,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         setUniswapRouterInternal(_uniswapRouter);
     }
 
-     /**
-     * @notice          Function to set uniswap router
-     */
+    /**
+    * @notice          Function to set uniswap router
+    */
     function setUniswapRouterInternal(
         address
         _uniswapRouter

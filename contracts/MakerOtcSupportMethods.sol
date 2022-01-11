@@ -6,13 +6,13 @@ import "./system/OrderBookUpgradable.sol";
 
 contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
     function getOffers(IOtc otc, address payToken, address buyToken) public view
-        returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
+    returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
         (ids, payAmts, buyAmts, owners, timestamps) = getOffers(otc, otc.getBestOffer(payToken, buyToken));
     }
 
     function getOffers(IOtc otc, uint offerId) public view
-        returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
+    returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
         uint i = 0;
         do {

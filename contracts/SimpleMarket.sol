@@ -29,7 +29,7 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 contract EventfulMarket {
     event LogItemUpdate(uint id);
     event LogTrade(uint pay_amt, address indexed pay_gem,
-                   uint buy_amt, address indexed buy_gem);
+        uint buy_amt, address indexed buy_gem);
 
     event LogMake(
         bytes32  indexed  id,
@@ -139,17 +139,17 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function getOffer(uint id) public view returns (uint, IERC20, uint, IERC20) {
-      OfferInfo memory offer = offers[id];
-      return (offer.pay_amt, offer.pay_gem,
-              offer.buy_amt, offer.buy_gem);
+        OfferInfo memory offer = offers[id];
+        return (offer.pay_amt, offer.pay_gem,
+        offer.buy_amt, offer.buy_gem);
     }
 
     // ---- Public entrypoints ---- //
 
     function bump(bytes32 id_)
-        public
-        whenNotPaused
-        can_buy(uint256(id_))
+    public
+    whenNotPaused
+    can_buy(uint256(id_))
     {
         uint256 id = uint256(id_);
         emit LogBump(
@@ -167,11 +167,11 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // Accept given `quantity` of an offer. Transfers funds from caller to
     // offer maker, and from market to caller.
     function buy_simple_market(uint id, uint quantity)
-        public
-        whenNotPaused
-        can_buy(id)
-        synchronized
-        returns (bool)
+    public
+    whenNotPaused
+    can_buy(id)
+    synchronized
+    returns (bool)
     {
         OfferInfo memory offer = offers[id];
         uint spend = mul(quantity, offer.buy_amt) / offer.pay_amt;
@@ -181,7 +181,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
         // For backwards semantic compatibility.
         if (quantity == 0 || spend == 0 ||
-            quantity > offer.pay_amt || spend > offer.buy_amt)
+        quantity > offer.pay_amt || spend > offer.buy_amt)
         {
             return false;
         }
@@ -193,9 +193,9 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(spend);
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
-       
+
             uint256 updatedSpend = spend - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
+
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
             address championAddress = IHPool(address(offer.pay_gem)).hPool().championAddress;
@@ -217,14 +217,14 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
+
             address championAddress = IHPool(address(offer.buy_gem)).hPool().championAddress;
 
             platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
 
             // send champion fee to champion
             safeTransfer(offer.pay_gem, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
-            
+
             emit FeesTaken(
                 championFee,
                 protocolFee
@@ -252,7 +252,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         emit LogTrade(quantity, address(offer.pay_gem), spend, address(offer.buy_gem));
 
         if (offers[id].pay_amt == 0) {
-          delete offers[id];
+            delete offers[id];
         }
 
         return true;
@@ -260,11 +260,11 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     // Cancel an offer. Refunds offer maker.
     function cancel_simple_market(uint id)
-        public
-        whenNotPaused
-        can_cancel_simple_market(id)
-        synchronized
-        returns (bool success)
+    public
+    whenNotPaused
+    can_cancel_simple_market(id)
+    synchronized
+    returns (bool success)
     {
         // read-only offer. Modify an offer by directly accessing offers[id]
         OfferInfo memory offer = offers[id];
@@ -289,10 +289,10 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     // Make a new offer. Takes funds from the caller into market escrow.
     function offer_simple_market(uint pay_amt, IERC20 pay_gem, uint buy_amt, IERC20 buy_gem)
-        internal
-        can_offer
-        synchronized
-        returns (uint id)
+    internal
+    can_offer
+    synchronized
+    returns (uint id)
     {
         require(uint128(pay_amt) == pay_amt);
         require(uint128(buy_amt) == buy_amt);
@@ -328,8 +328,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function _next_id()
-        internal
-        returns (uint)
+    internal
+    returns (uint)
     {
         last_offer_id++; return last_offer_id;
     }
@@ -354,10 +354,10 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         }
     }
 
-     /**
-        * @notice  Function allowing congress to pause the smart-contract
-        * @dev     Can be only called by HordCongress
-     */
+    /**
+       * @notice  Function allowing congress to pause the smart-contract
+       * @dev     Can be only called by HordCongress
+    */
     function pause()
     external
     onlyHordCongress
@@ -367,7 +367,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     /**
         * @notice  Function allowing congress to unpause the smart-contract
-        * @dev     Can be only called by HordCongress 
+        * @dev     Can be only called by HordCongress
      */
     function unpause()
     external

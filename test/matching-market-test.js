@@ -51,10 +51,18 @@ async function setupContractAndAccounts () {
     const OrderBookConfiguration = await ethers.getContractFactory('OrderBookConfiguration');
     orderBookConfiguration = await OrderBookConfiguration.deploy();
     await orderBookConfiguration.deployed();
-    // await orderBookConfiguration.initialize(
-    //     hordCongressAddr,
-    //     maintainersRegistry.address
-    // );
+    await orderBookConfiguration.initialize(
+        [
+            hordCongressAddr,
+            maintainersRegistry.address,
+            hordToken.address,
+            dustToken.address
+        ],
+        [
+            100,
+            25
+        ]
+    );
 
     const MockHPoolManager = await ethers.getContractFactory('MockHPoolManager');
     hPoolManager = await MockHPoolManager.deploy();
@@ -65,7 +73,10 @@ async function setupContractAndAccounts () {
     await matchingMarket.deployed();
     await matchingMarket.initialize(
         hordCongressAddr,
-        maintainersRegistry.address
+        maintainersRegistry.address,
+        orderBookConfiguration.address,
+        uniswapRouter.address,
+        hPoolManager.address
     );
 
 }
@@ -76,9 +87,9 @@ describe('MatchingMarket', async() => {
         await setupContractAndAccounts();
     });
 
-    describe('a', async() => {
+    describe('', async() => {
         it('s', async() => {
-            console.log('aaa')
+            console.log("a");
         });
     });
 
