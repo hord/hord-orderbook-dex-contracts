@@ -29,7 +29,6 @@ contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
-    event LogDelete(address keeper, uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
     event UniswapRouterSet(address uniswapRouter);
 }
@@ -129,8 +128,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     /**
         * @notice          function to make a new offer. Takes funds from the caller into market escrow
         * @param           pay_amt is the amount of the token user wants to sell 
-         * @param           pay_amt is the amount of the token user wants to sell 
-        * @param           pay_amt is the amount of the token user wants to sell 
         * @param           pay_gem is an ERC20 token user wants to sell
         * @param           buy_amt is the amount of the token user wants to buy
         * @param           buy_gem is an ERC20 token user wants to buy
@@ -213,20 +210,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             require(_hide(id));
         }
         return cancel_simple_market(id);    //delete the offer.
-    }
-
-    //deletes _rank [id]
-    //  Function should be called by keepers.
-    function del_rank(uint id)
-        public
-        whenNotPaused
-        returns (bool)
-    {
-        require(!locked, "Reentrancy attempt");
-        require(!isActive(id) && _rank[id].delb != 0 && _rank[id].delb < block.number - 10);
-        delete _rank[id];
-        emit LogDelete(msg.sender, id);
-        return true;
     }
 
     //returns the minimum sell amount for an offer
