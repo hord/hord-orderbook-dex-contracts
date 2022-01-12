@@ -85,7 +85,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
-    // make only HPool tokens tradeable
+    /**
+         * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
+         * @param           tokenA is a token user wants trade
+         * @param           tokenB is another token user wants to trade against tokenB
+     */
     modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
         require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
