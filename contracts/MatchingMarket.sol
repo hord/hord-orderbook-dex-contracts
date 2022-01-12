@@ -29,7 +29,6 @@ contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
-    event LogInsert(address keeper, uint id);
     event LogDelete(address keeper, uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
     event UniswapRouterSet(address uniswapRouter);
@@ -37,21 +36,21 @@ contract MatchingEvents {
 
 contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradeable {
     struct sortInfo {
-        uint next;  //points to id of next higher offer
-        uint prev;  //points to id of previous lower offer
-        uint delb;  //the blocknumber where this entry was marked for delete
+        uint next; //points to id of next higher offer
+        uint prev; //points to id of previous lower offer
+        uint delb; //the blocknumber where this entry was marked for delete
     }
 
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
-    mapping(uint => sortInfo) public _rank;                     //doubly linked lists of sorted offer ids
-    mapping(address => mapping(address => uint)) public _best;  //id of the highest offer for a token pair
-    mapping(address => mapping(address => uint)) public _span;  //number of offers stored for token pair in sorted orderbook
-    mapping(address => uint) public _dust;                      //minimum sell amount for a token to avoid dust offers
-    mapping(uint => uint) public _near;         //next unsorted offer id
-    uint public _head;                                 //first unsorted offer id
+    mapping(uint => sortInfo) public _rank; //doubly linked lists of sorted offer ids
+    mapping(address => mapping(address => uint)) public _best; //id of the highest offer for a token pair
+    mapping(address => mapping(address => uint)) public _span; //number of offers stored for token pair in sorted orderbook
+    mapping(address => uint) public _dust; //minimum sell amount for a token to avoid dust offers
+    mapping(uint => uint) public _near; //next unsorted offer id
+    uint public _head; //first unsorted offer id
 
     // dust management
     uint256 public dustLimit;
