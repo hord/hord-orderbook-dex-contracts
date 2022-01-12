@@ -5,6 +5,12 @@ import "./interfaces/IOtc.sol";
 import "./system/OrderBookUpgradable.sol";
 
 contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
+     /**
+         * @notice          Function to return all the current orders using several arrays
+         * @param           otc is MatchingMarket
+         * @param           payToken is the token user wants to sell
+         * @param           buyToken is the token user wants to buy
+     */
     function getOffers(IOtc otc, address payToken, address buyToken) public view
         returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {
