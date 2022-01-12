@@ -109,10 +109,19 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     // ---- Public entrypoints ---- //
 
+    /**
+        * @notice          function to take specific order. Calls buy function which executes the buy 
+        * @param           id id of the specific order
+        * @param           maxTakeAmount maximal amount of tokens user wants to buy from specific order
+    */
     function take(bytes32 id, uint128 maxTakeAmount) public {
         require(buy(uint256(id), maxTakeAmount));
     }
 
+    /**
+        * @notice          function to kill specific order. Calls cancel function which executes the cancellation of the specific order
+        * @param           id id of the specific order
+    */
     function kill(bytes32 id) public {
         require(cancel(uint256(id)));
     }
