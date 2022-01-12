@@ -86,9 +86,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     }
 
     /**
-         * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
-         * @param           tokenA is a token user wants trade
-         * @param           tokenB is another token user wants to trade against tokenB
+        * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
+        * @param           tokenA is a token user wants trade
+        * @param           tokenB is another token user wants to trade against tokenB
      */
     modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
         require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
@@ -126,14 +126,16 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(cancel(uint256(id)));
     }
     
-     /**
-         * @notice          function to make a new offer. Takes funds from the caller into market escrow.
+    /**
+        * @notice          function to make a new offer. Takes funds from the caller into market escrow
+        * @param           pay_amt is the amount of the token user wants to sell 
          * @param           pay_amt is the amount of the token user wants to sell 
-         * @param           pay_gem is an ERC20 token user wants to sell
-         * @param           buy_amt is the amount of the token user wants to buy
-         * @param           buy_gem is an ERC20 token user wants to buy
-         * @param           pos position where to insert the new offer, 0 should be used if unknown
-     */
+        * @param           pay_amt is the amount of the token user wants to sell 
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           buy_amt is the amount of the token user wants to buy
+        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           pos position where to insert the new offer, 0 should be used if unknown
+    */
     function offer(
         uint pay_amt,    //maker (ask) sell how much
         IERC20 pay_gem,   //maker (ask) sell which token
@@ -150,6 +152,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
     }
 
+    /**
+        * @notice          function to make a new offer. Takes funds from the caller into market escrow
+        * @param           pay_amt is the amount of the token user wants to sell 
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           buy_amt is the amount of the token user wants to buy
+        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
+        * @param           rounding boolean value indicating whether "close enough" orders should be matched
+    */
     function offer(
         uint pay_amt,    //maker (ask) sell how much
         IERC20 pay_gem,   //maker (ask) sell which token
