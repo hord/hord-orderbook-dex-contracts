@@ -181,7 +181,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return _matcho(pay_amt, pay_gem, buy_amt, buy_gem, pos, rounding);
     }
 
-    //Transfers funds from caller to offer maker, and from market to caller.
+    /**
+        * @notice          function that transfers funds from caller to offer maker, and from market to caller
+        * @param           id id of the specific order
+        * @param           amount amount of tokens user wants to buy from specific order
+    */
     function buy(uint id, uint amount)
         public
         whenNotPaused
@@ -192,7 +196,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return _buys(id, amount);
     }
 
-    // Cancel an offer. Refunds offer maker.
+    /**
+        * @notice          function that cancels an offer and refunds offer to maker
+        * @param           id id of the specific order
+    */
     function cancel(uint id)
         public
         whenNotPaused
