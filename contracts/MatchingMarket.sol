@@ -273,6 +273,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
                || _best[address(offers[id].pay_gem)][address(offers[id].buy_gem)] == id;
     }
 
+    /**
+        * @notice          function that attempts to exchange all of the pay_gem tokens for at least the specified amount of 
+                           buy_gem tokens. It is possible that more tokens will be bought (depending on the current state of
+                           the orderbook). Transaction will fail if the method call determines that the caller will receive 
+                           less amount than the amount specified as min_fill_amount.
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           pay_amt is the amount of the token user wants to sell 
+        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           min_fill_amount The least amount that the caller is willing to receive. If slippage happens and 
+                           price declines the user might end up with less of the buy_gem. In order to avoid big losses the
+                           caller should provide this threshold
+    */
     function sellAllAmount(IERC20 pay_gem, uint pay_amt, IERC20 buy_gem, uint min_fill_amount)
         public
         whenNotPaused
@@ -302,6 +314,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(fill_amt >= min_fill_amount);
     }
 
+     /**
+        * @notice          function that attempts to exchange at most specified amount of pay_gem tokens for a 
+                           specified amount of buy_gem tokens. It is possible that less tokens will be spent (depending
+                           on the current state of the orderbook). Transaction will fail if the method call determines
+                           that the caller will pay more than the amount specified as max_fill_amount.
+        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           buy_amt is the amount of the token user wants to buy
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           max_fill_amount The most amount that the caller is willing to pay. If slippage happens and
+                           price increases the user might end up with paying more of the pay_gem. In order to avoid big
+                           losses the caller should provide this threshold.
+    */
     function buyAllAmount(IERC20 buy_gem, uint buy_amt, IERC20 pay_gem, uint max_fill_amount)
         public
         whenNotPaused
