@@ -109,20 +109,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     // ---- Public entrypoints ---- //
 
-    function make(
-        IERC20    pay_gem,
-        IERC20    buy_gem,
-        uint128  pay_amt,
-        uint128  buy_amt
-    )
-        public
-        whenNotPaused
-        isHPoolToken(pay_gem, buy_gem)
-        returns (bytes32)
-    {
-        return bytes32(offer(pay_amt, pay_gem, buy_amt, buy_gem));
-    }
-
     function take(bytes32 id, uint128 maxTakeAmount) public {
         require(buy(uint256(id), maxTakeAmount));
     }
