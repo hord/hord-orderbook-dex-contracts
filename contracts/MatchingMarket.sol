@@ -128,30 +128,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(cancel(uint256(id)));
     }
 
-    // Make a new offer. Takes funds from the caller into market escrow.
-    //
-    //     * creates new offer without putting it in
-    //       the sorted list.
-    //     * available to authorized contracts only!
-    //     * keepers should call insert(id,pos)
-    //       to put offer in the sorted list.
-    //
-    function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //taker (ask) buy how much
-        IERC20 buy_gem    //taker (ask) buy which token
-    )
-        public
-        whenNotPaused
-        isHPoolToken(pay_gem, buy_gem)
-        returns (uint)
-    {
-        require(!locked, "Reentrancy attempt");
-        return _offeru(pay_amt, pay_gem, buy_amt, buy_gem);
-    }
-
-    // Make a new offer. Takes funds from the caller into market escrow.
+     */
     function offer(
         uint pay_amt,    //maker (ask) sell how much
         IERC20 pay_gem,   //maker (ask) sell which token
