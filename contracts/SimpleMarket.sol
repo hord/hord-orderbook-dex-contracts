@@ -167,7 +167,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // Accept given `quantity` of an offer. Transfers funds from caller to
     // offer maker, and from market to caller.
     function buy_simple_market(uint id, uint quantity)
-        public
+        internal
         whenNotPaused
         can_buy(id)
         synchronized
@@ -260,7 +260,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     // Cancel an offer. Refunds offer maker.
     function cancel_simple_market(uint id)
-        public
+        internal
         whenNotPaused
         can_cancel_simple_market(id)
         synchronized
