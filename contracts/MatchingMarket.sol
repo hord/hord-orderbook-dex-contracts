@@ -556,26 +556,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         }
     }
 
-    // Make a new offer without putting it in the sorted list.
-    // Takes funds from the caller into market escrow.
-    // ****Available to authorized contracts only!**********
-    // Keepers should call insert(id,pos) to put offer in the sorted list.
-    function _offeru(
-        uint pay_amt,      //maker (ask) sell how much
-        IERC20 pay_gem,     //maker (ask) sell which token
-        uint buy_amt,      //maker (ask) buy how much
-        IERC20 buy_gem      //maker (ask) buy which token
-    )
-        internal
-        returns (uint id)
-    {
-        require(_dust[address(pay_gem)] <= pay_amt);
-        id = offer_simple_market(pay_amt, pay_gem, buy_amt, buy_gem);
-        _near[id] = _head;
-        _head = id;
-        emit LogUnsortedOffer(id);
-    }
-
     //put offer into the sorted list
     function _sort(
         uint id,    //maker (ask) id
