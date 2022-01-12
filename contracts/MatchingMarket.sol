@@ -116,7 +116,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     function kill(bytes32 id) public {
         require(cancel(uint256(id)));
     }
-
+    
+     /**
+         * @notice          function to make a new offer. Takes funds from the caller into market escrow.
+         * @param           pay_amt is the amount of the token user wants to sell 
+         * @param           pay_gem is an ERC20 token user wants to sell
+         * @param           buy_amt is the amount of the token user wants to buy
+         * @param           buy_gem is an ERC20 token user wants to buy
+         * @param           pos position where to insert the new offer, 0 should be used if unknown
      */
     function offer(
         uint pay_amt,    //maker (ask) sell how much
