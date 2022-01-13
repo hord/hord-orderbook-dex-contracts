@@ -59,6 +59,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _hordCongress,
         address _maintainersRegistry,
         address _orderbookConfiguration,
+        address _uniswapRouter,
         address _hPoolManager
     )
     public
@@ -78,17 +79,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
-
+        
+        setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
     /**
-        * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
+        * @notice          modifier to ensure that one of the tokens is the dust token (BUSD), and one of the tokens is an HPool token
         * @param           tokenA is a token user wants trade
         * @param           tokenB is another token user wants to trade against tokenB
      */
-    modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
-        require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
+    modifier isValidHPoolTokenPair(IERC20 tokenA, IERC20 tokenB) {
+        require(hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
     }
 
@@ -187,7 +189,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     can_buy(id)
     returns (bool)
     {
-        require(!locked, "Reentrancy attempt");
+        //TODO: remove reentrancy guard impl and extend ReentrancyGuard contract
+        require(!locked, "Reentrancy attempt"); //TODO: maybe at least make the lock per token pair not on the entire dex
         return _buys(id, amount);
     }
 
@@ -535,7 +538,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             }
             // ^ The `rounding` parameter is a compromise borne of a couple days
             // of discussion.
-            buy(best_maker_id, min(m_pay_amt, t_buy_amt));
+            buy(best_maker_id, min(m_pay_amt, t_buy_amt)); // buys if its possible
             t_buy_amt_old = t_buy_amt;
             t_buy_amt = sub(t_buy_amt, min(m_pay_amt, t_buy_amt));
             t_pay_amt = mul(t_buy_amt, t_pay_amt) / t_buy_amt_old;
@@ -547,10 +550,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         if (t_buy_amt > 0 && t_pay_amt > 0 && t_pay_amt >= _dust[address(t_pay_gem)]) {
             //new offer should be created
-            id = offer_simple_market(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem);
+            id = offer_simple_market(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem); // makes offer if something is left
             //insert offer into the sorted list
             _sort(id, pos);
         }
+
+
     }
 
     /**
@@ -659,5 +664,64 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _near[pre] = _near[id];         //set previous unsorted offer to point to offer after offer id
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
+    }
+
+         /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouter(
+        address _uniswapRouter
+    )
+    external
+    onlyHordCongress
+    {
+        setUniswapRouterInternal(_uniswapRouter);
+    }
+
+     /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouterInternal(
+        address
+        _uniswapRouter
+    )
+    internal
+    {
+        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
+        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
+        emit UniswapRouterSet(_uniswapRouter);
+    }
+
+    function burnPlatformFees(
+        uint256 amount
+    )
+    external
+    onlyHordCongress
+    nonReentrant
+    {
+        require(amount <= platformFee.feesAvailable, "Amount is above threshold.");
+
+        platformFee.feesAvailable = platformFee.feesAvailable - amount;
+        platformFee.feesWithdrawn = platformFee.feesWithdrawn + amount;
+
+        address[] memory path = new address[](2);
+
+        path[0] = address(dustToken);
+        path[1] = uniswapRouter.WETH();
+        path[2] = hordToken;
+
+        uint256 deadline = block.timestamp + 300;
+
+        uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
+
+        uint256[] memory amounts = uniswapRouter.swapExactETHForTokens{value: amount} (
+            amountOutMin[1],
+            path,
+            address(1), // burn address
+            deadline
+        );
+
+        // Trigger event that buy&burn was executed over hord token
+        emit BuyAndBurn(amounts[0], amounts[1]);
     }
 }
