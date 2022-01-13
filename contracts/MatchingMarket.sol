@@ -481,8 +481,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         view
         returns (bool)
     {
-        return mul(offers[low].buy_amt, offers[high].pay_amt)
-          >= mul(offers[high].buy_amt, offers[low].pay_amt);
+        return offers[low].buy_amt * offers[high].pay_amt
+          >= offers[high].buy_amt * offers[low].pay_amt;
     }
 
     //these variables are global only because of solidity local variable limit
