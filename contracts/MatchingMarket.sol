@@ -472,6 +472,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         }
     }
 
+    /**
+        * @notice          function returns true if offers[low] priced less than or equal to offers[high]
+        * @param           low offer id
+        * @param           high offer id 
+    */
     //return true if offers[low] priced less than or equal to offers[high]
     function _isPricedLtOrEq(
         uint low,   //lower priced offer's id
