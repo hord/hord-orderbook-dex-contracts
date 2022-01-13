@@ -59,6 +59,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _hordCongress,
         address _maintainersRegistry,
         address _orderbookConfiguration,
+        address _uniswapRouter,
         address _hPoolManager
     )
     public
@@ -78,7 +79,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
-
+        
+        setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
@@ -659,5 +661,64 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _near[pre] = _near[id];         //set previous unsorted offer to point to offer after offer id
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
+    }
+
+         /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouter(
+        address _uniswapRouter
+    )
+    external
+    onlyHordCongress
+    {
+        setUniswapRouterInternal(_uniswapRouter);
+    }
+
+     /**
+     * @notice          Function to set uniswap router
+     */
+    function setUniswapRouterInternal(
+        address
+        _uniswapRouter
+    )
+    internal
+    {
+        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
+        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
+        emit UniswapRouterSet(_uniswapRouter);
+    }
+
+    function burnPlatformFees(
+        uint256 amount
+    )
+    external
+    onlyHordCongress
+    nonReentrant
+    {
+        require(amount <= platformFee.feesAvailable, "Amount is above threshold.");
+
+        platformFee.feesAvailable = platformFee.feesAvailable - amount;
+        platformFee.feesWithdrawn = platformFee.feesWithdrawn + amount;
+
+        address[] memory path = new address[](2);
+
+        path[0] = address(dustToken);
+        path[1] = uniswapRouter.WETH();
+        path[2] = hordToken;
+
+        uint256 deadline = block.timestamp + 300;
+
+        uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
+
+        uint256[] memory amounts = uniswapRouter.swapExactETHForTokens{value: amount} (
+            amountOutMin[1],
+            path,
+            address(1), // burn address
+            deadline
+        );
+
+        // Trigger event that buy&burn was executed over hord token
+        emit BuyAndBurn(amounts[0], amounts[1]);
     }
 }
