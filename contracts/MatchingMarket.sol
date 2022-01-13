@@ -29,29 +29,27 @@ contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
-    event LogInsert(address keeper, uint id);
-    event LogDelete(address keeper, uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
     event UniswapRouterSet(address uniswapRouter);
 }
 
 contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradeable {
     struct sortInfo {
-        uint next;  //points to id of next higher offer
-        uint prev;  //points to id of previous lower offer
-        uint delb;  //the blocknumber where this entry was marked for delete
+        uint next; //points to id of next higher offer
+        uint prev; //points to id of previous lower offer
+        uint delb; //the blocknumber where this entry was marked for delete
     }
 
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
-    mapping(uint => sortInfo) public _rank;                     //doubly linked lists of sorted offer ids
-    mapping(address => mapping(address => uint)) public _best;  //id of the highest offer for a token pair
-    mapping(address => mapping(address => uint)) public _span;  //number of offers stored for token pair in sorted orderbook
-    mapping(address => uint) public _dust;                      //minimum sell amount for a token to avoid dust offers
-    mapping(uint => uint) public _near;         //next unsorted offer id
-    uint public _head;                                 //first unsorted offer id
+    mapping(uint => sortInfo) public _rank; //doubly linked lists of sorted offer ids
+    mapping(address => mapping(address => uint)) public _best; //id of the highest offer for a token pair
+    mapping(address => mapping(address => uint)) public _span; //number of offers stored for token pair in sorted orderbook
+    mapping(address => uint) public _dust; //minimum sell amount for a token to avoid dust offers
+    mapping(uint => uint) public _near; //next unsorted offer id
+    uint public _head; //first unsorted offer id
 
     // dust management
     uint256 public dustLimit;
@@ -61,7 +59,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _hordCongress,
         address _maintainersRegistry,
         address _orderbookConfiguration,
-        address _uniswapRouter,
         address _hPoolManager
     )
     public
@@ -82,11 +79,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
 
-        setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
-    // make only HPool tokens tradeable
+    /**
+        * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
+        * @param           tokenA is a token user wants trade
+        * @param           tokenB is another token user wants to trade against tokenB
+     */
     modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
         require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
@@ -106,58 +106,37 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     // ---- Public entrypoints ---- //
 
-    function make(
-        IERC20    pay_gem,
-        IERC20    buy_gem,
-        uint128  pay_amt,
-        uint128  buy_amt
-    )
-    public
-    whenNotPaused
-    isHPoolToken(pay_gem, buy_gem)
-    returns (bytes32)
-    {
-        return bytes32(offer(pay_amt, pay_gem, buy_amt, buy_gem));
-    }
-
+    /**
+        * @notice          function to take specific order. Calls buy function which executes the buy
+        * @param           id id of the specific order
+        * @param           maxTakeAmount maximal amount of tokens user wants to buy from specific order
+    */
     function take(bytes32 id, uint128 maxTakeAmount) public {
         require(buy(uint256(id), maxTakeAmount));
     }
 
+    /**
+        * @notice          function to kill specific order. Calls cancel function which executes the cancellation of the specific order
+        * @param           id id of the specific order
+    */
     function kill(bytes32 id) public {
         require(cancel(uint256(id)));
     }
 
-    // Make a new offer. Takes funds from the caller into market escrow.
-    //
-    //     * creates new offer without putting it in
-    //       the sorted list.
-    //     * available to authorized contracts only!
-    //     * keepers should call insert(id,pos)
-    //       to put offer in the sorted list.
-    //
+    /**
+        * @notice          function to make a new offer. Takes funds from the caller into market escrow
+        * @param           pay_amt is the amount of the token maker wants to sell
+        * @param           pay_gem is an ERC20 token maker wants to sell
+        * @param           buy_amt is the amount of the token maker wants to buy
+        * @param           buy_gem is an ERC20 token maker wants to buy
+        * @param           pos position where to insert the new offer, 0 should be used if unknown
+    */
     function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //taker (ask) buy how much
-        IERC20 buy_gem    //taker (ask) buy which token
-    )
-    public
-    whenNotPaused
-    isHPoolToken(pay_gem, buy_gem)
-    returns (uint)
-    {
-        require(!locked, "Reentrancy attempt");
-        return _offeru(pay_amt, pay_gem, buy_amt, buy_gem);
-    }
-
-    // Make a new offer. Takes funds from the caller into market escrow.
-    function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //maker (ask) buy how much
-        IERC20 buy_gem,   //maker (ask) buy which token
-        uint pos         //position to insert offer, 0 should be used if unknown
+        uint pay_amt,
+        IERC20 pay_gem,
+        uint buy_amt,
+        IERC20 buy_gem,
+        uint pos
     )
     public
     whenNotPaused
@@ -168,13 +147,22 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
     }
 
+    /**
+        * @notice          function to make a new offer. Takes funds from the caller into market escrow
+        * @param           pay_amt is the amount of the token maker wants to sell
+        * @param           pay_gem is an ERC20 token maker wants to sell
+        * @param           buy_amt is the amount of the token maker wants to buy
+        * @param           buy_gem is an ERC20 token maker wants to buy
+        * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
+        * @param           rounding boolean value indicating whether "close enough" orders should be matched
+    */
     function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //maker (ask) buy how much
-        IERC20 buy_gem,   //maker (ask) buy which token
-        uint pos,        //position to insert offer, 0 should be used if unknown
-        bool rounding    //match "close enough" orders?
+        uint pay_amt,
+        IERC20 pay_gem,
+        uint buy_amt,
+        IERC20 buy_gem,
+        uint pos,
+        bool rounding
     )
     public
     whenNotPaused
@@ -188,7 +176,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return _matcho(pay_amt, pay_gem, buy_amt, buy_gem, pos, rounding);
     }
 
-    //Transfers funds from caller to offer maker, and from market to caller.
+    /**
+        * @notice          function that transfers funds from caller to offer maker, and from market to caller
+        * @param           id id of the specific order
+        * @param           amount amount of tokens user wants to buy from specific order
+    */
     function buy(uint id, uint amount)
     public
     whenNotPaused
@@ -199,7 +191,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return _buys(id, amount);
     }
 
-    // Cancel an offer. Refunds offer maker.
+    /**
+        * @notice          function that cancels an offer and refunds offer to maker
+        * @param           id id of the specific order
+    */
     function cancel(uint id)
     public
     whenNotPaused
@@ -213,40 +208,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             require(_hide(id));
         }
         return cancel_simple_market(id);    //delete the offer.
-    }
-
-    //insert offer into the sorted list
-    //keepers need to use this function
-    function insert(
-        uint id,   //maker (ask) id
-        uint pos   //position to insert into
-    )
-    public
-    whenNotPaused
-    returns (bool)
-    {
-        require(!locked, "Reentrancy attempt");
-        require(!isOfferSorted(id));    //make sure offers[id] is not yet sorted
-        require(isActive(id));          //make sure offers[id] is active
-
-        _hide(id);                      //remove offer from unsorted offers list
-        _sort(id, pos);                 //put offer into the sorted offers list
-        emit LogInsert(msg.sender, id);
-        return true;
-    }
-
-    //deletes _rank [id]
-    //  Function should be called by keepers.
-    function del_rank(uint id)
-    public
-    whenNotPaused
-    returns (bool)
-    {
-        require(!locked, "Reentrancy attempt");
-        require(!isActive(id) && _rank[id].delb != 0 && _rank[id].delb < block.number - 10);
-        delete _rank[id];
-        emit LogDelete(msg.sender, id);
-        return true;
     }
 
     //returns the minimum sell amount for an offer
@@ -310,6 +271,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         || _best[address(offers[id].pay_gem)][address(offers[id].buy_gem)] == id;
     }
 
+    /**
+        * @notice          function that attempts to exchange all of the pay_gem tokens for at least the specified amount of
+                           buy_gem tokens. It is possible that more tokens will be bought (depending on the current state of
+                           the orderbook). Transaction will fail if the method call determines that the caller will receive
+                           less amount than the amount specified as min_fill_amount.
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           pay_amt is the amount of the token user wants to sell
+        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           min_fill_amount The least amount that the caller is willing to receive. If slippage happens and
+                           price declines the user might end up with less of the buy_gem. In order to avoid big losses the
+                           caller should provide this threshold
+    */
     function sellAllAmount(IERC20 pay_gem, uint pay_amt, IERC20 buy_gem, uint min_fill_amount)
     public
     whenNotPaused
@@ -339,6 +312,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         require(fill_amt >= min_fill_amount);
     }
 
+    /**
+       * @notice          function that attempts to exchange at most specified amount of pay_gem tokens for a
+                          specified amount of buy_gem tokens. It is possible that less tokens will be spent (depending
+                          on the current state of the orderbook). Transaction will fail if the method call determines
+                          that the caller will pay more than the amount specified as max_fill_amount.
+       * @param           buy_gem is an ERC20 token user wants to buy
+       * @param           buy_amt is the amount of the token user wants to buy
+       * @param           pay_gem is an ERC20 token user wants to sell
+       * @param           max_fill_amount The most amount that the caller is willing to pay. If slippage happens and
+                          price increases the user might end up with paying more of the pay_gem. In order to avoid big
+                          losses the caller should provide this threshold.
+   */
     function buyAllAmount(IERC20 buy_gem, uint buy_amt, IERC20 pay_gem, uint max_fill_amount)
     public
     whenNotPaused
@@ -487,29 +472,41 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         }
     }
 
-    //return true if offers[low] priced less than or equal to offers[high]
+    /**
+        * @notice          function returns true if offers[low] priced less than or equal to offers[high]
+        * @param           low lower priced offer's id
+        * @param           high higher priced offer's id
+    */
     function _isPricedLtOrEq(
-        uint low,   //lower priced offer's id
-        uint high   //higher priced offer's id
+        uint low,
+        uint high
     )
     internal
     view
     returns (bool)
     {
-        return mul(offers[low].buy_amt, offers[high].pay_amt)
-        >= mul(offers[high].buy_amt, offers[low].pay_amt);
+        return offers[low].buy_amt * offers[high].pay_amt
+        >= offers[high].buy_amt * offers[low].pay_amt;
     }
 
     //these variables are global only because of solidity local variable limit
 
-    //match offers with taker offer, and execute token transactions
+    /**
+        * @notice          function that matches offers with taker offer, and execute token transactions
+        * @param           t_pay_amt is the amount of the token taker wants to sell
+        * @param           t_pay_gem is an ERC20 token taker wants to sell
+        * @param           t_buy_amt is the amount of the token taker wants to buy
+        * @param           t_buy_gem is an ERC20 token taker wants to buy
+        * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
+        * @param           rounding boolean value indicating whether "close enough" orders should be matched
+    */
     function _matcho(
-        uint t_pay_amt,    //taker sell how much
-        IERC20 t_pay_gem,   //taker sell which token
-        uint t_buy_amt,    //taker buy how much
-        IERC20 t_buy_gem,   //taker buy which token
-        uint pos,          //position id
-        bool rounding      //match "close enough" orders?
+        uint t_pay_amt,
+        IERC20 t_pay_gem,
+        uint t_buy_amt,
+        IERC20 t_buy_gem,
+        uint pos,
+        bool rounding
     )
     internal
     returns (uint id)
@@ -556,30 +553,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         }
     }
 
-    // Make a new offer without putting it in the sorted list.
-    // Takes funds from the caller into market escrow.
-    // ****Available to authorized contracts only!**********
-    // Keepers should call insert(id,pos) to put offer in the sorted list.
-    function _offeru(
-        uint pay_amt,      //maker (ask) sell how much
-        IERC20 pay_gem,     //maker (ask) sell which token
-        uint buy_amt,      //maker (ask) buy how much
-        IERC20 buy_gem      //maker (ask) buy which token
-    )
-    internal
-    returns (uint id)
-    {
-        require(_dust[address(pay_gem)] <= pay_amt);
-        id = offer_simple_market(pay_amt, pay_gem, buy_amt, buy_gem);
-        _near[id] = _head;
-        _head = id;
-        emit LogUnsortedOffer(id);
-    }
-
-    //put offer into the sorted list
+    /**
+        * @notice          function that puts offer into the sorted list
+        * @param           id maker (ask) id
+        * @param           pos position to insert into
+    */
     function _sort(
-        uint id,    //maker (ask) id
-        uint pos    //position to insert into
+        uint id,
+        uint pos
     )
     internal
     {
@@ -617,9 +598,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         emit LogSortedOffer(id);
     }
 
-    // Remove offer from the sorted list (does not cancel offer)
+    /**
+        * @notice          function that removes offer from the sorted list (does not cancel offer)
+        * @param           id id of maker (ask) offer to remove from sorted list
+    */
     function _unsort(
-        uint id    //id of maker (ask) offer to remove from sorted list
+        uint id
     )
     internal
     returns (bool)
@@ -675,63 +659,5 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _near[pre] = _near[id];         //set previous unsorted offer to point to offer after offer id
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
-    }
-    /**
-    * @notice          Function to set uniswap router
-    */
-    function setUniswapRouter(
-        address _uniswapRouter
-    )
-    external
-    onlyHordCongress
-    {
-        setUniswapRouterInternal(_uniswapRouter);
-    }
-
-    /**
-    * @notice          Function to set uniswap router
-    */
-    function setUniswapRouterInternal(
-        address
-        _uniswapRouter
-    )
-    internal
-    {
-        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
-        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
-        emit UniswapRouterSet(_uniswapRouter);
-    }
-
-    function burnPlatformFees(
-        uint256 amount
-    )
-    external
-    onlyHordCongress
-    nonReentrant
-    {
-        require(amount <= platformFee.feesAvailable, "Amount is above threshold.");
-
-        platformFee.feesAvailable = platformFee.feesAvailable - amount;
-        platformFee.feesWithdrawn = platformFee.feesWithdrawn + amount;
-
-        address[] memory path = new address[](2);
-
-        path[0] = address(dustToken);
-        path[1] = uniswapRouter.WETH();
-        path[2] = hordToken;
-
-        uint256 deadline = block.timestamp + 300;
-
-        uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
-
-        uint256[] memory amounts = uniswapRouter.swapExactETHForTokens{value: amount} (
-            amountOutMin[1],
-            path,
-            address(1), // burn address
-            deadline
-        );
-
-        // Trigger event that buy&burn was executed over hord token
-        emit BuyAndBurn(amounts[0], amounts[1]);
     }
 }

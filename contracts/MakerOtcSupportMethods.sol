@@ -1,3 +1,8 @@
+// Normally, querying offers directly OasisDEX order book would require making several 
+// calls to the contract to extract all the active orders. An alternative would be to cache this 
+// information on the server side, but we can also use a support contract to save on the number of queries.
+// The MakerOtcSupportsMethods contract provides an easy way to list all the pending orders in a 
+// single call, considerably speeding the request.
 pragma solidity 0.8.10;
 
 import "./libraries/DSMath.sol";
@@ -5,6 +10,12 @@ import "./interfaces/IOtc.sol";
 import "./system/OrderBookUpgradable.sol";
 
 contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
+     /**
+         * @notice          Function to return all the current orders using several arrays
+         * @param           otc is MatchingMarket
+         * @param           payToken is the token user wants to sell
+         * @param           buyToken is the token user wants to buy
+     */
     function getOffers(IOtc otc, address payToken, address buyToken) public view
     returns (uint[100] memory ids, uint[100] memory payAmts, uint[100] memory buyAmts, address[100] memory owners, uint[100] memory timestamps)
     {

@@ -14,9 +14,6 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     // Represents limit of dust token
     uint256 private _dustLimit;
 
-    // Represents total fee percent that gets taken on each trade
-    uint256 private _totalFeePercent;
-
     event HordTokenAddressChanged(string parameter, address newValue);
     event DustTokenAddressChanged(string parameter, address newValue);
     event ConfigurationChanged(string parameter, uint256 newValue);
@@ -34,7 +31,6 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         _hordToken = addresses[2];
         _dustToken = addresses[3];
         _dustLimit = configValues[0];
-        _totalFeePercent = configValues[1];
     }
 
     function setDustLimit(uint256 dustLimit_)
@@ -43,14 +39,6 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     {
         _dustLimit = dustLimit_;
         emit ConfigurationChanged("_dustLimit", _dustLimit);
-    }
-
-    function setTotalFeePercent(uint256 totalFeePercent_)
-    external
-    onlyHordCongress
-    {
-        _totalFeePercent = totalFeePercent_;
-        emit ConfigurationChanged("_totalFeePercent", _totalFeePercent);
     }
 
     function setHordTokenAddress(
@@ -84,16 +72,6 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         return _dustLimit;
     }
 
-    // _protocolFee getter function
-    function totalFeePercent()
-    external
-    view
-    returns (uint256)
-    {
-        return _totalFeePercent;
-    }
-
-
     // _hordToken getter function
     function hordToken()
     external
@@ -110,17 +88,5 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     returns (address)
     {
         return _dustToken;
-    }
-
-    function calculateTotalFee(uint256 amount) internal view returns (uint256){
-        return (amount / 10000) * _totalFeePercent;
-    }
-
-    function calculateChampionFee(uint256 amount) internal pure returns (uint256){
-        return (amount / 3) * 2;
-    }
-
-    function calculateOrderbookFee(uint256 amount) internal pure returns (uint256){
-        return amount / 3;
     }
 }
