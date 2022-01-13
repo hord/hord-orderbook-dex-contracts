@@ -99,12 +99,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         uint64   timestamp;
     }
 
-    struct PlatformFee {
-        uint256 feesAvailable;
-        uint256 feesWithdrawn;
-    }
-
-    PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IERC20 public dustToken;
 
@@ -189,53 +183,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         offers[id].pay_amt = sub(offer.pay_amt, quantity);
         offers[id].buy_amt = sub(offer.buy_amt, spend);
 
-        if (address(offer.buy_gem) == address(dustToken)) { // offer.buy_gem is BUSD
-            uint256 totalFee = orderbookConfiguration.calculateTotalFee(spend);
-            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
-            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
-       
-            uint256 updatedSpend = spend - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
-            platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
-
-            address championAddress = IHPool(address(offer.pay_gem)).hPool().championAddress;
-            // send champion fee to champion
-            safeTransferFrom(offer.buy_gem, msg.sender, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
-
-            safeTransferFrom(offer.buy_gem, msg.sender, address(this), protocolFee); // send protocol fee to this address
-
-            emit FeesTaken(
-                championFee,
-                protocolFee
-            );
-            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
-            safeTransfer(offer.pay_gem, msg.sender, quantity);
-
-        } else { // offer.pay_gem is BUSD
-            uint256 totalFee = orderbookConfiguration.calculateTotalFee(quantity);
-            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
-            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract
-
-            uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
-            
-            address championAddress = IHPool(address(offer.buy_gem)).hPool().championAddress;
-
-            platformFee.feesAvailable = platformFee.feesAvailable + protocolFee; // add taken protocol fee to keep track of total fees on the contract
-
-            // send champion fee to champion
-            safeTransfer(offer.pay_gem, championAddress, championFee); // TODO get champion address from existing Hord smart contracts with help of HPool token address
-            
-            emit FeesTaken(
-                championFee,
-                protocolFee
-            );
-            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
-            safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
-        }
-
-        // OLD CODE
-        // safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
-        // safeTransfer(offer.pay_gem, msg.sender, quantity);
+        safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
+        safeTransfer(offer.pay_gem, msg.sender, quantity);
 
         emit LogItemUpdate(id);
         emit LogTake(
