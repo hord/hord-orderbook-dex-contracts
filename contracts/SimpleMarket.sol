@@ -134,14 +134,26 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         locked = false;
     }
 
+    /**
+        * @notice          function that returns if offer is valid active offer
+        * @param           id offer id
+    */
     function isActive(uint id) public view returns (bool active) {
         return offers[id].timestamp > 0;
     }
-
+    
+    /**
+        * @notice          function that returns owner address of specific order
+        * @param           id offer id
+    */
     function getOwner(uint id) public view returns (address owner) {
         return offers[id].owner;
     }
 
+    /**
+        * @notice          function that returns from specific order the buy token, buy token amount, sell token and sell token amount
+        * @param           id offer id
+    */
     function getOffer(uint id) public view returns (uint, IERC20, uint, IERC20) {
       OfferInfo memory offer = offers[id];
       return (offer.pay_amt, offer.pay_gem,
@@ -297,7 +309,10 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint64(block.timestamp)
         );
     }
-
+     
+    /**
+        * @notice          function that returns the next available id 
+    */
     function _next_id()
         internal
         returns (uint)
