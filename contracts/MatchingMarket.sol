@@ -125,18 +125,18 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     
     /**
         * @notice          function to make a new offer. Takes funds from the caller into market escrow
-        * @param           pay_amt is the amount of the token user wants to sell 
-        * @param           pay_gem is an ERC20 token user wants to sell
-        * @param           buy_amt is the amount of the token user wants to buy
-        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           pay_amt is the amount of the token maker wants to sell 
+        * @param           pay_gem is an ERC20 token maker wants to sell
+        * @param           buy_amt is the amount of the token maker wants to buy
+        * @param           buy_gem is an ERC20 token maker wants to buy
         * @param           pos position where to insert the new offer, 0 should be used if unknown
     */
     function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //maker (ask) buy how much
-        IERC20 buy_gem,   //maker (ask) buy which token
-        uint pos         //position to insert offer, 0 should be used if unknown
+        uint pay_amt,    
+        IERC20 pay_gem,   
+        uint buy_amt,    
+        IERC20 buy_gem,   
+        uint pos         
     )
         public
         whenNotPaused
@@ -149,20 +149,20 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     /**
         * @notice          function to make a new offer. Takes funds from the caller into market escrow
-        * @param           pay_amt is the amount of the token user wants to sell 
-        * @param           pay_gem is an ERC20 token user wants to sell
-        * @param           buy_amt is the amount of the token user wants to buy
-        * @param           buy_gem is an ERC20 token user wants to buy
+        * @param           pay_amt is the amount of the token maker wants to sell 
+        * @param           pay_gem is an ERC20 token maker wants to sell
+        * @param           buy_amt is the amount of the token maker wants to buy
+        * @param           buy_gem is an ERC20 token maker wants to buy
         * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
         * @param           rounding boolean value indicating whether "close enough" orders should be matched
     */
     function offer(
-        uint pay_amt,    //maker (ask) sell how much
-        IERC20 pay_gem,   //maker (ask) sell which token
-        uint buy_amt,    //maker (ask) buy how much
-        IERC20 buy_gem,   //maker (ask) buy which token
-        uint pos,        //position to insert offer, 0 should be used if unknown
-        bool rounding    //match "close enough" orders?
+        uint pay_amt,    
+        IERC20 pay_gem,   
+        uint buy_amt,   
+        IERC20 buy_gem,   
+        uint pos,        
+        bool rounding    
     )
         public
         whenNotPaused
@@ -474,13 +474,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
     /**
         * @notice          function returns true if offers[low] priced less than or equal to offers[high]
-        * @param           low offer id
-        * @param           high offer id 
+        * @param           low lower priced offer's id
+        * @param           high higher priced offer's id
     */
-    //return true if offers[low] priced less than or equal to offers[high]
     function _isPricedLtOrEq(
-        uint low,   //lower priced offer's id
-        uint high   //higher priced offer's id
+        uint low, 
+        uint high   
     )
         internal
         view
@@ -489,7 +488,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return offers[low].buy_amt * offers[high].pay_amt
           >= offers[high].buy_amt * offers[low].pay_amt;
     }
-    
+
     //these variables are global only because of solidity local variable limit
 
     /**
