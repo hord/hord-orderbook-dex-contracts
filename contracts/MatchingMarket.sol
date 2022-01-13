@@ -553,11 +553,15 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             _sort(id, pos);
         }
     }
-
-    //put offer into the sorted list
+    
+    /**
+        * @notice          function that puts offer into the sorted list
+        * @param           id maker (ask) id
+        * @param           pos position to insert into
+    */
     function _sort(
-        uint id,    //maker (ask) id
-        uint pos    //position to insert into
+        uint id,    
+        uint pos  
     )
         internal
     {
