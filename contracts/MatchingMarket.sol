@@ -598,10 +598,13 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _span[address(pay_gem)][address(buy_gem)]++;
         emit LogSortedOffer(id);
     }
-
-    // Remove offer from the sorted list (does not cancel offer)
+    
+    /**
+        * @notice          function that removes offer from the sorted list (does not cancel offer)
+        * @param           id id of maker (ask) offer to remove from sorted list
+    */
     function _unsort(
-        uint id    //id of maker (ask) offer to remove from sorted list
+        uint id  
     )
         internal
         returns (bool)
