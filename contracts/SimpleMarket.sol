@@ -83,11 +83,11 @@ contract EventfulMarket {
 
 contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUpgradeable {
 
-    uint public last_offer_id;
+    uint public last_offer_id; // last offer id to keep track of the last index
 
-    mapping (uint => OfferInfo) public offers;
+    mapping (uint => OfferInfo) public offers; // offer id => Offerinfo mapping
 
-    bool public locked;
+    bool public locked; // locked variable for reentrancy attack prevention
 
     struct OfferInfo {
         uint     pay_amt;
@@ -99,7 +99,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
-    IERC20 public dustToken;
+    IERC20 public dustToken; // main token that gets trading against HPool tokens
 
     modifier can_buy(uint id) {
         require(isActive(id));
