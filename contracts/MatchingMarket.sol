@@ -85,12 +85,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     }
 
     /**
-        * @notice          modifier to ensure that one of the tokens is the dust token, and one of the tokens is an HPool token
+        * @notice          modifier to ensure that one of the tokens is the dust token (BUSD), and one of the tokens is an HPool token
         * @param           tokenA is a token user wants trade
         * @param           tokenB is another token user wants to trade against tokenB
      */
-    modifier isHPoolToken(IERC20 tokenA, IERC20 tokenB) {
-        require(hPoolManager.allHPoolTokens(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.allHPoolTokens(address(tokenB)) && address(tokenA) == address(dustToken));
+    modifier isValidHPoolTokenPair(IERC20 tokenA, IERC20 tokenB) {
+        require(hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken));
         _;
     }
 
@@ -189,7 +189,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         can_buy(id)
         returns (bool)
     {
-        require(!locked, "Reentrancy attempt");
+        //TODO: remove reentrancy guard impl and extend ReentrancyGuard contract
+        require(!locked, "Reentrancy attempt"); //TODO: maybe at least make the lock per token pair not on the entire dex
         return _buys(id, amount);
     }
 
@@ -553,6 +554,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             //insert offer into the sorted list
             _sort(id, pos);
         }
+
+
     }
     
     /**
