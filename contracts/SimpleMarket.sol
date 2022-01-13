@@ -292,11 +292,23 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     {
         last_offer_id++; return last_offer_id;
     }
-
+    
+    /**
+        * @notice          function that calls transfer function of ERC20 token
+        * @param           token is the ERC20 token that gets transfered
+        * @param           to is the address of the ERC20 token gets transfered to
+        * @param           value is the amount of the ERC20 token that gets transfered
+    */
     function safeTransfer(IERC20 token, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
-
+     
+    /**
+        * @notice          function that calls transferFrom function of ERC20 token
+        * @param           token is the the ERC20 token that gets transfered
+        * @param           from is the address the ERC20 token gets transfered from
+        * @param           value is the amount of the ERC20 token that gets transfered
+    */
     function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
     }
