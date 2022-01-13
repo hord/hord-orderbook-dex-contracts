@@ -143,7 +143,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     public
     whenNotPaused
     can_offer
-    isHPoolToken(pay_gem, buy_gem)
+    isValidHPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
         return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
@@ -169,7 +169,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     public
     whenNotPaused
     can_offer
-    isHPoolToken(pay_gem, buy_gem)
+    isValidHPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
         require(!locked, "Reentrancy attempt");
