@@ -220,7 +220,10 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         return true;
     }
 
-    // Cancel an offer. Refunds offer maker.
+    /**
+        * @notice          function that cancels an offer and refunds offer to maker
+        * @param           id offer id
+    */
     function cancel_simple_market(uint id)
         internal
         whenNotPaused
