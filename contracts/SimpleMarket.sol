@@ -252,7 +252,13 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         success = true;
     }
 
-    // Make a new offer. Takes funds from the caller into market escrow.
+    /**
+        * @notice          function that creates a new offer. Takes funds from the caller into market escrow
+        * @param           pay_amt is the amount of the token user wants to sell 
+        * @param           pay_gem is an ERC20 token user wants to sell
+        * @param           buy_amt is the amount of the token user wants to buy
+        * @param           buy_gem is an ERC20 token user wants to buy
+    */
     function offer_simple_market(uint pay_amt, IERC20 pay_gem, uint buy_amt, IERC20 buy_gem)
         internal
         can_offer
