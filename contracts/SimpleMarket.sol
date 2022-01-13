@@ -22,7 +22,6 @@ pragma solidity 0.8.10;
 import "./libraries/DSMath.sol";
 import "./system/OrderBookUpgradable.sol";
 import "./interfaces/IOrderbookConfiguration.sol";
-import "./interfaces/IHPool.sol";
 import "./interfaces/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
