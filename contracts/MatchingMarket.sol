@@ -489,17 +489,25 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return offers[low].buy_amt * offers[high].pay_amt
           >= offers[high].buy_amt * offers[low].pay_amt;
     }
-
+    
     //these variables are global only because of solidity local variable limit
 
-    //match offers with taker offer, and execute token transactions
+    /**
+        * @notice          function that matches offers with taker offer, and execute token transactions
+        * @param           t_pay_amt is the amount of the token taker wants to sell 
+        * @param           t_pay_gem is an ERC20 token taker wants to sell
+        * @param           t_buy_amt is the amount of the token taker wants to buy
+        * @param           t_buy_gem is an ERC20 token taker wants to buy
+        * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
+        * @param           rounding boolean value indicating whether "close enough" orders should be matched
+    */
     function _matcho(
-        uint t_pay_amt,    //taker sell how much
-        IERC20 t_pay_gem,   //taker sell which token
-        uint t_buy_amt,    //taker buy how much
-        IERC20 t_buy_gem,   //taker buy which token
-        uint pos,          //position id
-        bool rounding      //match "close enough" orders?
+        uint t_pay_amt,    
+        IERC20 t_pay_gem,   
+        uint t_buy_amt,    
+        IERC20 t_buy_gem,  
+        uint pos,          
+        bool rounding    
     )
         internal
         returns (uint id)
