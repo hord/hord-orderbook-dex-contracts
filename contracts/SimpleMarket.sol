@@ -101,11 +101,19 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IERC20 public dustToken; // main token that gets trading against HPool tokens
 
+    /**
+        * @notice          modifier to check if user can take specific order
+        * @param           id offer id
+    */
     modifier can_buy(uint id) {
         require(isActive(id));
         _;
     }
-
+    
+    /**
+        * @notice          modifier to check if user can cancel specific order, checks if offer is active and caller is owner of offer
+        * @param           id offer id
+    */
     modifier can_cancel_simple_market(uint id) {
         require(isActive(id));
         require(getOwner(id) == msg.sender);
@@ -115,7 +123,10 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     modifier can_offer {
         _;
     }
-
+    
+    /**
+        * @notice          modifier to prevent reentrancy attack
+    */
     modifier synchronized {
         require(!locked);
         locked = true;
