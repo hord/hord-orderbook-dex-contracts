@@ -535,7 +535,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
             }
             // ^ The `rounding` parameter is a compromise borne of a couple days
             // of discussion.
-            buy(best_maker_id, min(m_pay_amt, t_buy_amt));
+            buy(best_maker_id, min(m_pay_amt, t_buy_amt)); // buys if its possible
             t_buy_amt_old = t_buy_amt;
             t_buy_amt = sub(t_buy_amt, min(m_pay_amt, t_buy_amt));
             t_pay_amt = mul(t_buy_amt, t_pay_amt) / t_buy_amt_old;
@@ -547,7 +547,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         if (t_buy_amt > 0 && t_pay_amt > 0 && t_pay_amt >= _dust[address(t_pay_gem)]) {
             //new offer should be created
-            id = offer_simple_market(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem);
+            id = offer_simple_market(t_pay_amt, t_pay_gem, t_buy_amt, t_buy_gem); // makes offer if something is left
             //insert offer into the sorted list
             _sort(id, pos);
         }
