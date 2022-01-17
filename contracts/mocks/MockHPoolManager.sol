@@ -2,18 +2,18 @@ pragma solidity 0.8.10;
 
 contract MockHPoolManager {
 
-    mapping(address => bool) public allHPoolTokens;
+    mapping(address => bool) public isHPoolToken;
 
     constructor() public {
 
     }
 
     function addHPoolToken(address hPoolToken) public {
-        allHPoolTokens[hPoolToken] = true;
+        isHPoolToken[hPoolToken] = true;
     }
 
     function removeHPoolToken(address hPoolToken) public {
-        allHPoolTokens[hPoolToken] = false;
+        isHPoolToken[hPoolToken] = false;
     }
 
 }
