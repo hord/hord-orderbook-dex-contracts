@@ -86,7 +86,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     uint public last_offer_id; // last offer id to keep track of the last index
 
-    mapping (uint => OfferInfo) public offers; // offer id => Offerinfo mapping
+    mapping (uint => OfferInfo) public offers; // offer id => OfferInfo mapping
 
     bool public locked; // locked variable for reentrancy attack prevention
 

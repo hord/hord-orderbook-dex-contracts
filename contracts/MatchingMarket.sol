@@ -79,8 +79,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
-        
-        setUniswapRouterInternal(_uniswapRouter);
+
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
@@ -90,7 +89,10 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         * @param           tokenB is another token user wants to trade against tokenB
      */
     modifier isValidHPoolTokenPair(IERC20 tokenA, IERC20 tokenB) {
-        require(hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) || hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken));
+        require(hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
+            hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken),
+            "The pair is not valid."
+        );
         _;
     }
 
@@ -146,7 +148,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     isValidHPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
-        return offer(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
+        return offerWithRounding(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
     }
 
     /**
@@ -158,7 +160,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         * @param           pos is the OFFER ID of the first offer that has a higher (or lower depending on whether it is bid or ask ) price than the new offer that the caller is making. 0 should be used if unknown.
         * @param           rounding boolean value indicating whether "close enough" orders should be matched
     */
-    function offer(
+    function offerWithRounding(
         uint pay_amt,
         IERC20 pay_gem,
         uint buy_amt,
@@ -173,7 +175,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     returns (uint)
     {
         require(!locked, "Reentrancy attempt");
-        require(_dust[address(pay_gem)] <= pay_amt);
+        require(_dust[address(pay_gem)] <= pay_amt, "The amount of tokens for sale is less than the lower limit.");
 
         return _matcho(pay_amt, pay_gem, buy_amt, buy_gem, pos, rounding);
     }
@@ -666,62 +668,4 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         return true;
     }
 
-         /**
-     * @notice          Function to set uniswap router
-     */
-    function setUniswapRouter(
-        address _uniswapRouter
-    )
-    external
-    onlyHordCongress
-    {
-        setUniswapRouterInternal(_uniswapRouter);
-    }
-
-     /**
-     * @notice          Function to set uniswap router
-     */
-    function setUniswapRouterInternal(
-        address
-        _uniswapRouter
-    )
-    internal
-    {
-        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
-        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
-        emit UniswapRouterSet(_uniswapRouter);
-    }
-
-    function burnPlatformFees(
-        uint256 amount
-    )
-    external
-    onlyHordCongress
-    nonReentrant
-    {
-        require(amount <= platformFee.feesAvailable, "Amount is above threshold.");
-
-        platformFee.feesAvailable = platformFee.feesAvailable - amount;
-        platformFee.feesWithdrawn = platformFee.feesWithdrawn + amount;
-
-        address[] memory path = new address[](2);
-
-        path[0] = address(dustToken);
-        path[1] = uniswapRouter.WETH();
-        path[2] = hordToken;
-
-        uint256 deadline = block.timestamp + 300;
-
-        uint256[] memory amountOutMin = uniswapRouter.getAmountsOut(amount, path);
-
-        uint256[] memory amounts = uniswapRouter.swapExactETHForTokens{value: amount} (
-            amountOutMin[1],
-            path,
-            address(1), // burn address
-            deadline
-        );
-
-        // Trigger event that buy&burn was executed over hord token
-        emit BuyAndBurn(amounts[0], amounts[1]);
-    }
 }
