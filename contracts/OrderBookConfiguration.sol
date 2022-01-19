@@ -113,7 +113,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     }
 
     function calculateTotalFee(uint256 amount) internal view returns (uint256){
-        return (amount / 10000) * _totalFeePercent; 
+        return (amount * _totalFeePercent) / 1000000;
     }
 
     function calculateChampionFee(uint256 amount) internal pure returns (uint256){
