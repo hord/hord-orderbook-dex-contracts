@@ -9,17 +9,38 @@ async function main() {
     const contracts = getSavedContractAddresses()[hre.network.name];
     const contractProxies = getSavedContractProxies()[hre.network.name];
 
+    const OrderBookConfiguration = await ethers.getContractFactory('OrderBookConfiguration');
+    const orderBookConfiguration = await upgrades.deployProxy(OrderBookConfiguration, [
+        [
+            contracts["HordCongress"],
+            contractProxies["MaintainersRegistry"],
+            contracts["HordToken"],
+            contracts["DustToken"]
+        ],
+        [
+            toHordDenomination(config["dustLimit"]),
+            config["totalFeePercent"]
+        ],
+    ],
+        { unsafeAllow: ['delegatecall'] }
+    );
+    await orderBookConfiguration.deployed();
+    console.log('OrderBookConfiguration Proxy is deployed to: ', orderBookConfiguration.address);
+    saveContractProxies(hre.network.name, 'OrderBookConfiguration', orderBookConfiguration.address);
+
     const MatchingMarket = await ethers.getContractFactory('MatchingMarket');
     const matchingMarket = await upgrades.deployProxy(MatchingMarket, [
-            ethers.utils.parseEther(config['dustLimit']),
             contracts['HordCongress'],
             contractProxies['MaintainersRegistry'],
+            orderBookConfiguration.address,
             contracts['UniswapRouter'],
-            contracts['DustToken'],
-            contracts['AggregatorV3Interface'],
-            contractProxies['HordConfiguration']
-    ]);
+            contractProxies['HPoolManager']
+    ],
+        { unsafeAllow: ['delegatecall'] }
+    );
     await matchingMarket.deployed();
+    console.log('MatchingMarket Proxy is deployed to: ', matchingMarket.address);
+    saveContractProxies(hre.network.name, 'MatchingMarket', matchingMarket.address);
 
     let admin = await upgrades.admin.getInstance();
 
@@ -27,6 +48,9 @@ async function main() {
     console.log('MatchingMarket Implementation: ', matchingMarketImplementation);
     saveContractAddress(hre.network.name, 'MatchingMarket', matchingMarketImplementation);
 
+    let orderBookConfigurationImplementation = await admin.getProxyImplementation(orderBookConfiguration.address);
+    console.log('OrderBookConfiguration Implementation: ', orderBookConfigurationImplementation);
+    saveContractAddress(hre.network.name, 'OrderBookConfiguration', orderBookConfigurationImplementation);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
