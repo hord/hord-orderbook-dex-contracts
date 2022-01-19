@@ -1,10 +1,10 @@
 {
   "bscTestnet" : {
-    "dustLimit" : 100,
-    "totalFeePercent": 25
+    "dustLimit" : 1,
+    "totalFeePercent": 25000
   },
   "local": {
-    "dustLimit" : 100,
-    "totalFeePercent": 25
+    "dustLimit" : 1,
+    "totalFeePercent": 25000
   }
 }
