@@ -8,7 +8,8 @@
         "HPoolManager": "0x68513f23c3495c68799E3905AAC477C1Ca9578DE",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xE1314AAA3a35400C35377639F76ce41211350262",
-        "OrderBookConfiguration": "0xa57730b3082234cc7cFe73fa74617b07CBb66493"
+        "OrderBookConfiguration": "0xa57730b3082234cc7cFe73fa74617b07CBb66493",
+        "MakerOtcSupportMethods": "0xA8854cBb045a2e73797BBc8cf848D3433cF42d86"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
@@ -19,6 +20,7 @@
         "HPoolManager": "0x68513f23c3495c68799E3905AAC477C1Ca9578DE",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-        "OrderBookConfiguration": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        "OrderBookConfiguration": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "MakerOtcSupportMethods": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     }
 }

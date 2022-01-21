@@ -3,14 +3,14 @@
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
         "HPoolManager": "0x11aE5750086b6F1d3D290399bF85f5672D870F5E",
-        "OrderBookConfiguration": "0x6428750b9bAb466E5b2c48Dec1b5f697B94A79b7",
-        "MatchingMarket": "0xAff437027B63b57232356f4B82326ffCE88753a6"
+        "OrderBookConfiguration": "0x82904F354C570b7bd8c61F93f47cd06d4e490681",
+        "MatchingMarket": "0xaA987c98b000D001B4b73305c456f59591B333ef"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
         "HPoolManager": "0x11aE5750086b6F1d3D290399bF85f5672D870F5E",
-        "OrderBookConfiguration": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
-        "MatchingMarket": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+        "OrderBookConfiguration": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "MatchingMarket": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
     }
 }
