@@ -10,7 +10,12 @@ import "./interfaces/IOtc.sol";
 import "./system/OrderBookUpgradable.sol";
 
 contract MakerOtcSupportMethods is DSMath, OrderBookUpgradable {
-     /**
+
+    constructor () public {
+
+    }
+
+    /**
          * @notice          Function to return all the current orders using several arrays
          * @param           otc is MatchingMarket
          * @param           payToken is the token user wants to sell
