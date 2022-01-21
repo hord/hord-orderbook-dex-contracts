@@ -9,6 +9,12 @@ async function main() {
     const contracts = getSavedContractAddresses()[hre.network.name];
     const contractProxies = getSavedContractProxies()[hre.network.name];
 
+    const MakerOtcSupportMethods = await hre.ethers.getContractFactory("MakerOtcSupportMethods");
+    const makerOtcSupportMethods = await MakerOtcSupportMethods.deploy();
+    await makerOtcSupportMethods.deployed();
+    console.log("MakerOtcSupportMethods contract deployed to:", makerOtcSupportMethods.address);
+    saveContractAddress(hre.network.name, 'MakerOtcSupportMethods', makerOtcSupportMethods.address);
+
     const OrderBookConfiguration = await ethers.getContractFactory('OrderBookConfiguration');
     const orderBookConfiguration = await upgrades.deployProxy(OrderBookConfiguration, [
         [
