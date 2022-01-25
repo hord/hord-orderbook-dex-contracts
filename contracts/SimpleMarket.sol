@@ -90,8 +90,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     bool public locked; // locked variable for reentrancy attack prevention
 
     mapping (uint => OfferInfo) public offers; // offer id => OfferInfo mapping
-    mapping (address => ChampionFee) public hPoolTokenToChampionFee;
-    mapping (address => PlatformFee) public hPoolTokenToPlatformFee;
+    mapping (address => ChampionFee) public hPoolToChampionFee;
+    mapping (address => PlatformFee) public hPoolToPlatformFee;
 
     IHPoolManager public hPoolManager; // Instance of HPoolManager
     IHordTreasury public hordTreasury; // Instance of HordTreasury
@@ -106,18 +106,24 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     struct ChampionFee {
-        uint256 feesAvailable;
-        uint256 feesWithdrawn;
+        uint256 totalTransferFeesInHpoolTokens;
+        uint256 availableTransferFeesInHpoolTokens;
+        uint256 totalTradingFeesInStableCoin;
+        uint256 availableTradingFeesInStableCoin;
     }
 
      struct PlatformFee {
-         uint256 feesAvailable;
-         uint256 feesWithdrawn;
+         uint256 totalTransferFeesInHpoolTokens;
+         uint256 availableTransferFeesInHpoolTokens;
+         uint256 totalTradingFeesInStableCoin;
+         uint256 availableTradingFeesInStableCoin;
      }
 
-    PlatformFee public platformFee; // Struct representing platform fee and it's withdrawal history
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IERC20 public dustToken; // main token that gets trading against HPool tokens
+
+    event ChampionWithdrawFees(address championAddress, uint256 amountInHpoolTokens, uint256 amountInBaseTokens);
+    event ProtocolWithdrawFees(uint256 amountInHpoolTokens, uint256 amountInBaseTokens);
 
     /**
         * @notice          modifier to check if user can take specific order
@@ -164,31 +170,46 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
         uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(_amount);
 
-        hPoolTokenToChampionFee[_hPoolToken].feesAvailable += championFee;
-        hPoolTokenToPlatformFee[_hPoolToken].feesAvailable += protocolFee;
+        hPoolToChampionFee[_hPoolToken].availableTransferFeesInHpoolTokens += championFee;
+        hPoolToChampionFee[_hPoolToken].totalTransferFeesInHpoolTokens += championFee;
+
+        hPoolToPlatformFee[_hPoolToken].availableTransferFeesInHpoolTokens += protocolFee;
+        hPoolToPlatformFee[_hPoolToken].totalTransferFeesInHpoolTokens += protocolFee;
     }
 
-    function withdrawChampionFee(uint256 amount, address _hPoolToken) external {
-        require(hPoolManager.isHPoolToken(_hPoolToken), "HPoolToken is not valid");
-        require(IHPool(_hPoolToken).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
-        require(hPoolTokenToChampionFee[_hPoolToken].feesAvailable >= amount, "Amount exceeds allowance");
+    function withdrawChampionFee(address hPool) external {
+        require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
+        require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
 
-        hPoolTokenToChampionFee[_hPoolToken].feesAvailable -= amount;
-        hPoolTokenToChampionFee[_hPoolToken].feesWithdrawn += amount;
+        uint256 amountInHpoolTokens = hPoolToChampionFee[hPool].availableTransferFeesInHpoolTokens;
 
-        bool status = IERC20(_hPoolToken).transfer(msg.sender, amount);
+        bool status = IERC20(hPool).transfer(msg.sender, amountInHpoolTokens);
         require(status, "failed transfer");
+
+        uint256 amountInBaseTokens = hPoolToChampionFee[hPool].availableTradingFeesInStableCoin;
+
+        status = IERC20(orderbookConfiguration.dustToken()).transfer(msg.sender, amountInBaseTokens);
+        require(status, "failed transfer");
+
+        hPoolToChampionFee[hPool].availableTransferFeesInHpoolTokens = 0;
+        hPoolToChampionFee[hPool].availableTradingFeesInStableCoin = 0;
+
+        emit ChampionWithdrawFees(msg.sender, amountInHpoolTokens, amountInBaseTokens);
     }
 
-    function withdrawProtocolFee(uint256 amount, address _hPoolToken) external onlyMaintainer {
-        require(hPoolManager.isHPoolToken(_hPoolToken), "HPoolToken is not valid");
-        require(hPoolTokenToPlatformFee[_hPoolToken].feesAvailable >= amount, "Amount exceeds allowance");
+    function withdrawProtocolFee(address hPool) external onlyMaintainer {
+        require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
 
-        hPoolTokenToPlatformFee[_hPoolToken].feesAvailable -= amount;
-        hPoolTokenToPlatformFee[_hPoolToken].feesWithdrawn += amount;
+        uint256 amountInHpoolTokens = hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens;
+        hordTreasury.depositToken(hPool, amountInHpoolTokens);
 
-        hordTreasury.depositToken(_hPoolToken, amount);
+        uint256 amountInBaseTokens = hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin;
+        hordTreasury.depositToken(orderbookConfiguration.dustToken(), amountInBaseTokens);
 
+        hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens = 0;
+        hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin = 0;
+
+        emit ProtocolWithdrawFees(amountInHpoolTokens, amountInBaseTokens);
     }
 
     /**
@@ -264,8 +285,11 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
             uint256 updatedSpend = spend - (championFee + protocolFee); // take champion and protocol fee from BUSD
 
-            hPoolTokenToPlatformFee[address(offer.pay_gem)].feesAvailable += protocolFee; // add taken protocol fee to keep track of total fees on the contract
-            hPoolTokenToChampionFee[address(offer.pay_gem)].feesAvailable += championFee;
+            hPoolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += protocolFee;
+            hPoolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += protocolFee;
+
+            hPoolToChampionFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += championFee;
+            hPoolToChampionFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += championFee;
 
             emit FeesTaken(
                 championFee,
@@ -281,8 +305,13 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
 
-            hPoolTokenToPlatformFee[address(offer.buy_gem)].feesAvailable += protocolFee; // add taken protocol fee to keep track of total fees on the contract
-            hPoolTokenToChampionFee[address(offer.buy_gem)].feesAvailable += championFee;
+            address championAddress = IHPool(address(offer.buy_gem)).hPool().championAddress;
+
+            hPoolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
+            hPoolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
+
+            hPoolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
+            hPoolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
 
             emit FeesTaken(
                 championFee,
