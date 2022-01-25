@@ -40,7 +40,8 @@ async function main() {
             contractProxies['MaintainersRegistry'],
             orderBookConfiguration.address,
             contracts['UniswapRouter'],
-            contractProxies['HPoolManager']
+            contractProxies['HPoolManager'],
+            contractProxies['HordTreasury']
     ],
         { unsafeAllow: ['delegatecall'] }
     );
