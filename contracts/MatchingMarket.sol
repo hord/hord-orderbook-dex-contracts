@@ -23,13 +23,14 @@ pragma solidity 0.8.10;
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
-import "./interfaces/IHPoolManager.sol";
 
 contract MatchingEvents {
     event LogMinSell(address pay_gem, uint min_amount);
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
+    event HPoolManagerSet(address hPoolManager);
+    event HordTreasurySet(address hordTreasury);
     event UniswapRouterSet(address uniswapRouter);
 }
 
@@ -41,7 +42,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
     }
 
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
-    IHPoolManager public hPoolManager; // Instance of HPoolManager
     address public hordToken; // Address for HORD token
 
     mapping(uint => sortInfo) public _rank; //doubly linked lists of sorted offer ids
@@ -60,7 +60,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         address _maintainersRegistry,
         address _orderbookConfiguration,
         address _uniswapRouter,
-        address _hPoolManager
+        address _hPoolManager,
+        address _hordTreasury
     )
     public
     initializer
@@ -75,6 +76,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
 
         orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
+        hordTreasury = IHordTreasury(_hordTreasury);
         hordToken = orderbookConfiguration.hordToken();
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
@@ -667,6 +669,34 @@ contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradea
         _near[pre] = _near[id];         //set previous unsorted offer to point to offer after offer id
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
+    }
+
+    /**
+        * @notice          Function to set hPoolManager contract
+    */
+    function setHPoolManager(
+        address _hPoolManager
+    )
+    external
+    onlyHordCongress
+    {
+        require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address.");
+        hPoolManager = IHPoolManager(_hPoolManager);
+        emit HPoolManagerSet(_hPoolManager);
+    }
+
+    /**
+        * @notice          Function to set hordTreasury contract
+    */
+    function setHordTreasury(
+        address _hordTreasury
+    )
+    external
+    onlyHordCongress
+    {
+        require(_hordTreasury != address(0), "HPoolManager can not be 0x0 address.");
+        hordTreasury = IHordTreasury(_hordTreasury);
+        emit HordTreasurySet(_hordTreasury);
     }
 
     /**
