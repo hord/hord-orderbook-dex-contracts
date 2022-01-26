@@ -20,7 +20,6 @@
 
 pragma solidity 0.8.10;
 
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
 
@@ -34,7 +33,7 @@ contract MatchingEvents {
     event UniswapRouterSet(address uniswapRouter);
 }
 
-contract MatchingMarket is MatchingEvents, SimpleMarket, ReentrancyGuardUpgradeable {
+contract MatchingMarket is MatchingEvents, SimpleMarket {
     struct sortInfo {
         uint next; //points to id of next higher offer
         uint prev; //points to id of previous lower offer

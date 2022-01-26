@@ -27,6 +27,7 @@ import "./interfaces/IERC20.sol";
 import "./interfaces/IHPoolManager.sol";
 import "./interfaces/IHordTreasury.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
 contract EventfulMarket {
     event LogItemUpdate(uint id);
@@ -84,7 +85,7 @@ contract EventfulMarket {
     );
 }
 
-contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUpgradeable {
+contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUpgradeable, ReentrancyGuardUpgradeable {
 
     uint public last_offer_id; // last offer id to keep track of the last index
     bool public locked; // locked variable for reentrancy attack prevention
@@ -177,8 +178,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hPoolToPlatformFee[_hPoolToken].totalTransferFeesInHpoolTokens += protocolFee;
     }
 
-    //TODO: add nonrentrant
-    function withdrawChampionFee(address hPool)  external {
+    function withdrawChampionFee(address hPool)  external nonReentrant {
         require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
         require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
 
@@ -198,14 +198,15 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         emit ChampionWithdrawFees(msg.sender, amountInHpoolTokens, amountInBaseTokens);
     }
 
-    //TODO: add nonrentrant
-    function withdrawProtocolFee(address hPool) external onlyMaintainer {
+    function withdrawProtocolFee(address hPool) external nonReentrant onlyMaintainer {
         require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
 
         uint256 amountInHpoolTokens = hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens;
-        hordTreasury.depositToken(hPool, amountInHpoolTokens); //TODO: check approval dynamics to enable safetransferfrom
+        IERC20(hPool).approve(address(hordTreasury), amountInHpoolTokens);
+        hordTreasury.depositToken(hPool, amountInHpoolTokens);
 
         uint256 amountInBaseTokens = hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin;
+        IERC20(orderbookConfiguration.dustToken()).approve(address(hordTreasury), amountInHpoolTokens);
         hordTreasury.depositToken(orderbookConfiguration.dustToken(), amountInBaseTokens);
 
         hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens = 0;
