@@ -25,6 +25,31 @@
                 "inputs": [
                     {
                         "indexed": false,
+                        "internalType": "address",
+                        "name": "championAddress",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "amountInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "amountInBaseTokens",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ChampionWithdrawFees",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
                         "internalType": "uint256",
                         "name": "championFee",
                         "type": "uint256"
@@ -37,6 +62,32 @@
                     }
                 ],
                 "name": "FeesTaken",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "hPoolManager",
+                        "type": "address"
+                    }
+                ],
+                "name": "HPoolManagerSet",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "hordTreasury",
+                        "type": "address"
+                    }
+                ],
+                "name": "HordTreasurySet",
                 "type": "event"
             },
             {
@@ -372,6 +423,25 @@
                 "inputs": [
                     {
                         "indexed": false,
+                        "internalType": "uint256",
+                        "name": "amountInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "amountInBaseTokens",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ProtocolWithdrawFees",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
                         "internalType": "address",
                         "name": "uniswapRouter",
                         "type": "address"
@@ -524,12 +594,17 @@
             {
                 "inputs": [
                     {
-                        "internalType": "bytes32",
-                        "name": "id_",
-                        "type": "bytes32"
+                        "internalType": "uint256",
+                        "name": "_amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_hPoolToken",
+                        "type": "address"
                     }
                 ],
-                "name": "bump",
+                "name": "addTradingFee",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -537,12 +612,12 @@
             {
                 "inputs": [
                     {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
+                        "internalType": "bytes32",
+                        "name": "id_",
+                        "type": "bytes32"
                     }
                 ],
-                "name": "burnPlatformFees",
+                "name": "bump",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -912,6 +987,74 @@
                 "type": "function"
             },
             {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "hPoolToChampionFee",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTransferFeesInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTransferFeesInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTradingFeesInStableCoin",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTradingFeesInStableCoin",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "hPoolToPlatformFee",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTransferFeesInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTransferFeesInHpoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTradingFeesInStableCoin",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTradingFeesInStableCoin",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [],
                 "name": "hordCongress",
                 "outputs": [
@@ -930,6 +1073,19 @@
                 "outputs": [
                     {
                         "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "hordTreasury",
+                "outputs": [
+                    {
+                        "internalType": "contract IHordTreasury",
                         "name": "",
                         "type": "address"
                     }
@@ -962,6 +1118,11 @@
                     {
                         "internalType": "address",
                         "name": "_hPoolManager",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_hordTreasury",
                         "type": "address"
                     }
                 ],
@@ -1221,24 +1382,6 @@
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "platformFee",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "feesAvailable",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "feesWithdrawn",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [
                     {
                         "internalType": "contract IERC20",
@@ -1269,6 +1412,32 @@
                         "type": "uint256"
                     }
                 ],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_hPoolManager",
+                        "type": "address"
+                    }
+                ],
+                "name": "setHPoolManager",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_hordTreasury",
+                        "type": "address"
+                    }
+                ],
+                "name": "setHordTreasury",
+                "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
@@ -1322,6 +1491,36 @@
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hPool",
+                        "type": "address"
+                    }
+                ],
+                "name": "withdrawChampionFee",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hPool",
+                        "type": "address"
+                    }
+                ],
+                "name": "withdrawProtocolFee",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "stateMutability": "payable",
+                "type": "receive"
             }
         ],
         "OrderBookConfiguration": [
