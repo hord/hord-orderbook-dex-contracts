@@ -1,15 +1,12 @@
 {
     "bscTestnet": {
-        "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
         "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
-        "HordConfiguration": "0xd6F03FB1aD9B8DA252c28e65e179E9Fc13999f30",
-        "HPoolManager": "0x68513f23c3495c68799E3905AAC477C1Ca9578DE",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
-        "MatchingMarket": "0xE1314AAA3a35400C35377639F76ce41211350262",
+        "MatchingMarket": "0xdC6B30814446BCF5e5D944791e5280B9aA3c49e0",
         "OrderBookConfiguration": "0xa57730b3082234cc7cFe73fa74617b07CBb66493",
-        "MakerOtcSupportMethods": "0xA8854cBb045a2e73797BBc8cf848D3433cF42d86"
+        "MakerOtcSupportMethods": "0xAa25EF8459631bdb0fE253D5De715aA5c8C242C7"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
