@@ -177,7 +177,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hPoolToPlatformFee[_hPoolToken].totalTransferFeesInHpoolTokens += protocolFee;
     }
 
-    function withdrawChampionFee(address hPool) external {
+    //TODO: add nonrentrant
+    function withdrawChampionFee(address hPool)  external {
         require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
         require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
 
@@ -197,11 +198,12 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         emit ChampionWithdrawFees(msg.sender, amountInHpoolTokens, amountInBaseTokens);
     }
 
+    //TODO: add nonrentrant
     function withdrawProtocolFee(address hPool) external onlyMaintainer {
         require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
 
         uint256 amountInHpoolTokens = hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens;
-        hordTreasury.depositToken(hPool, amountInHpoolTokens);
+        hordTreasury.depositToken(hPool, amountInHpoolTokens); //TODO: check approval dynamics to enable safetransferfrom
 
         uint256 amountInBaseTokens = hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin;
         hordTreasury.depositToken(orderbookConfiguration.dustToken(), amountInBaseTokens);
