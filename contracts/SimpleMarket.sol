@@ -206,7 +206,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hordTreasury.depositToken(hPool, amountInHpoolTokens);
 
         uint256 amountInBaseTokens = hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin;
-        IERC20(orderbookConfiguration.dustToken()).approve(address(hordTreasury), amountInHpoolTokens);
+        IERC20(orderbookConfiguration.dustToken()).approve(address(hordTreasury), amountInBaseTokens);
         hordTreasury.depositToken(orderbookConfiguration.dustToken(), amountInBaseTokens);
 
         hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens = 0;
