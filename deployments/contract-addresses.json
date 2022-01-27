@@ -4,9 +4,9 @@
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
-        "MatchingMarket": "0xdC6B30814446BCF5e5D944791e5280B9aA3c49e0",
-        "OrderBookConfiguration": "0xa57730b3082234cc7cFe73fa74617b07CBb66493",
-        "MakerOtcSupportMethods": "0xAa25EF8459631bdb0fE253D5De715aA5c8C242C7"
+        "MatchingMarket": "0x05730A0f0175B2072303a67B31CB08dEdc9f18e4",
+        "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
+        "MakerOtcSupportMethods": "0x56844c61504F85f895b68bF700590427A9d02aA8"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
