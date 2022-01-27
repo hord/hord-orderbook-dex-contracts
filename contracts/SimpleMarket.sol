@@ -123,8 +123,15 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     IOrderbookConfiguration public orderbookConfiguration; // Instance of Orderbook configuration contract
     IERC20 public dustToken; // main token that gets trading against HPool tokens
 
-    event ChampionWithdrawFees(address championAddress, uint256 amountInHpoolTokens, uint256 amountInBaseTokens);
-    event ProtocolWithdrawFees(uint256 amountInHpoolTokens, uint256 amountInBaseTokens);
+    event ChampionWithdrawFees(
+        address championAddress,
+        uint256 amountInHpoolTokens,
+        uint256 amountInBaseTokens
+    );
+    event ProtocolWithdrawFees(
+        uint256 amountInHpoolTokens,
+        uint256 amountInBaseTokens
+    );
 
     /**
         * @notice          modifier to check if user can take specific order
@@ -195,7 +202,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hPoolToChampionFee[hPool].availableTransferFeesInHpoolTokens = 0;
         hPoolToChampionFee[hPool].availableTradingFeesInStableCoin = 0;
 
-        emit ChampionWithdrawFees(msg.sender, amountInHpoolTokens, amountInBaseTokens, hPoolToChampionFee[hPool].totalTransferFeesInHpoolTokens, hPoolToChampionFee[hPool].totalTradingFeesInStableCoin);
+        emit ChampionWithdrawFees(msg.sender, amountInHpoolTokens, amountInBaseTokens);
     }
 
     function withdrawProtocolFee(address hPool) external nonReentrant onlyMaintainer {
@@ -212,7 +219,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hPoolToPlatformFee[hPool].availableTransferFeesInHpoolTokens = 0;
         hPoolToPlatformFee[hPool].availableTradingFeesInStableCoin = 0;
 
-        emit ProtocolWithdrawFees(amountInHpoolTokens, amountInBaseTokens, hPoolToPlatformFee[hPool].totalTransferFeesInHpoolTokens,hPoolToPlatformFee[hPool].totalTradingFeesInStableCoin);
+        emit ProtocolWithdrawFees(amountInHpoolTokens, amountInBaseTokens);
     }
 
     /**
