@@ -8,7 +8,7 @@ const { ethers, expect, toHordDenomination, BigNumber } = require('./setup')
 
 let config;
 let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken,
-    maintainer, maintainerAddr, matchingMarket, uniswapRouter, orderBookConfiguration, firstHPoolToken, secondHPoolToken, user, userAddr;
+    maintainer, maintainerAddr, matchingMarket, uniswapRouter, orderBookConfiguration, hordTreasury, firstHPoolToken, secondHPoolToken, user, userAddr;
 let offerId, amount, amountBuy = 0, amountSell = 0, minSellAmount = 1, bestOffer = 2, worseOffer = 3, offerCnt = 0, zerro = 0;
 
 async function setupContractAndAccounts () {
@@ -89,6 +89,10 @@ async function setupContractAndAccounts () {
     hPoolManager = await MockHPoolManager.deploy();
     await hPoolManager.deployed();
 
+    const MockHordTreasury = await ethers.getContractFactory('MockHordTreasury');
+    hordTreasury = await MockHordTreasury.deploy();
+    await hordTreasury.deployed();
+
     const MatchingMarket = await ethers.getContractFactory('MatchingMarket');
     matchingMarket = await MatchingMarket.deploy();
     await matchingMarket.deployed();
@@ -108,7 +112,8 @@ describe('MatchingMarket', async() => {
                     maintainersRegistry.address,
                     address(0),
                     uniswapRouter.address,
-                    hPoolManager.address
+                    hPoolManager.address,
+                    hordTreasury.address
                 )
             ).to.be.revertedWith("OrderbookConfiguration can not be 0x0 address");
         });
@@ -120,7 +125,8 @@ describe('MatchingMarket', async() => {
                     maintainersRegistry.address,
                     orderBookConfiguration.address,
                     uniswapRouter.address,
-                    address(0)
+                    address(0),
+                    hordTreasury.address
                 )
             ).to.be.revertedWith("HPoolManager can not be 0x0 address");
         });
@@ -132,7 +138,8 @@ describe('MatchingMarket', async() => {
                     maintainersRegistry.address,
                     orderBookConfiguration.address,
                     uniswapRouter.address,
-                    hPoolManager.address
+                    hPoolManager.address,
+                    hordTreasury.address
                 )
             ).to.be.revertedWith("Hord congress can't be 0x0 address");
         });
@@ -144,7 +151,8 @@ describe('MatchingMarket', async() => {
                     address(0),
                     orderBookConfiguration.address,
                     uniswapRouter.address,
-                    hPoolManager.address
+                    hPoolManager.address,
+                    hordTreasury.address
                 )
             ).to.be.revertedWith("Maintainers regsitry can't be 0x0 address");
         });
@@ -155,7 +163,8 @@ describe('MatchingMarket', async() => {
                 maintainersRegistry.address,
                 orderBookConfiguration.address,
                 uniswapRouter.address,
-                hPoolManager.address
+                hPoolManager.address,
+                hordTreasury.address
             );
         });
 
@@ -248,9 +257,9 @@ describe('MatchingMarket', async() => {
             await matchingMarket.connect(owner).offer(amountSell, dustToken.address, amountBuy, firstHPoolToken.address, 0);
             offerCnt++;
 
-            amountSell = 5;
-            amountBuy = 100;
-            await matchingMarket.connect(user).offer(amountSell, firstHPoolToken.address, amountBuy, dustToken.address, 0);
+            // amountSell = 5;
+            // amountBuy = 100;
+            // await matchingMarket.connect(user).offer(amountSell, firstHPoolToken.address, amountBuy, dustToken.address, 0);
 
             offerId = 1;
 
@@ -344,10 +353,10 @@ describe('MatchingMarket', async() => {
 
     describe('MatchingMarket::Buy', async() => {
 
-        it('should let user to cancel offer', async() => {
-            await firstHPoolToken.connect(owner).approve(matchingMarket.address, 100);
-            let a = await matchingMarket.connect(owner).buyAllAmount(dustToken.address, 100, firstHPoolToken.address, 5);
-            console.log(a);
+        it('s', async() => {
+           await matchingMarket.addTradingFee(100, firstHPoolToken.address);
+           // let a = await matchingMarket.a();
+           //  console.log(a);
         });
 
     });
