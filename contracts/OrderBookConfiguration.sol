@@ -117,7 +117,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     }
 
     function calculateChampionFee(uint256 amount) external pure returns (uint256){
-        return (amount / 3) * 2;
+        return (amount * 2) / 3;
     }
 
     function calculateOrderbookFee(uint256 amount) external pure returns (uint256){
