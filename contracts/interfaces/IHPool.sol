@@ -9,10 +9,11 @@ interface IHPool {
         uint256 hPoolId;
         uint256 bePoolId;
         uint256 initialPoolWorthUSD;
-        uint256 championFee;
-        uint256 protocolFee;
+        uint256 availableToClaimChampionSuccessFee;
+        uint256 totalChampionSuccessFee;
+        uint256 availableToClaimProtocolFee;
+        uint256 totalProtocolFee;
         uint256 totalDeposit;
-        bool isHPoolTokenMinted;
         bool isHPoolEnded;
         bool endingPoolInProgress;
     }
