@@ -1500,7 +1500,7 @@
                         "type": "address"
                     }
                 ],
-                "name": "withdrawChampionFee",
+                "name": "withdrawChampionTradingAndTransferFee",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
