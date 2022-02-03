@@ -4,8 +4,8 @@
         "HordTreasury": "0x07594fd6B300e4186Cb05722F158af109431faA8",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
         "HPoolManager": "0x54Ef7d69E27bFbA2c29e60b91AA64E10f61951A2",
-        "OrderBookConfiguration": "0x870CCA6e51AD8FD54b1581AC383e8036274456CC",
-        "MatchingMarket": "0xE6257b70E1860E120C2B6c15d9fa9bA9Bc815495"
+        "OrderBookConfiguration": "0xa9811300388703AB87C2A0Fdc1730D6726b592fb",
+        "MatchingMarket": "0xa226f32967307B6E5B7E28ccc3D78213E917dF37"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
