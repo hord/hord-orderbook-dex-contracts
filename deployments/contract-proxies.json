@@ -7,6 +7,14 @@
         "OrderBookConfiguration": "0xa9811300388703AB87C2A0Fdc1730D6726b592fb",
         "MatchingMarket": "0xa226f32967307B6E5B7E28ccc3D78213E917dF37"
     },
+    "bscTestnetStaging": {
+        "MaintainersRegistry": "0xCE2fDA100cd60a3Ec177b404cd8af55946Bb12A1",
+        "HordTreasury": "0x9E0812E8cb29813709600473e4dB46bdCA165678",
+        "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
+        "HPoolManager": "0xbC90a9E60cAa3EBbE25A90a7dEC464a3bff23BB8",
+        "OrderBookConfiguration": "0x0FbA1c085A7a8499EdF7F3D8e76D7299aF1F6363",
+        "MatchingMarket": "0x5FB6A75D2D78F910d556AefF0ae2d768d5f8adc3"
+    },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",

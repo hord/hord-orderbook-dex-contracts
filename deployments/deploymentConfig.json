@@ -3,6 +3,10 @@
     "dustLimit" : 1,
     "totalFeePercent": 25000
   },
+  "bscTestnetStaging" : {
+    "dustLimit" : 1,
+    "totalFeePercent": 25000
+  },
   "local": {
     "dustLimit" : 1,
     "totalFeePercent": 25000
