@@ -15,7 +15,6 @@ interface IHPool {
         uint256 totalProtocolFee;
         uint256 totalDeposit;
         bool isHPoolEnded;
-        bool endingPoolInProgress;
     }
     function hPool() external returns (HPoolInfo memory);
 }
