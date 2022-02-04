@@ -49,6 +49,13 @@ module.exports = {
       gasPrice: 40000000000,
       timeout: 500000
     },
+    bscTestnetStaging: {
+      url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      accounts: [process.env.PK || PK],
+      chainId: 97,
+      gasPrice: 40000000000,
+      timeout: 500000
+    },
     bsc_mainnet: {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
