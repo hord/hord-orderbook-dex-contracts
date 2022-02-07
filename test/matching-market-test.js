@@ -7,7 +7,7 @@ let configuration = require('../deployments/deploymentConfig.json');
 const { ethers, expect, toHordDenomination, BigNumber } = require('./setup')
 
 let config;
-let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken,
+let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken, champion, championAddr,
     maintainer, maintainerAddr, matchingMarket, uniswapRouter, orderBookConfiguration, hordTreasury, firstHPoolToken, secondHPoolToken, user, userAddr;
 let offerId, amount, amountBuy = 0, amountSell = 0, minSellAmount = 1, bestOffer = 2, worseOffer = 3, offerCnt = 0, zerro = 0;
 
@@ -23,6 +23,8 @@ async function setupContractAndAccounts () {
     maintainerAddr = await maintainer.getAddress();
     user = accounts[3];
     userAddr = await user.getAddress();
+    champion = accounts[4];
+    championAddr = await champion.getAddress();
 
     const MaintainersRegistry = await ethers.getContractFactory('MockMaintainersRegistry');
     maintainersRegistry = await MaintainersRegistry.deploy();
@@ -38,7 +40,8 @@ async function setupContractAndAccounts () {
         "HORD",
         "HORD",
         toHordDenomination(100000000),
-        ownerAddr
+        ownerAddr,
+        championAddr
     );
     await hordToken.deployed();
 
@@ -47,7 +50,8 @@ async function setupContractAndAccounts () {
         "DustToken",
         "DT",
         toHordDenomination(100000000),
-        ownerAddr
+        ownerAddr,
+        championAddr
     );
     await dustToken.deployed();
 
@@ -56,7 +60,8 @@ async function setupContractAndAccounts () {
         "DustToken",
         "DT",
         toHordDenomination(100000000),
-        ownerAddr
+        ownerAddr,
+        championAddr
     );
     await firstHPoolToken.deployed();
 
@@ -65,7 +70,8 @@ async function setupContractAndAccounts () {
         "DustToken",
         "DT",
         toHordDenomination(100000000),
-        ownerAddr
+        ownerAddr,
+        championAddr
     );
     await secondHPoolToken.deployed();
 
@@ -355,8 +361,9 @@ describe('MatchingMarket', async() => {
 
         it('s', async() => {
            await matchingMarket.addTradingFee(100, firstHPoolToken.address);
-           // let a = await matchingMarket.a();
-           //  console.log(a);
+           await matchingMarket.connect(champion).withdrawChampionTradingAndTransferFee(firstHPoolToken.address);
+           let a = await matchingMarket.hPoolToChampionFee(firstHPoolToken.address);
+           console.log(a);
         });
 
     });

@@ -186,8 +186,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function withdrawChampionTradingAndTransferFee(address hPool) external nonReentrant {
-//        require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
-//        require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
+        require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
+        require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
 
         uint256 amountInHpoolTokens = hPoolToChampionFee[hPool].availableTransferFeesInHpoolTokens;
 

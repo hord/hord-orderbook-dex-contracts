@@ -13,6 +13,24 @@ contract ERC20Mock is IERC20Metadata{
     string private _name;
     string private _symbol;
 
+    struct HPoolInfo {
+        address championAddress;
+        address hPoolImplementation;
+        address baseAsset;
+        uint256 totalBaseAssetAtLaunch;
+        uint256 hPoolId;
+        uint256 bePoolId;
+        uint256 initialPoolWorthUSD;
+        uint256 availableToClaimChampionSuccessFee;
+        uint256 totalChampionSuccessFee;
+        uint256 availableToClaimProtocolFee;
+        uint256 totalProtocolFee;
+        uint256 totalDeposit;
+        bool isHPoolEnded;
+    }
+
+    HPoolInfo public hPool;
+
     /**
      * @dev Sets the values for {name} and {symbol}.
      *
@@ -22,11 +40,12 @@ contract ERC20Mock is IERC20Metadata{
      * All three of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory name_, string memory symbol_, uint256 totalSupply_, address beneficiary) public {
+    constructor (string memory name_, string memory symbol_, uint256 totalSupply_, address beneficiary, address champion) public {
         _name = name_;
         _symbol = symbol_;
         _totalSupply = totalSupply_;
         _balances[beneficiary] = totalSupply_;
+        hPool.championAddress = champion;
         emit Transfer(address(0x0), beneficiary, totalSupply_);
     }
 
