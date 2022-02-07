@@ -217,7 +217,7 @@ describe('MatchingMarket', async() => {
         });
 
     });
-    
+
     describe('MatchingMarket::Make offer', async() => {
 
         it('should not let to make offer for invalid pair', async() => {
