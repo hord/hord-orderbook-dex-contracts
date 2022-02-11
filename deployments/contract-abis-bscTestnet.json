@@ -1498,6 +1498,11 @@
                         "internalType": "address",
                         "name": "hPool",
                         "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "poolId",
+                        "type": "uint256"
                     }
                 ],
                 "name": "withdrawChampionTradingAndTransferFee",
