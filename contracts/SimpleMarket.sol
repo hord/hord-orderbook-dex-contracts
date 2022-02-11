@@ -175,6 +175,9 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function addTradingFee(uint256 _amount, address _hPoolToken) external {
+        require(hPoolManager.isHPoolToken(msg.sender), "Msg sender is not valid");
+        require(msg.sender == _hPoolToken, "HPoolToken is not valid");
+
         uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
         uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(_amount);
 
@@ -185,9 +188,12 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         hPoolToPlatformFee[_hPoolToken].totalTransferFeesInHpoolTokens += protocolFee;
     }
 
-    function withdrawChampionTradingAndTransferFee(address hPool) external nonReentrant {
+    function withdrawChampionTradingAndTransferFee(address hPool, uint256 poolId) external nonReentrant {
         require(hPoolManager.isHPoolToken(hPool), "HPoolToken is not valid");
-        require(IHPool(hPool).hPool().championAddress == msg.sender, "Only champion can withdraw his hPoolTokens");
+
+        address _championAddress;
+        (, , _championAddress, , , , , , , , , )= IHPoolManager(hPoolManager).getPoolInfo(poolId);
+        require(_championAddress == msg.sender, "Only champion can withdraw his hPoolTokens.");
 
         uint256 amountInHpoolTokens = hPoolToChampionFee[hPool].availableTransferFeesInHpoolTokens;
 
