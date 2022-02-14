@@ -4,18 +4,18 @@
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
-        "MatchingMarket": "0xFd32fB7B0086C9cb1496ADDDa8aA5d7C6B05e59D",
+        "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
         "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0xa47f38843CA7f5b544Cc898E724d34Bb9F10A05c"
+        "MakerOtcSupportMethods": "0xe93949c2894B1977Ac4a77258497be21c25BF4E6"
     },
     "bscTestnetStaging": {
         "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
-        "MatchingMarket": "0x9D980f73EB11EfE0356b049fEeE8c16dD5769ed4",
+        "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
         "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0x8881309B876bAb80A133aa2087Ac57A8ce076D10"
+        "MakerOtcSupportMethods": "0x316254d12477cD1B2996980760CFc78283d8Daf9"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
