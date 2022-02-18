@@ -19,12 +19,10 @@
     },
     "bscMainnetStaging": {
         "UniswapRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-        "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
+        "HordCongress": "0xB465d030145dfC5327644198fc047d8C00e30825",
         "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
         "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-        "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
-        "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0x316254d12477cD1B2996980760CFc78283d8Daf9"
+        "MakerOtcSupportMethods": "0xCD893D16e889126020b2621A99b98816706585E6"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
