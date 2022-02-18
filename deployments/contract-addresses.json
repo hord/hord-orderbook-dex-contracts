@@ -21,8 +21,7 @@
         "UniswapRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
         "HordCongress": "0xB465d030145dfC5327644198fc047d8C00e30825",
         "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
-        "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-        "MakerOtcSupportMethods": "0xCD893D16e889126020b2621A99b98816706585E6"
+        "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
