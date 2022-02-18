@@ -19,7 +19,9 @@
         "MaintainersRegistry": "0x65a41a20AB3ea81D3C606f375F95C852B5C1F40f",
         "HordTreasury": "0x00db80D39CCa4adB657978Ba9fC7F5dA40cca979",
         "ProxyAdmin": "0x9Dd1764C16AfAa5E2d638071e365Fa0a5D46149B",
-        "HPoolManager": "0x9f4da339F1cCE8e65E7b45D376A2C54902541115"
+        "HPoolManager": "0x9f4da339F1cCE8e65E7b45D376A2C54902541115",
+        "OrderBookConfiguration": "0x2458d6C55860B7a0E779CDD9698080c62364aAED",
+        "MatchingMarket": "0xbd290e6B6ca8c84d6589965C2ba168813Db292c9"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
