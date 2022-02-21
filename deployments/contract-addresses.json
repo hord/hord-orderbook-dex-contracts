@@ -6,7 +6,7 @@
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
         "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0x83DbBabBcaA2633A97D76d17eAde262fff44334b"
+        "MakerOtcSupportMethods": "0xe93949c2894B1977Ac4a77258497be21c25BF4E6"
     },
     "bscTestnetStaging": {
         "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
@@ -15,7 +15,16 @@
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
         "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0xb0732801706a6e928d7201eb46142428b09C8fDc"
+        "MakerOtcSupportMethods": "0x316254d12477cD1B2996980760CFc78283d8Daf9"
+    },
+    "bscMainnetStaging": {
+        "UniswapRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+        "HordCongress": "0xB465d030145dfC5327644198fc047d8C00e30825",
+        "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
+        "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+        "MakerOtcSupportMethods": "0xb9C831dd8b5D3eEe8250f08D049FcbFC534A6384",
+        "MatchingMarket": "0x8243ee322c638d339831F2b20c7df62310033655",
+        "OrderBookConfiguration": "0xCc4D906f696577b1bd4E6f50ca3b85255aC5A3e5"
     },
     "local": {
         "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",

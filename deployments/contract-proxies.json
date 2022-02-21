@@ -1,19 +1,27 @@
 {
     "bscTestnet": {
-        "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
-        "HordTreasury": "0x07594fd6B300e4186Cb05722F158af109431faA8",
+        "MaintainersRegistry": "0xAC47089CF51d23fF9811071C625507Cc7ddF95cF",
+        "HordTreasury": "0xEB23cdecc53866005a9B6252D6190173Fc292cC5",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
-        "HPoolManager": "0x54Ef7d69E27bFbA2c29e60b91AA64E10f61951A2",
-        "OrderBookConfiguration": "0x4977ee24eAd66e9C30bB166314c0e7520067843B",
-        "MatchingMarket": "0x498E60a53Cf8A560965650B4F4DF8f1deF4845c7"
+        "HPoolManager": "0xd3e745c5A9789df9b6A2b33C8753EaAf7680D6A1",
+        "OrderBookConfiguration": "0xdb74E910Bc1CaB7BE6EBf5bD323B30FEdC2453F8",
+        "MatchingMarket": "0x2c72CFe2d6796a8a708c01c80e8D735075E5135B"
     },
     "bscTestnetStaging": {
-        "MaintainersRegistry": "0xCE2fDA100cd60a3Ec177b404cd8af55946Bb12A1",
-        "HordTreasury": "0x9E0812E8cb29813709600473e4dB46bdCA165678",
+        "MaintainersRegistry": "0xd7E8CB06d26047382893E3F7F9B1c65e405B0ab1",
+        "HordTreasury": "0xAADE9C87f7A140Ed3fcB843594135E67D1880e41",
         "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
-        "HPoolManager": "0xbC90a9E60cAa3EBbE25A90a7dEC464a3bff23BB8",
-        "OrderBookConfiguration": "0x27E1372A4ff1f1dFc3567e0A5FA0A9F28Bbf0F31",
-        "MatchingMarket": "0xe18b551A4309f98Df26a896Fdc3D6a4a3eEF5588"
+        "HPoolManager": "0x4e8Be04EDFf2B53fFCbA7d1e26c59ba947ad63f4",
+        "OrderBookConfiguration": "0x79D888FC8b51AAc8a5a4C452DBdaC9feED26543c",
+        "MatchingMarket": "0x4a627D6E25b67DC2472125072aBB4644Ea955ba8"
+    },
+    "bscMainnetStaging": {
+        "MaintainersRegistry": "0x65a41a20AB3ea81D3C606f375F95C852B5C1F40f",
+        "HordTreasury": "0x00db80D39CCa4adB657978Ba9fC7F5dA40cca979",
+        "ProxyAdmin": "0x9Dd1764C16AfAa5E2d638071e365Fa0a5D46149B",
+        "HPoolManager": "0x9f4da339F1cCE8e65E7b45D376A2C54902541115",
+        "OrderBookConfiguration": "0x2458d6C55860B7a0E779CDD9698080c62364aAED",
+        "MatchingMarket": "0xbd290e6B6ca8c84d6589965C2ba168813Db292c9"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",

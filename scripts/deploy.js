@@ -3,6 +3,9 @@ const { hexify, toHordDenomination } = require('../test/setup');
 const { getSavedContractAddresses, saveContractAddress, saveContractProxies, getSavedContractProxies } = require('./utils');
 let c = require('../deployments/deploymentConfig.json');
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+const delayLength = 6000;
+
 async function main() {
     await hre.run('compile');
     const config = c[hre.network.name];
@@ -14,6 +17,8 @@ async function main() {
     await makerOtcSupportMethods.deployed();
     console.log("MakerOtcSupportMethods contract deployed to:", makerOtcSupportMethods.address);
     saveContractAddress(hre.network.name, 'MakerOtcSupportMethods', makerOtcSupportMethods.address);
+
+    await delay(delayLength);
 
     const OrderBookConfiguration = await ethers.getContractFactory('OrderBookConfiguration');
     const orderBookConfiguration = await upgrades.deployProxy(OrderBookConfiguration, [
@@ -34,6 +39,8 @@ async function main() {
     console.log('OrderBookConfiguration Proxy is deployed to: ', orderBookConfiguration.address);
     saveContractProxies(hre.network.name, 'OrderBookConfiguration', orderBookConfiguration.address);
 
+    await delay(delayLength);
+
     const MatchingMarket = await ethers.getContractFactory('MatchingMarket');
     const matchingMarket = await upgrades.deployProxy(MatchingMarket, [
             contracts['HordCongress'],
@@ -48,6 +55,8 @@ async function main() {
     await matchingMarket.deployed();
     console.log('MatchingMarket Proxy is deployed to: ', matchingMarket.address);
     saveContractProxies(hre.network.name, 'MatchingMarket', matchingMarket.address);
+
+    await delay(delayLength);
 
     let admin = await upgrades.admin.getInstance();
 
