@@ -6,7 +6,7 @@
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xf9f8B575Ec056B94D7f4266E918578C5a9b04958",
         "OrderBookConfiguration": "0xa1a82aF4f46e62325988Af6e75DA8fAb6fB97b95",
-        "MakerOtcSupportMethods": "0x46b0943916B1f476DcB978Ac2806Da403fD1FFAa"
+        "MakerOtcSupportMethods": "0x55F25DD38aa6d24CaF7705B7778ff13cD772d2F5"
     },
     "bscTestnetStaging": {
         "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
