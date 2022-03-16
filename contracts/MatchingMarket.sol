@@ -41,7 +41,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     }
 
     IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
-    address public hordToken; // Address for HORD token
 
     mapping(uint => sortInfo) public _rank; //doubly linked lists of sorted offer ids
     mapping(address => mapping(address => uint)) public _best; //id of the highest offer for a token pair
@@ -76,7 +75,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
         hordTreasury = IHordTreasury(_hordTreasury);
-        hordToken = orderbookConfiguration.hordToken();
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
