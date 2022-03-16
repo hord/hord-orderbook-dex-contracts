@@ -27,7 +27,10 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     function initialize(
         address[] memory addresses,
         uint256[] memory configValues
-    ) external initializer {
+    )
+    external
+    initializer
+    {
         // Set hord congress and maintainers registry
         setCongressAndMaintainers(addresses[0], addresses[1]);
 
@@ -41,6 +44,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     external
     onlyHordCongress
     {
+        require(dustLimit_ <= 100, "dustLimit_ is above threshold");
         _dustLimit = dustLimit_;
         emit ConfigurationChanged("_dustLimit", _dustLimit);
     }
@@ -71,6 +75,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     external
     onlyHordCongress
     {
+        require(dustLimit_ <= 300000, "totalFeePercent_ is above threshold");
         _totalFeePercent = totalFeePercent_;
         emit ConfigurationChanged("_totalFeePercent", _totalFeePercent);
     }
