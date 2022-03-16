@@ -62,7 +62,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         address _hPoolManager,
         address _hordTreasury
     )
-    public
+    external
     initializer
     {
         require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address");
@@ -125,7 +125,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @notice          function to kill specific order. Calls cancel function which executes the cancellation of the specific order
         * @param           id id of the specific order
     */
-    function kill(bytes32 id) public {
+    function kill(bytes32 id) external {
         require(cancel(uint256(id)));
     }
 
@@ -144,7 +144,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         IERC20 buy_gem,
         uint pos
     )
-    public
+    external
     whenNotPaused
     can_offer
     isValidHPoolTokenPair(pay_gem, buy_gem)
@@ -193,8 +193,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     can_buy(id)
     returns (bool)
     {
-        //TODO: remove reentrancy guard impl and extend ReentrancyGuard contract
-        require(!locked, "Reentrancy attempt"); //TODO: maybe at least make the lock per token pair not on the entire dex
+        require(!locked, "Reentrancy attempt");
         return _buys(id, amount);
     }
 
@@ -221,7 +220,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     function getMinSell(
         IERC20 pay_gem      //token for which minimum sell amount is queried
     )
-    public
+    external
     view
     returns (uint)
     {
@@ -247,13 +246,13 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     //      the better offer is in the lower priced one if its an ask,
     //      the next higher priced one if its a bid offer
     //      and in both cases the older one if they're equal.
-    function getBetterOffer(uint id) public view returns(uint) {
+    function getBetterOffer(uint id) external view returns(uint) {
 
         return _rank[id].next;
     }
 
     //return the amount of better offers for a token pair
-    function getOfferCount(IERC20 sell_gem, IERC20 buy_gem) public view returns(uint) {
+    function getOfferCount(IERC20 sell_gem, IERC20 buy_gem) external view returns(uint) {
         return _span[address(sell_gem)][address(buy_gem)];
     }
 
@@ -262,13 +261,13 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     //      Their offers get put in the unsorted list of offers.
     //      Keepers can calculate the insertion position offchain and pass it to the insert() function to insert
     //      the unsorted offer into the sorted list. Unsorted offers will not be matched, but can be bought with buy().
-    function getFirstUnsortedOffer() public view returns(uint) {
+    function getFirstUnsortedOffer() external view returns(uint) {
         return _head;
     }
 
     //get the next unsorted offer
     //      Can be used to cycle through all the unsorted offers.
-    function getNextUnsortedOffer(uint id) public view returns(uint) {
+    function getNextUnsortedOffer(uint id) external view returns(uint) {
         return _near[id];
     }
 
@@ -291,7 +290,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                            caller should provide this threshold
     */
     function sellAllAmount(IERC20 pay_gem, uint pay_amt, IERC20 buy_gem, uint min_fill_amount)
-    public
+    external
     whenNotPaused
     returns (uint fill_amt)
     {
@@ -332,7 +331,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                           losses the caller should provide this threshold.
    */
     function buyAllAmount(IERC20 buy_gem, uint buy_amt, IERC20 pay_gem, uint max_fill_amount)
-    public
+    external
     whenNotPaused
     returns (uint fill_amt)
     {
@@ -359,7 +358,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         require(fill_amt <= max_fill_amount);
     }
 
-    function getBuyAmount(IERC20 buy_gem, IERC20 pay_gem, uint pay_amt) public view returns (uint fill_amt) {
+    function getBuyAmount(IERC20 buy_gem, IERC20 pay_gem, uint pay_amt) external view returns (uint fill_amt) {
         uint256 offerId = getBestOffer(buy_gem, pay_gem);           //Get best offer for the token pair
         while (pay_amt > offers[offerId].buy_amt) {
             fill_amt = add(fill_amt, offers[offerId].pay_amt);  //Add amount to buy accumulator
@@ -372,7 +371,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         fill_amt = add(fill_amt, rmul(pay_amt * 10 ** 9, rdiv(offers[offerId].pay_amt, offers[offerId].buy_amt)) / 10 ** 9); //Add proportional amount of last offer to buy accumulator
     }
 
-    function getPayAmount(IERC20 pay_gem, IERC20 buy_gem, uint buy_amt) public view returns (uint fill_amt) {
+    function getPayAmount(IERC20 pay_gem, IERC20 buy_gem, uint buy_amt) external view returns (uint fill_amt) {
         uint256 offerId = getBestOffer(buy_gem, pay_gem);           //Get best offer for the token pair
         while (buy_amt > offers[offerId].pay_amt) {
             fill_amt = add(fill_amt, offers[offerId].buy_amt);  //Add amount to pay accumulator

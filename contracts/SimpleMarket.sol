@@ -237,7 +237,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @notice          function that returns from specific order the buy token, buy token amount, sell token and sell token amount
         * @param           id offer id
     */
-    function getOffer(uint id) public view returns (uint, IERC20, uint, IERC20) {
+    function getOffer(uint id) external view returns (uint, IERC20, uint, IERC20) {
         OfferInfo memory offer = offers[id];
         return (offer.pay_amt, offer.pay_gem,
         offer.buy_amt, offer.buy_gem);
@@ -246,7 +246,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // ---- Public entrypoints ---- //
 
     function bump(bytes32 id_)
-    public
+    external
     whenNotPaused
     can_buy(uint256(id_))
     {
