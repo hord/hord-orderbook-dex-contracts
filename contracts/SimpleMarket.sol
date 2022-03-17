@@ -498,7 +498,4 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         _unpause();
     }
 
-    receive() external payable {
-
-    }
 }
