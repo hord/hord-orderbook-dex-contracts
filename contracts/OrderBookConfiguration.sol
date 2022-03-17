@@ -75,7 +75,7 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     external
     onlyHordCongress
     {
-        require(dustLimit_ <= 300000, "totalFeePercent_ is above threshold");
+        require(totalFeePercent_ <= 300000, "totalFeePercent_ is above threshold");
         _totalFeePercent = totalFeePercent_;
         emit ConfigurationChanged("_totalFeePercent", _totalFeePercent);
     }
