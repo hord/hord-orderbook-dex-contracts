@@ -116,7 +116,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @param           maxTakeAmount maximal amount of tokens user wants to buy from specific order
     */
     function take(bytes32 id, uint128 maxTakeAmount) public {
-        require(buy(uint256(id), maxTakeAmount));
+        require(buy(uint256(id), maxTakeAmount), "Revert in buy function.");
     }
 
     /**
@@ -124,7 +124,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @param           id id of the specific order
     */
     function kill(bytes32 id) external {
-        require(cancel(uint256(id)));
+        require(cancel(uint256(id)), "Revert in cancel function.");
     }
 
     /**
@@ -205,9 +205,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     {
         require(!locked, "Reentrancy attempt");
         if (isOfferSorted(id)) {
-            require(_unsort(id));
+            require(_unsort(id), "Revert in _unsort function.");
         } else {
-            require(_hide(id));
+            require(_hide(id), "Revert in _hide function.");
         }
         return cancel_simple_market(id);    //delete the offer.
     }
@@ -294,7 +294,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         uint offerId;
         while (pay_amt > 0) {                           //while there is amount to sell
             offerId = getBestOffer(buy_gem, pay_gem);   //Get the best offer for the token pair
-            require(offerId != 0);                      //Fails if there are not more offers
+            require(offerId != 0, "offerId can not be 0.");                      //Fails if there are not more offers
 
             // There is a chance that pay_amt is smaller than 1 wei of the other token
             if (pay_amt * 1 ether < wdiv(offers[offerId].buy_amt, offers[offerId].pay_amt)) {
@@ -311,7 +311,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                 pay_amt = 0;                            //All amount is sold
             }
         }
-        require(fill_amt >= min_fill_amount);
+        require(fill_amt >= min_fill_amount, "fill_amt is less than min_fill_amount.");
     }
 
     /**
@@ -335,7 +335,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         uint offerId;
         while (buy_amt > 0) {                           //Meanwhile there is amount to buy
             offerId = getBestOffer(buy_gem, pay_gem);   //Get the best offer for the token pair
-            require(offerId != 0);
+            require(offerId != 0, "offerId can not be 0.");
 
             // There is a chance that buy_amt is smaller than 1 wei of the other token
             if (buy_amt * 1 ether < wdiv(offers[offerId].pay_amt, offers[offerId].buy_amt)) {
@@ -351,7 +351,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                 buy_amt = 0;                                                //All amount is bought
             }
         }
-        require(fill_amt <= max_fill_amount);
+        require(fill_amt <= max_fill_amount, "fill_amt is less than min_fill_amount.");
     }
 
     function getBuyAmount(IERC20 buy_gem, IERC20 pay_gem, uint pay_amt) external view returns (uint fill_amt) {
@@ -361,7 +361,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
             pay_amt = sub(pay_amt, offers[offerId].buy_amt);    //Decrease amount to pay
             if (pay_amt > 0) {                                  //If we still need more offers
                 offerId = getWorseOffer(offerId);               //We look for the next best offer
-                require(offerId != 0);                          //Fails if there are not enough offers to complete
+                require(offerId != 0, "offerId can not be 0.");                          //Fails if there are not enough offers to complete
             }
         }
         fill_amt = add(fill_amt, rmul(pay_amt * 10 ** 9, rdiv(offers[offerId].pay_amt, offers[offerId].buy_amt)) / 10 ** 9); //Add proportional amount of last offer to buy accumulator
@@ -374,7 +374,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
             buy_amt = sub(buy_amt, offers[offerId].pay_amt);    //Decrease amount to buy
             if (buy_amt > 0) {                                  //If we still need more offers
                 offerId = getWorseOffer(offerId);               //We look for the next best offer
-                require(offerId != 0);                          //Fails if there are not enough offers to complete
+                require(offerId != 0, "offerId can not be 0.");                          //Fails if there are not enough offers to complete
             }
         }
         fill_amt = add(fill_amt, rmul(buy_amt * 10 ** 9, rdiv(offers[offerId].buy_amt, offers[offerId].pay_amt)) / 10 ** 9); //Add proportional amount of last offer to pay accumulator
@@ -404,7 +404,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
                 _hide(id);
             }
         }
-        require(buy_simple_market(id, amount));
+        require(buy_simple_market(id, amount), "Revert in buy_simple_market function.");
         // If offer has become dust during buy, we cancel it
         if (isActive(id) && offers[id].pay_amt < _dust[address(offers[id].pay_gem)]) {
             cancel(id);
@@ -418,7 +418,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     view
     returns (uint)
     {
-        require( id > 0 );
+        require(id > 0, "id must be greater than 0.");
 
         address buy_gem = address(offers[id].buy_gem);
         address pay_gem = address(offers[id].pay_gem);
@@ -439,7 +439,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     view
     returns (uint)
     {
-        require(id > 0);
+        require(id > 0, "id must be greater than 0.");
 
         // Look for an active order.
         while (pos != 0 && !isActive(pos)) {
@@ -568,7 +568,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     )
     internal
     {
-        require(isActive(id));
+        require(isActive(id), "offer is not active.");
 
         IERC20 buy_gem = offers[id].buy_gem;
         IERC20 pay_gem = offers[id].pay_gem;
@@ -614,20 +614,20 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     {
         address buy_gem = address(offers[id].buy_gem);
         address pay_gem = address(offers[id].pay_gem);
-        require(_span[pay_gem][buy_gem] > 0);
+        require(_span[pay_gem][buy_gem] > 0, "There is no offer for this token pair.");
 
         require(_rank[id].delb == 0 &&                    //assert id is in the sorted list
-            isOfferSorted(id));
+            isOfferSorted(id), "Id is not in the sorted list.");
 
         if (id != _best[pay_gem][buy_gem]) {              // offers[id] is not the highest offer
-            require(_rank[_rank[id].next].prev == id);
+            require(_rank[_rank[id].next].prev == id, "Id is not on valid pos.");
             _rank[_rank[id].next].prev = _rank[id].prev;
         } else {                                          //offers[id] is the highest offer
             _best[pay_gem][buy_gem] = _rank[id].prev;
         }
 
         if (_rank[id].prev != 0) {                        //offers[id] is not the lowest offer
-            require(_rank[_rank[id].prev].next == id);
+            require(_rank[_rank[id].prev].next == id, "Id is not on valid pos.");
             _rank[_rank[id].prev].next = _rank[id].next;
         }
 
@@ -646,7 +646,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         uint uid = _head;               //id of an offer in unsorted offers list
         uint pre = uid;                 //id of previous offer in unsorted offers list
 
-        require(!isOfferSorted(id));    //make sure offer id is not in sorted offers list
+        require(!isOfferSorted(id), "OrderId is in sorted offers list.");    //make sure offer id is not in sorted offers list
 
         if (_head == id) {              //check if offer is first offer in unsorted offers list
             _head = _near[id];          //set head to new first unsorted offer

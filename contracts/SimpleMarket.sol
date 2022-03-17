@@ -138,7 +138,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @param           id offer id
     */
     modifier can_buy(uint id) {
-        require(isActive(id));
+        require(isActive(id), "Offer is not active.");
         _;
     }
 
@@ -147,8 +147,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @param           id offer id
     */
     modifier can_cancel_simple_market(uint id) {
-        require(isActive(id));
-        require(getOwner(id) == msg.sender);
+        require(isActive(id), "Offer is not active.");
+        require(getOwner(id) == msg.sender, "Only owner can cancel offer.");
         _;
     }
 
@@ -156,7 +156,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @notice          modifier to prevent reentrancy attack
     */
     modifier synchronized {
-        require(!locked);
+        require(!locked, "Locked");
         locked = true;
         _;
         locked = false;
@@ -276,8 +276,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         OfferInfo memory offer = offers[id];
         uint spend = mul(quantity, offer.buy_amt) / offer.pay_amt;
 
-        require(uint128(spend) == spend);
-        require(uint128(quantity) == quantity);
+        require(uint128(spend) == spend, "Cast error.");
+        require(uint128(quantity) == quantity, "Cast error.");
 
         // For backwards semantic compatibility.
         if (quantity == 0 || spend == 0 ||
@@ -398,13 +398,13 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     synchronized
     returns (uint id)
     {
-        require(uint128(pay_amt) == pay_amt);
-        require(uint128(buy_amt) == buy_amt);
-        require(pay_amt > 0);
-        require(pay_gem != IERC20(address(0)));
-        require(buy_amt > 0);
-        require(buy_gem != IERC20(address(0)));
-        require(pay_gem != buy_gem);
+        require(uint128(pay_amt) == pay_amt, "Cast error.");
+        require(uint128(buy_amt) == buy_amt, "Cast error.");
+        require(pay_amt > 0, "Pay amount must be greater than 0.");
+        require(pay_gem != IERC20(address(0)), "Pay token can not be 0x0 address.");
+        require(buy_amt > 0, "Buy ampunt must be greater than 0.");
+        require(buy_gem != IERC20(address(0)), "Buy token can not be 0x0 address.");
+        require(pay_gem != buy_gem, "Pay token must be different than buy token.");
 
         OfferInfo memory info;
         info.pay_amt = pay_amt;
