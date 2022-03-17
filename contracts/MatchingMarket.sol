@@ -144,7 +144,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     )
     external
     whenNotPaused
-    can_offer
     isValidHPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
@@ -170,7 +169,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     )
     public
     whenNotPaused
-    can_offer
     isValidHPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {

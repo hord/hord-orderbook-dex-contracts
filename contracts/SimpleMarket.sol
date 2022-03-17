@@ -152,10 +152,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         _;
     }
 
-    modifier can_offer {
-        _;
-    }
-
     /**
         * @notice          modifier to prevent reentrancy attack
     */
@@ -397,7 +393,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     */
     function offer_simple_market(uint pay_amt, IERC20 pay_gem, uint buy_amt, IERC20 buy_gem)
     internal
-    can_offer
     synchronized
     returns (uint id)
     {
