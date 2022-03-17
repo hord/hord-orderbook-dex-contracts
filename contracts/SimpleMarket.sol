@@ -171,6 +171,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function addTradingFee(uint256 _amount, address _hPoolToken) external {
+        require(hPoolManager.isHPoolToken(msg.sender), "Msg.sender is not HPool contract.");
+
         uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
         uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(_amount);
 
