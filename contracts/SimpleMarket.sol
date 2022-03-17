@@ -309,7 +309,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
             safeTransfer(offer.pay_gem, msg.sender, quantity);
 
-        } else { // offer.pay_gem is BUSD
+        } else if(address(offer.pay_gem) == address(dustToken)) { // offer.pay_gem is BUSD
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(quantity);
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
