@@ -302,10 +302,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             hPoolToChampionFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += championFee;
             hPoolToChampionFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += championFee;
 
-            address championAddress = IHPool(address(offer.pay_gem)).championAddress();
-
-            safeTransferFrom(offer.buy_gem, msg.sender, championAddress, championFee);
-            safeTransferFrom(offer.buy_gem, msg.sender, address(this), protocolFee);
+            safeTransferFrom(offer.buy_gem, msg.sender, address(this), totalFee);
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
             safeTransfer(offer.pay_gem, msg.sender, quantity);
 
@@ -321,16 +318,13 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
 
-            address championAddress = IHPool(address(offer.buy_gem)).championAddress;
-
             hPoolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
             hPoolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
 
             hPoolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
             hPoolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
 
-            safeTransferFrom(offer.pay_gem, msg.sender, championAddress, championFee);
-            safeTransferFrom(offer.pay_gem, msg.sender, address(this), protocolFee);
+            safeTransferFrom(offer.pay_gem, msg.sender, address(this), totalFee);
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
             safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
 
