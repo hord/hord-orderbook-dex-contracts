@@ -138,7 +138,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @param           id offer id
     */
     modifier can_buy(uint id) {
-        require(isActive(id));
+        require(isActive(id), "Offer is not active.");
         _;
     }
 
@@ -147,12 +147,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @param           id offer id
     */
     modifier can_cancel_simple_market(uint id) {
-        require(isActive(id));
-        require(getOwner(id) == msg.sender);
-        _;
-    }
-
-    modifier can_offer {
+        require(isActive(id), "Offer is not active.");
+        require(getOwner(id) == msg.sender, "Only owner can cancel offer.");
         _;
     }
 
@@ -160,7 +156,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @notice          modifier to prevent reentrancy attack
     */
     modifier synchronized {
-        require(!locked);
+        require(!locked, "Locked");
         locked = true;
         _;
         locked = false;
@@ -175,6 +171,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     }
 
     function addTradingFee(uint256 _amount, address _hPoolToken) external {
+        require(hPoolManager.isHPoolToken(msg.sender), "Msg.sender is not HPool contract.");
+
         uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
         uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(_amount);
 
@@ -237,7 +235,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         * @notice          function that returns from specific order the buy token, buy token amount, sell token and sell token amount
         * @param           id offer id
     */
-    function getOffer(uint id) public view returns (uint, IERC20, uint, IERC20) {
+    function getOffer(uint id) external view returns (uint, IERC20, uint, IERC20) {
         OfferInfo memory offer = offers[id];
         return (offer.pay_amt, offer.pay_gem,
         offer.buy_amt, offer.buy_gem);
@@ -246,7 +244,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     // ---- Public entrypoints ---- //
 
     function bump(bytes32 id_)
-    public
+    external
     whenNotPaused
     can_buy(uint256(id_))
     {
@@ -278,8 +276,8 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         OfferInfo memory offer = offers[id];
         uint spend = mul(quantity, offer.buy_amt) / offer.pay_amt;
 
-        require(uint128(spend) == spend);
-        require(uint128(quantity) == quantity);
+        require(uint128(spend) == spend, "Cast error.");
+        require(uint128(quantity) == quantity, "Cast error.");
 
         // For backwards semantic compatibility.
         if (quantity == 0 || spend == 0 ||
@@ -304,21 +302,21 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             hPoolToChampionFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += championFee;
             hPoolToChampionFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += championFee;
 
+            safeTransferFrom(offer.buy_gem, msg.sender, address(this), totalFee);
+            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
+            safeTransfer(offer.pay_gem, msg.sender, quantity);
+
             emit FeesTaken(
                 championFee,
                 protocolFee
             );
-            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
-            safeTransfer(offer.pay_gem, msg.sender, quantity);
 
-        } else { // offer.pay_gem is BUSD
+        } else if(address(offer.pay_gem) == address(dustToken)) { // offer.pay_gem is BUSD
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(quantity);
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
 
             uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
-
-            address championAddress = IHPool(address(offer.buy_gem)).hPool().championAddress;
 
             hPoolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
             hPoolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
@@ -326,12 +324,14 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             hPoolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
             hPoolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
 
+            safeTransferFrom(offer.pay_gem, msg.sender, address(this), totalFee);
+            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
+            safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
+
             emit FeesTaken(
                 championFee,
                 protocolFee
             );
-            safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
-            safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
         }
 
 
@@ -397,17 +397,16 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     */
     function offer_simple_market(uint pay_amt, IERC20 pay_gem, uint buy_amt, IERC20 buy_gem)
     internal
-    can_offer
     synchronized
     returns (uint id)
     {
-        require(uint128(pay_amt) == pay_amt);
-        require(uint128(buy_amt) == buy_amt);
-        require(pay_amt > 0);
-        require(pay_gem != IERC20(address(0)));
-        require(buy_amt > 0);
-        require(buy_gem != IERC20(address(0)));
-        require(pay_gem != buy_gem);
+        require(uint128(pay_amt) == pay_amt, "Cast error.");
+        require(uint128(buy_amt) == buy_amt, "Cast error.");
+        require(pay_amt > 0, "Pay amount must be greater than 0.");
+        require(pay_gem != IERC20(address(0)), "Pay token can not be 0x0 address.");
+        require(buy_amt > 0, "Buy ampunt must be greater than 0.");
+        require(buy_gem != IERC20(address(0)), "Buy token can not be 0x0 address.");
+        require(pay_gem != buy_gem, "Pay token must be different than buy token.");
 
         OfferInfo memory info;
         info.pay_amt = pay_amt;
@@ -498,7 +497,4 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         _unpause();
     }
 
-    receive() external payable {
-
-    }
 }

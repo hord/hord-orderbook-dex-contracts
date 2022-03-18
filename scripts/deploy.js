@@ -67,6 +67,9 @@ async function main() {
     let orderBookConfigurationImplementation = await admin.getProxyImplementation(orderBookConfiguration.address);
     console.log('OrderBookConfiguration Implementation: ', orderBookConfigurationImplementation);
     saveContractAddress(hre.network.name, 'OrderBookConfiguration', orderBookConfigurationImplementation);
+
+    saveContractProxies(hre.network.name, 'ProxyAdmin', admin.address);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
