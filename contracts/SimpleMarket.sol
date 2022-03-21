@@ -170,8 +170,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         return offers[id].timestamp > 0;
     }
 
-    //TODO: rename to addTransferFee to disambiguate from the trading fee taken by the dex as part of trading
-    function addTradingFee(uint256 _amount, address _hPoolToken) external {
+    function addTransferFee(uint256 _amount, address _hPoolToken) external {
         require(hPoolManager.isHPoolToken(msg.sender), "Msg.sender is not HPool contract.");
 
         uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
