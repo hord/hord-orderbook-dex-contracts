@@ -359,7 +359,7 @@ describe('MatchingMarket', async() => {
 
     describe('MatchingMarket::Buy', async() => {
 
-        it('s', async() => {
+        xit('s', async() => {
            await matchingMarket.addTradingFee(100, firstHPoolToken.address);
            await matchingMarket.connect(champion).withdrawChampionTradingAndTransferFee(firstHPoolToken.address);
            let a = await matchingMarket.hPoolToChampionFee(firstHPoolToken.address);
