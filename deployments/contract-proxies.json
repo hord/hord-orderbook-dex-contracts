@@ -2,10 +2,10 @@
     "bscTestnet": {
         "MaintainersRegistry": "0xdd6B01C762B0A2744f81FE93758588C003d6286e",
         "HordTreasury": "0x03EaB68c63Ea150852239f3C33c484479E8D1950",
-        "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
+        "ProxyAdmin": "0x8388d29aA9956a3f2adf95CEfD5dA1f7a3218250",
         "HPoolManager": "0xb331d9c5b5CD9cD8dCA37E04001156887B58556F",
-        "OrderBookConfiguration": "0x77B2e6aaA628b571F2204B2E17889caACE47B0f0",
-        "MatchingMarket": "0xCEa90370b9bF45E27D9aC2eaa61b18A1d4A7593b"
+        "OrderBookConfiguration": "0x0562FAb851B71Ec86Daa47eB8F0D122F82Be5394",
+        "MatchingMarket": "0x420e518538da6F093D2Be2FefCa34d5eddb45494"
     },
     "bscTestnetStaging": {
         "MaintainersRegistry": "0xd7E8CB06d26047382893E3F7F9B1c65e405B0ab1",
