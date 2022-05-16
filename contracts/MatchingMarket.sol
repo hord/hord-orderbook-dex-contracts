@@ -666,20 +666,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     }
 
     /**
-        * @notice          Function to set hPoolManager contract
-    */
-    function setHPoolManager(
-        address _hPoolManager
-    )
-    external
-    onlyHordCongress
-    {
-        require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address.");
-        hPoolManager = IHPoolManager(_hPoolManager);
-        emit HPoolManagerSet(_hPoolManager);
-    }
-
-    /**
         * @notice          Function to set hordTreasury contract
     */
     function setHordTreasury(
@@ -688,7 +674,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     external
     onlyHordCongress
     {
-        require(_hordTreasury != address(0), "HPoolManager can not be 0x0 address.");
+        require(_hordTreasury != address(0), "HordTreasury can not be 0x0 address.");
         hordTreasury = IHordTreasury(_hordTreasury);
         emit HordTreasurySet(_hordTreasury);
     }
