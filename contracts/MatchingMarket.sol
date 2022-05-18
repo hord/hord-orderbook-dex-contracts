@@ -59,7 +59,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         address _orderbookConfiguration,
         address _uniswapRouter,
         address _hPoolManager,
-        address _vPoolManager,
         address _hordTreasury
     )
     external
@@ -75,7 +74,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
 
         orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
-        vPoolManager = IVPoolManager(_vPoolManager);
         hordTreasury = IHordTreasury(_hordTreasury);
 
         dustToken = IERC20(orderbookConfiguration.dustToken());

@@ -25,7 +25,6 @@ import "./interfaces/IOrderbookConfiguration.sol";
 import "./interfaces/IHPool.sol";
 import "./interfaces/IERC20.sol";
 import "./interfaces/IHPoolManager.sol";
-import "./interfaces/IVPoolManager.sol";
 import "./interfaces/IHordTreasury.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
@@ -96,7 +95,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     mapping (address => PlatformFee) public hPoolToPlatformFee;
 
     IHPoolManager public hPoolManager; // Instance of HPoolManager
-    IVPoolManager public vPoolManager; // Instance of VPoolManager
     IHordTreasury public hordTreasury; // Instance of HordTreasury
 
     struct OfferInfo {
