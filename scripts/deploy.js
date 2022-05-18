@@ -48,7 +48,6 @@ async function main() {
             orderBookConfiguration.address,
             contracts['UniswapRouter'],
             contractProxies['HPoolManager'],
-            contractProxies['VPoolManager'],
             contractProxies['HordTreasury']
     ],
         { unsafeAllow: ['delegatecall'] }

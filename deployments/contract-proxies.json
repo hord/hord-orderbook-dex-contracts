@@ -5,8 +5,8 @@
         "ProxyAdmin": "0x8388d29aA9956a3f2adf95CEfD5dA1f7a3218250",
         "HPoolManager": "0x2905777a41F2868e4FD2EC3C25bD5cE665095e95",
         "VPoolManager": "0x2905777a41F2868e4FD2EC3C25bD5cE665095e95",
-        "OrderBookConfiguration": "0x3d02401b7f944E76EBFBFdA15CC54A9B8Fd16a6f",
-        "MatchingMarket": "0x8bcE01667ad23634a52089f224D54b3399951B7e"
+        "OrderBookConfiguration": "0xAcF6DA66953093b3FCffeedAd871E0D78715FE20",
+        "MatchingMarket": "0x1Ef3d0Ba6514a482766fA3e6c382B935FAF39ba1"
     },
     "bscTestnetStaging": {
         "MaintainersRegistry": "0xd7E8CB06d26047382893E3F7F9B1c65e405B0ab1",
