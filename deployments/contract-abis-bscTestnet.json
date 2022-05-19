@@ -70,19 +70,6 @@
                     {
                         "indexed": false,
                         "internalType": "address",
-                        "name": "hPoolManager",
-                        "type": "address"
-                    }
-                ],
-                "name": "HPoolManagerSet",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "address",
                         "name": "hordTreasury",
                         "type": "address"
                     }
@@ -424,7 +411,7 @@
                     {
                         "indexed": false,
                         "internalType": "uint256",
-                        "name": "amountInHpoolTokens",
+                        "name": "amountInPoolTokens",
                         "type": "uint256"
                     },
                     {
@@ -987,74 +974,6 @@
                 "type": "function"
             },
             {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "name": "hPoolToChampionFee",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "totalTransferFeesInHpoolTokens",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "availableTransferFeesInHpoolTokens",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "totalTradingFeesInStableCoin",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "availableTradingFeesInStableCoin",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "name": "hPoolToPlatformFee",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "totalTransferFeesInHpoolTokens",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "availableTransferFeesInHpoolTokens",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "totalTradingFeesInStableCoin",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "availableTradingFeesInStableCoin",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [],
                 "name": "hordCongress",
                 "outputs": [
@@ -1105,6 +1024,11 @@
                     {
                         "internalType": "address",
                         "name": "_hPoolManager",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_vPoolManager",
                         "type": "address"
                     },
                     {
@@ -1371,6 +1295,74 @@
             {
                 "inputs": [
                     {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "poolToChampionFee",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTransferFeesInPoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTransferFeesInPoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTradingFeesInStableCoin",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTradingFeesInStableCoin",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "poolToPlatformFee",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTransferFeesInPoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTransferFeesInPoolTokens",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTradingFeesInStableCoin",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "availableTradingFeesInStableCoin",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
                         "internalType": "contract IERC20",
                         "name": "pay_gem",
                         "type": "address"
@@ -1399,19 +1391,6 @@
                         "type": "uint256"
                     }
                 ],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "_hPoolManager",
-                        "type": "address"
-                    }
-                ],
-                "name": "setHPoolManager",
-                "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
@@ -1480,10 +1459,23 @@
                 "type": "function"
             },
             {
+                "inputs": [],
+                "name": "vPoolManager",
+                "outputs": [
+                    {
+                        "internalType": "contract IVPoolManager",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "hPool",
+                        "name": "pool",
                         "type": "address"
                     },
                     {
@@ -1501,7 +1493,7 @@
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "hPool",
+                        "name": "pool",
                         "type": "address"
                     }
                 ],
@@ -1776,11 +1768,6 @@
             }
         ],
         "MakerOtcSupportMethods": [
-            {
-                "inputs": [],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
             {
                 "inputs": [
                     {
