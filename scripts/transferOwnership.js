@@ -7,12 +7,11 @@ async function main() {
     await hre.run('compile');
     const config = c[hre.network.name];
     const contracts = getSavedContractAddresses()[hre.network.name];
-    const contractProxies = getSavedContractProxies()[hre.network.name];
+    const proxies = getSavedContractProxies()[hre.network.name];
     const abi = getSavedContractProxyAbis()["ProxyAdmin"];
-    let admin = await hre.ethers.getContractAt(abi, contractProxies["ProxyAdmin"]);
-    console.log(admin)
+    let admin = await hre.ethers.getContractAt(abi, proxies["ProxyAdmin"]);
     console.log(contracts["HordCongress"]);
-    await admin.transferOwnership(contractProxies["HordCongress"]);
+    await admin.transferOwnership(contracts["HordCongress"]);
     console.log(await admin.owner());
 }
 
