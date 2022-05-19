@@ -28,7 +28,6 @@ contract MatchingEvents {
     event LogUnsortedOffer(uint id);
     event LogSortedOffer(uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
-    event HPoolManagerSet(address hPoolManager);
     event HordTreasurySet(address hordTreasury);
     event UniswapRouterSet(address uniswapRouter);
 }
@@ -59,12 +58,14 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         address _orderbookConfiguration,
         address _uniswapRouter,
         address _hPoolManager,
+        address _vPoolManager,
         address _hordTreasury
     )
     external
     initializer
     {
         require(_hPoolManager != address(0), "HPoolManager can not be 0x0 address");
+        require(_vPoolManager != address(0), "VPoolManager can not be 0x0 address");
         require(_orderbookConfiguration != address(0), "OrderbookConfiguration can not be 0x0 address");
 
         // Set hord congress and maintainers registry
@@ -74,6 +75,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
 
         orderbookConfiguration = IOrderbookConfiguration(_orderbookConfiguration);
         hPoolManager = IHPoolManager(_hPoolManager);
+        vPoolManager = IVPoolManager(_vPoolManager);
         hordTreasury = IHordTreasury(_hordTreasury);
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
@@ -88,9 +90,12 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @param           tokenA is a token user wants trade
         * @param           tokenB is another token user wants to trade against tokenB
      */
-    modifier isValidHPoolTokenPair(IERC20 tokenA, IERC20 tokenB) {
-        require(hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
-            hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken),
+    modifier isValidPoolTokenPair(IERC20 tokenA, IERC20 tokenB) {
+        require(
+            hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
+            hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken) ||
+            vPoolManager.isVPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
+            vPoolManager.isVPoolToken(address(tokenB)) && address(tokenA) == address(dustToken),
             "The pair is not valid."
         );
         _;
@@ -144,7 +149,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     )
     external
     whenNotPaused
-    isValidHPoolTokenPair(pay_gem, buy_gem)
+    isValidPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
         return offerWithRounding(pay_amt, pay_gem, buy_amt, buy_gem, pos, true);
@@ -169,7 +174,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
     )
     public
     whenNotPaused
-    isValidHPoolTokenPair(pay_gem, buy_gem)
+    isValidPoolTokenPair(pay_gem, buy_gem)
     returns (uint)
     {
         require(!locked, "Reentrancy attempt");
