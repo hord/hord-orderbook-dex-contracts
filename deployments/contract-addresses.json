@@ -1,6 +1,5 @@
 {
     "bscTestnet": {
-        "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
         "HordCongress": "0x5f2dbeEc4a47c7c8e4405790feA978E220AaFbCe",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
@@ -9,7 +8,6 @@
         "MakerOtcSupportMethods": "0x4e82d88aD079d5b4d010DA96dabeaa23752b9895"
     },
     "bscMainnetStaging": {
-        "UniswapRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
         "HordCongress": "0x5f2dbeEc4a47c7c8e4405790feA978E220AaFbCe",
         "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
         "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
@@ -18,8 +16,6 @@
         "OrderBookConfiguration": "0xD72285eB1c68A2bF229F287B008574E96A8aE4E5"
     },
     "local": {
-        "AggregatorV3Interface": "0x6c5E4A82c7C601D819A59e708B397BE630C3AeD7",
-        "UniswapRouter": "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
         "HordConfiguration": "0xd6F03FB1aD9B8DA252c28e65e179E9Fc13999f30",

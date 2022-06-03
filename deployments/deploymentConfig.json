@@ -1,18 +1,22 @@
 {
   "bscTestnet" : {
     "dustLimit" : 1,
-    "totalFeePercent": 25000
+    "totalFeePercent": 25000,
+    "percentPrecision": 1000000
   },
   "bscTestnetStaging" : {
     "dustLimit" : 1,
-    "totalFeePercent": 25000
+    "totalFeePercent": 25000,
+    "percentPrecision": 1000000
   },
   "bscMainnetStaging" : {
     "dustLimit" : 1,
-    "totalFeePercent": 25000
+    "totalFeePercent": 25000,
+    "percentPrecision": 1000000
   },
   "local": {
     "dustLimit" : 1,
-    "totalFeePercent": 25000
+    "totalFeePercent": 25000,
+    "percentPrecision": 1000000
   }
 }
