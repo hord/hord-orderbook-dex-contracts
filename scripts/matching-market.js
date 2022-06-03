@@ -1,14 +1,14 @@
 const {
     address,
     encodeParameters
-} = require('./ethereum');
+} = require('../test/ethereum');
 const hre = require("hardhat");
 let configuration = require('../deployments/deploymentConfig.json');
-const { ethers, expect, toHordDenomination, BigNumber } = require('./setup')
+const { ethers, expect, toHordDenomination, BigNumber } = require('../test/setup')
 
 let config;
 let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken, champion, championAddr,
-    maintainer, maintainerAddr, matchingMarket, uniswapRouter, orderBookConfiguration, hordTreasury, firstHPoolToken, secondHPoolToken, user, userAddr;
+    maintainer, maintainerAddr, matchingMarket, orderBookConfiguration, hordTreasury, firstHPoolToken, secondHPoolToken, user, userAddr;
 let offerId, amount, amountBuy = 0, amountSell = 0, minSellAmount = 1, bestOffer = 2, worseOffer = 3, offerCnt = 0, zerro = 0;
 
 async function setupContractAndAccounts () {
@@ -30,10 +30,6 @@ async function setupContractAndAccounts () {
     maintainersRegistry = await MaintainersRegistry.deploy();
     await maintainersRegistry.deployed();
     await maintainersRegistry.initialize([maintainerAddr], hordCongressAddr);
-
-    const MockUniswap = await ethers.getContractFactory("MockUniswap");
-    uniswapRouter = await MockUniswap.deploy();
-    uniswapRouter.deployed();
 
     let ERC20Mock = await hre.ethers.getContractFactory("ERC20Mock");
     hordToken = await ERC20Mock.deploy(
@@ -117,7 +113,6 @@ describe('MatchingMarket', async() => {
                     hordCongressAddr,
                     maintainersRegistry.address,
                     address(0),
-                    uniswapRouter.address,
                     hPoolManager.address,
                     hordTreasury.address
                 )
@@ -130,7 +125,6 @@ describe('MatchingMarket', async() => {
                     hordCongressAddr,
                     maintainersRegistry.address,
                     orderBookConfiguration.address,
-                    uniswapRouter.address,
                     address(0),
                     hordTreasury.address
                 )
@@ -143,7 +137,6 @@ describe('MatchingMarket', async() => {
                     address(0),
                     maintainersRegistry.address,
                     orderBookConfiguration.address,
-                    uniswapRouter.address,
                     hPoolManager.address,
                     hordTreasury.address
                 )
@@ -156,7 +149,6 @@ describe('MatchingMarket', async() => {
                     hordCongressAddr,
                     address(0),
                     orderBookConfiguration.address,
-                    uniswapRouter.address,
                     hPoolManager.address,
                     hordTreasury.address
                 )
@@ -168,7 +160,6 @@ describe('MatchingMarket', async() => {
                 hordCongressAddr,
                 maintainersRegistry.address,
                 orderBookConfiguration.address,
-                uniswapRouter.address,
                 hPoolManager.address,
                 hordTreasury.address
             );
