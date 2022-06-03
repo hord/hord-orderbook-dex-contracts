@@ -46,7 +46,6 @@ async function main() {
             contracts['HordCongress'],
             contractProxies['MaintainersRegistry'],
             orderBookConfiguration.address,
-            contracts['UniswapRouter'],
             contractProxies['HPoolManager'],
             contractProxies['VPoolManager'],
             contractProxies['HordTreasury']
