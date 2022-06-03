@@ -20,7 +20,6 @@
 
 pragma solidity 0.8.10;
 
-import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./SimpleMarket.sol";
 
 contract MatchingEvents {
@@ -29,7 +28,6 @@ contract MatchingEvents {
     event LogSortedOffer(uint id);
     event BuyAndBurn(uint256 amountEthSpent, uint256 amountHordBurned);
     event HordTreasurySet(address hordTreasury);
-    event UniswapRouterSet(address uniswapRouter);
 }
 
 contract MatchingMarket is MatchingEvents, SimpleMarket {
@@ -38,8 +36,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         uint prev; //points to id of previous lower offer
         uint delb; //the blocknumber where this entry was marked for delete
     }
-
-    IUniswapV2Router02 public uniswapRouter; // Instance of Uniswap
 
     mapping(uint => sortInfo) public _rank; //doubly linked lists of sorted offer ids
     mapping(address => mapping(address => uint)) public _best; //id of the highest offer for a token pair
@@ -56,7 +52,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         address _hordCongress,
         address _maintainersRegistry,
         address _orderbookConfiguration,
-        address _uniswapRouter,
         address _hPoolManager,
         address _vPoolManager,
         address _hordTreasury
@@ -81,7 +76,6 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
 
-        setUniswapRouterInternal(_uniswapRouter);
         _setMinSell(IERC20(dustToken), dustLimit);
     }
 
@@ -669,46 +663,4 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         _near[id] = 0;                  //delete order from unsorted order list
         return true;
     }
-
-    /**
-        * @notice          Function to set hordTreasury contract
-    */
-    function setHordTreasury(
-        address _hordTreasury
-    )
-    external
-    onlyHordCongress
-    {
-        require(_hordTreasury != address(0), "HordTreasury can not be 0x0 address.");
-        hordTreasury = IHordTreasury(_hordTreasury);
-        emit HordTreasurySet(_hordTreasury);
-    }
-
-    /**
-        * @notice          Function to set uniswap router
-    */
-    function setUniswapRouter(
-        address _uniswapRouter
-    )
-    external
-    onlyHordCongress
-    {
-        setUniswapRouterInternal(_uniswapRouter);
-    }
-
-    /**
-        * @notice          Function to set uniswap router
-    */
-    function setUniswapRouterInternal(
-        address
-        _uniswapRouter
-    )
-    internal
-    {
-        require(_uniswapRouter != address(0), "Uniswap router can not be 0x0 address.");
-        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
-        emit UniswapRouterSet(_uniswapRouter);
-    }
-
-
 }
