@@ -30,7 +30,8 @@ async function main() {
         ],
         [
             toHordDenomination(config["dustLimit"]),
-            config["totalFeePercent"]
+            toHordDenomination(config["totalFeePercent"]),
+            toHordDenomination(config["percentPrecision"])
         ],
     ],
         { unsafeAllow: ['delegatecall'] }
