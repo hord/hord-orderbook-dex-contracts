@@ -6,16 +6,15 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
 
     // Representing HORD token address
-    address private _hordToken;
-
+    address public hordToken;
     // Representing dust token address
-    address private _dustToken;
-
+    address public dustToken;
     // Represents limit of dust token
-    uint256 private _dustLimit;
-
+    uint256 public dustLimit;
     // Represents total fee percent that gets taken on each trade
-    uint256 private _totalFeePercent;
+    uint256 public totalFeePercent;
+    // Represents percent precision
+    uint256 public percentPrecision;
 
     event HordTokenAddressChanged(string parameter, address newValue);
     event DustTokenAddressChanged(string parameter, address newValue);
@@ -34,91 +33,69 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
         // Set hord congress and maintainers registry
         setCongressAndMaintainers(addresses[0], addresses[1]);
 
-        _hordToken = addresses[2];
-        _dustToken = addresses[3];
-        _dustLimit = configValues[0];
-        _totalFeePercent = configValues[1];
+        hordToken = addresses[2];
+        dustToken = addresses[3];
+        dustLimit = configValues[0];
+        totalFeePercent = configValues[1];
+        percentPrecision = configValues[2];
     }
 
-    function setDustLimit(uint256 dustLimit_)
+    function setDustLimit(
+        uint256 _dustLimit
+    )
     external
     onlyHordCongress
     {
-        require(dustLimit_ <= 100, "dustLimit_ is above threshold");
-        _dustLimit = dustLimit_;
-        emit ConfigurationChanged("_dustLimit", _dustLimit);
+        require(_dustLimit <= 100, "dustLimit_ is above threshold");
+        dustLimit = _dustLimit;
+        emit ConfigurationChanged("_dustLimit", dustLimit);
     }
 
     function setHordTokenAddress(
-        address hordToken_
+        address _hordToken
     )
     external
     onlyHordCongress
     {
-        require(hordToken_ != address(0), "Address can not be 0x0.");
-        _hordToken = hordToken_;
-        emit HordTokenAddressChanged("_hordToken", _hordToken);
+        require(_hordToken != address(0), "Address can not be 0x0.");
+        hordToken = _hordToken;
+        emit HordTokenAddressChanged("_hordToken", hordToken);
     }
 
     function setDustTokenAddress(
-        address dustToken_
+        address _dustToken
     )
     external
     onlyHordCongress
     {
-        require(dustToken_ != address(0), "Address can not be 0x0.");
-        _dustToken = dustToken_;
-        emit DustTokenAddressChanged("_hordToken", _dustToken);
+        require(_dustToken != address(0), "Address can not be 0x0.");
+        dustToken = _dustToken;
+        emit DustTokenAddressChanged("_hordToken", dustToken);
     }
 
-    function setTotalFeePercent(uint256 totalFeePercent_)
+    function setTotalFeePercent(
+        uint256 _totalFeePercent
+    )
     external
     onlyHordCongress
     {
-        require(totalFeePercent_ <= 300000, "totalFeePercent_ is above threshold");
-        _totalFeePercent = totalFeePercent_;
-        emit ConfigurationChanged("_totalFeePercent", _totalFeePercent);
+        require(_totalFeePercent <= 300000, "totalFeePercent_ is above threshold");
+        totalFeePercent = _totalFeePercent;
+        emit ConfigurationChanged("_totalFeePercent", totalFeePercent);
     }
 
-
-    // _dustLimit getter function
-    function dustLimit()
+    function setPercentPrecision(
+        uint256 _percentPrecision
+    )
     external
-    view
-    returns (uint256)
+    onlyHordCongress
     {
-        return _dustLimit;
-    }
-
-    // _hordToken getter function
-    function hordToken()
-    external
-    view
-    returns (address)
-    {
-        return _hordToken;
-    }
-
-    // _dustToken getter function
-    function dustToken()
-    external
-    view
-    returns (address)
-    {
-        return _dustToken;
-    }
-
-    // _protocolFee getter function
-    function totalFeePercent()
-    external
-    view
-    returns (uint256)
-    {
-        return _totalFeePercent;
+        percentPrecision = _percentPrecision;
+        emit ConfigurationChanged("_percentPrecision", percentPrecision);
     }
 
     function calculateTotalFee(uint256 amount) external view returns (uint256){
-        return (amount * _totalFeePercent) / 1000000;
+        return (amount * totalFeePercent) / percentPrecision;
     }
 
     function calculateChampionFee(uint256 amount) external pure returns (uint256){
