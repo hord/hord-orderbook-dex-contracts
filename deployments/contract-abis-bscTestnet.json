@@ -430,19 +430,6 @@
                     {
                         "indexed": false,
                         "internalType": "address",
-                        "name": "uniswapRouter",
-                        "type": "address"
-                    }
-                ],
-                "name": "UniswapRouterSet",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "address",
                         "name": "account",
                         "type": "address"
                     }
@@ -1018,11 +1005,6 @@
                     },
                     {
                         "internalType": "address",
-                        "name": "_uniswapRouter",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
                         "name": "_hPoolManager",
                         "type": "address"
                     },
@@ -1397,32 +1379,6 @@
             {
                 "inputs": [
                     {
-                        "internalType": "address",
-                        "name": "_hordTreasury",
-                        "type": "address"
-                    }
-                ],
-                "name": "setHordTreasury",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "_uniswapRouter",
-                        "type": "address"
-                    }
-                ],
-                "name": "setUniswapRouter",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
                         "internalType": "bytes32",
                         "name": "id",
                         "type": "bytes32"
@@ -1436,19 +1392,6 @@
                 "name": "take",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "uniswapRouter",
-                "outputs": [
-                    {
-                        "internalType": "contract IUniswapV2Router02",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -1702,10 +1645,23 @@
                 "type": "function"
             },
             {
+                "inputs": [],
+                "name": "percentPrecision",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [
                     {
                         "internalType": "uint256",
-                        "name": "dustLimit_",
+                        "name": "_dustLimit",
                         "type": "uint256"
                     }
                 ],
@@ -1718,7 +1674,7 @@
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "dustToken_",
+                        "name": "_dustToken",
                         "type": "address"
                     }
                 ],
@@ -1731,7 +1687,7 @@
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "hordToken_",
+                        "name": "_hordToken",
                         "type": "address"
                     }
                 ],
@@ -1744,7 +1700,20 @@
                 "inputs": [
                     {
                         "internalType": "uint256",
-                        "name": "totalFeePercent_",
+                        "name": "_percentPrecision",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "setPercentPrecision",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_totalFeePercent",
                         "type": "uint256"
                     }
                 ],
