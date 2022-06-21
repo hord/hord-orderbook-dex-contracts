@@ -5,7 +5,7 @@
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xaf88457B511418DA2461B94C46346fD321afb9d3",
         "OrderBookConfiguration": "0x5774d55e3f1532edaa270FF429Eb2a6A47A59950",
-        "MakerOtcSupportMethods": "0x465e50d658854c5cA68A6A80BAbBEa4c565F2320"
+        "MakerOtcSupportMethods": "0x584Ef03169Aa5BE65624a0667FC54721772d68A9"
     },
     "bscMainnetStaging": {
         "HordCongress": "0x5f2dbeEc4a47c7c8e4405790feA978E220AaFbCe",
