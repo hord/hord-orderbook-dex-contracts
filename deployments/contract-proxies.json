@@ -1,4 +1,13 @@
 {
+    "ropsten": {
+        "MaintainersRegistry": "0x51f2c5915ECf6cA40ff3CC7f2ada07A226396717",
+        "HordTreasury": "0x1d9c6a2C6787F562682C6B0E18bF90026A453165",
+        "ProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963",
+        "HPoolManager": "0xe4A237F3f41c367fF28B08f829835EB30c19c35B",
+        "VPoolManager": "0xa41D3292a59372c3F1fDC05A0AD5Cf078E2bD098",
+        "OrderBookConfiguration": "0x69e6E28cdbA1998F9FB686fAA847E48c598ddB46",
+        "MatchingMarket": "0x72045a0b83aF896b95EDb7B05cFf139037d6A186"
+    },
     "bscTestnet": {
         "MaintainersRegistry": "0x898311a1deA41E5fb0a0cA4A18526F8c091E3213",
         "HordTreasury": "0x7F45462C072b95cf81cc127fd71d3DD702442205",

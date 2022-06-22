@@ -1,4 +1,12 @@
 {
+    "ropsten": {
+        "HordCongress": "0x76E6daA0b54E29c8108AD5313ba6721261E28fe6",
+        "HordToken": "0x6D67A76F8A11C04F08Be9989dC58eBfc9101C464",
+        "DustToken": "0xCD893D16e889126020b2621A99b98816706585E6",
+        "MatchingMarket": "0x16cB71892d085B74a5B6E31cC54d40679BDeb473",
+        "OrderBookConfiguration": "0x6e8c3E312c5f9bb38967AdFF330653345A3C2B95",
+        "MakerOtcSupportMethods": "0x6840Cab2c78F554fA037995EddD07aE7F2113e39"
+    },
     "bscTestnet": {
         "HordCongress": "0x5f2dbeEc4a47c7c8e4405790feA978E220AaFbCe",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
