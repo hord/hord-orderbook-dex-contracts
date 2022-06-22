@@ -35,12 +35,11 @@ module.exports = {
   },
   networks: {
     ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      url: "https://ropsten.infura.io/v3/3bf15b15a0a74588b3bb3e455375fb54",
+      accounts: [process.env.PK || PK],
       chainId: 3,
       gasPrice: 40000000000,
-      timeout: 500000,
+      timeout: 500000
     },
     bscTestnet: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
