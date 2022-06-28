@@ -1,21 +1,21 @@
 {
     "ropsten": {
-        "MaintainersRegistry": "0x51f2c5915ECf6cA40ff3CC7f2ada07A226396717",
-        "HordTreasury": "0x1d9c6a2C6787F562682C6B0E18bF90026A453165",
+        "MaintainersRegistry": "0xA324Ba646B015eBCAeeb4068e40B8e0Eb56a6482",
+        "HordTreasury": "0x057BFC80ffAB54ACDcd7050C01E3999BD82FCd46",
         "ProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963",
-        "HPoolManager": "0xe4A237F3f41c367fF28B08f829835EB30c19c35B",
-        "VPoolManager": "0xa41D3292a59372c3F1fDC05A0AD5Cf078E2bD098",
-        "OrderBookConfiguration": "0x69e6E28cdbA1998F9FB686fAA847E48c598ddB46",
-        "MatchingMarket": "0x72045a0b83aF896b95EDb7B05cFf139037d6A186"
+        "HPoolManager": "0xe696B16674bB8EbD84ad09dB2e4A5F793586D094",
+        "VPoolManager": "0x672ddAfF027715bc5e65Aef66390a35f5c8C7C10",
+        "OrderBookConfiguration": "0x61182125638974e5f2f049341397B130F937c6b7",
+        "MatchingMarket": "0xE761e093CB7BFc74686D1cC2EB4817D5a88b2f53"
     },
     "bscTestnet": {
-        "MaintainersRegistry": "0x898311a1deA41E5fb0a0cA4A18526F8c091E3213",
-        "HordTreasury": "0x7F45462C072b95cf81cc127fd71d3DD702442205",
+        "MaintainersRegistry": "0x364A17226BBAbB0b571d366056faE6178A553a6a",
+        "HordTreasury": "0xd5Ef94C895EAcC0f81FD4Fb0Fc60cc3B167eB283",
         "ProxyAdmin": "0xeFef022dc8683BE9b465e852D852d6e6df76c659",
-        "HPoolManager": "0x8A0621F8E76aCbF3F42FC275f9EcC2fCF69F3923",
-        "VPoolManager": "0x27B1De96d51034Ae81fAb9eA776FbE044772b58d",
-        "OrderBookConfiguration": "0x9FC66A2432d18cfEb650CFf9326d3fDCB2Dd51a2",
-        "MatchingMarket": "0xCfc46E85ad947bf6B92c68DeEb527bDA955c75C3"
+        "HPoolManager": "0x5a16f9adc50cA8Df2958CE64A64B5446c7491c3e",
+        "VPoolManager": "0xd87C1Dfee4E1B2E599433611476bd5DAdaFC113d",
+        "OrderBookConfiguration": "0x9AEbE4331B20e6db264022F534737190B4971950",
+        "MatchingMarket": "0x6724b7D371D3a704d4A3842864675f4Bc0131925"
     },
     "bscMainnetStaging": {
         "MaintainersRegistry": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
