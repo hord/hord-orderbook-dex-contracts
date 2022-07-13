@@ -192,7 +192,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         if(hPoolManager.isHPoolToken(pool)) {
             (, , _championAddress, , , , , , , , , ) = hPoolManager.getPoolInfo(poolId);
         } else {
-            (, _championAddress, , , , , , , ,) = vPoolManager.getPoolInfo(poolId);
+            (, _championAddress, , , , , ,) = vPoolManager.getPoolInfo(poolId);
         }
 
         require(_championAddress == msg.sender, "Only champion can withdraw his poolTokens.");
@@ -496,7 +496,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     /**
         * @notice  Function allowing congress to unpause the smart-contract
-        * @dev     Can be only called by HordCongress 
+        * @dev     Can be only called by HordCongress
      */
     function unpause()
     external
