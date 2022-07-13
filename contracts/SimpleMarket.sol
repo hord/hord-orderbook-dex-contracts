@@ -302,7 +302,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
 
-            uint256 updatedSpend = spend - (championFee + protocolFee); // take champion and protocol fee from BUSD
+            uint256 updatedSpend = spend - totalFee; // take champion and protocol fee from BUSD
 
             poolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += protocolFee;
             poolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += protocolFee;
@@ -324,7 +324,7 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
             uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
 
-            uint256 updatedQuantity = quantity - (championFee + protocolFee); // take champion and protocol fee from BUSD
+            uint256 updatedQuantity = quantity - totalFee; // take champion and protocol fee from BUSD
 
             poolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
             poolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
@@ -332,7 +332,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
             poolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
             poolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
 
-            safeTransferFrom(offer.pay_gem, msg.sender, address(this), totalFee);
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
             safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
 
