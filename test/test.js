@@ -7,8 +7,8 @@ const { ethers, expect, toHordDenomination, BigNumber } = require('./setup')
 
 let config;
 let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken, vPoolToken, champion, championAddr,
-    maintainer, maintainerAddr, matchingMarket, orderBookConfiguration, hordTreasury, bobAddr, bob;
-let vPoolManager, offerId;
+    maintainer, maintainerAddr, matchingMarket, orderBookConfiguration, hordTreasury, bobAddr, bob, aliceAddr, alice;
+let vPoolManager, offerId, amountBUSDToSell, expectAmountOfVPoolTokens, amountVPoolTokenToSell, expectAmountOfBUSD, pos;
 let dustLimit = 1, totalFeePercent = 25000, percentPrecision = 1000000;
 
 async function setupContractAndAccounts () {
@@ -23,7 +23,9 @@ async function setupContractAndAccounts () {
     maintainerAddr = await maintainer.getAddress();
     bob = accounts[3];
     bobAddr = await bob.getAddress();
-    champion = accounts[4];
+    alice = accounts[4];
+    aliceAddr = await alice.getAddress();
+    champion = accounts[5];
     championAddr = await champion.getAddress();
 
     const MaintainersRegistry = await ethers.getContractFactory('MockMaintainersRegistry');
@@ -107,30 +109,120 @@ describe('MatchingMarket', async() => {
     describe('First should set up everything', async() => {
         it('should add new VPool token', async() => {
             await vPoolManager.addVPoolToken(vPoolToken.address);
+            let resp = await vPoolManager.isVPoolToken(vPoolToken.address);
+
+            expect(resp)
+                .to.be.true;
         });
 
-        it('should send some BUSD to bob', async() => {
-            await dustToken.connect(owner).transfer(bobAddr, toHordDenomination(1000));
+        it('should send some BUSD to Bob', async() => {
+            let amountToSend = toHordDenomination(100);
+            await dustToken.connect(owner).transfer(bobAddr, amountToSend);
+            let resp = await dustToken.balanceOf(bobAddr);
+
+            expect(resp)
+                .to.be.equal(amountToSend);
+        });
+
+        it('should send some VPoolToken to Alice', async() => {
+            let amountToSend = toHordDenomination(100);
+            await vPoolToken.connect(owner).transfer(aliceAddr, amountToSend);
+            let resp = await vPoolToken.balanceOf(aliceAddr);
+
+            expect(resp)
+                .to.be.equal(amountToSend);
         });
     });
 
     describe('MatchingMarket::Functions', async() => {
-        it('bob should approve amount of tokens which he wants to spend', async() => {
-            await dustToken.connect(bob).approve(matchingMarket.address, toHordDenomination(10));
+
+        describe('MatchingMarket::First trade', async() => {
+            it('alice should approve amount of tokens which he wants to spend', async() => {
+                amountVPoolTokenToSell = toHordDenomination(5);
+                await vPoolToken.connect(alice).approve(matchingMarket.address, amountVPoolTokenToSell);
+            });
+
+            it('should let alice to make sell offer', async() => {
+                pos = 1;
+                expectAmountOfBUSD = toHordDenomination(10);
+
+                await matchingMarket.connect(alice).offer(
+                    amountVPoolTokenToSell,
+                    vPoolToken.address,
+                    expectAmountOfBUSD,
+                    dustToken.address,
+                    pos
+                );
+            });
+
+            it('bob should approve amount of tokens which he wants to spend', async() => {
+                amountBUSDToSell = toHordDenomination(10);
+                await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
+            });
+
+            it('should let bob to make buy offer', async() => {
+                pos = 0;
+                expectAmountOfVPoolTokens = toHordDenomination(5);
+
+                await matchingMarket.connect(bob).offer(
+                    amountBUSDToSell,
+                    dustToken.address,
+                    expectAmountOfVPoolTokens,
+                    vPoolToken.address,
+                    pos
+                );
+            });
         });
 
-        it('should let bob to make first offer', async() => {
-            let pos = 0;
+        describe('MatchingMarket::Second trade', async() => {
 
-            await matchingMarket.connect(bob).offer(
-                toHordDenomination(10),
-                dustToken.address,
-                toHordDenomination(5),
-                vPoolToken.address,
-                pos
-            );
+            it('bob should approve amount of tokens which he wants to spend', async() => {
+                amountBUSDToSell = toHordDenomination(10);
+                await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
+            });
+
+            it('should let bob to make buy offer', async() => {
+                pos = 0;
+                expectAmountOfVPoolTokens = toHordDenomination(5);
+
+                await matchingMarket.connect(bob).offer(
+                    amountBUSDToSell,
+                    dustToken.address,
+                    expectAmountOfVPoolTokens,
+                    vPoolToken.address,
+                    pos
+                );
+            });
+
+            it('alice should approve amount of tokens which he wants to spend', async() => {
+                amountVPoolTokenToSell = toHordDenomination(5);
+                await vPoolToken.connect(alice).approve(matchingMarket.address, amountVPoolTokenToSell);
+            });
+
+            it('should let alice to make sell offer', async() => {
+                pos = 1;
+                expectAmountOfBUSD = toHordDenomination(10);
+
+                let resp = await dustToken.balanceOf(matchingMarket.address);
+                console.log(resp)
+
+                await matchingMarket.connect(alice).offer(
+                    amountVPoolTokenToSell,
+                    vPoolToken.address,
+                    expectAmountOfBUSD,
+                    dustToken.address,
+                    pos
+                );
+
+                resp = await dustToken.balanceOf(matchingMarket.address);
+                console.log(resp)
+            });
+
 
         });
+
+
+
 
     });
 
