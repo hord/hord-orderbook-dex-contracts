@@ -13,8 +13,6 @@ interface IVPoolManager {
         uint256,
         uint256,
         uint256,
-        uint256,
-        uint256,
         uint256
     );
 }
