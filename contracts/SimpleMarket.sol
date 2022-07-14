@@ -27,7 +27,6 @@ import "./interfaces/IERC20.sol";
 import "./interfaces/IHPoolManager.sol";
 import "./interfaces/IVPoolManager.sol";
 import "./interfaces/IHordTreasury.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
 contract EventfulMarket {
@@ -86,7 +85,7 @@ contract EventfulMarket {
     );
 }
 
-contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUpgradeable, ReentrancyGuardUpgradeable {
+contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, ReentrancyGuardUpgradeable {
 
     uint public last_offer_id; // last offer id to keep track of the last index
     bool public locked; // locked variable for reentrancy attack prevention
@@ -253,7 +252,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
 
     function bump(bytes32 id_)
     external
-    whenNotPaused
     can_buy(uint256(id_))
     {
         uint256 id = uint256(id_);
@@ -276,7 +274,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     */
     function buy_simple_market(uint id, uint quantity)
     internal
-    whenNotPaused
     can_buy(id)
     synchronized
     returns (bool)
@@ -369,7 +366,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
     */
     function cancel_simple_market(uint id)
     internal
-    whenNotPaused
     can_cancel_simple_market(id)
     synchronized
     returns (bool success)
@@ -480,28 +476,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, PausableUp
         if (returndata.length > 0) { // Return data is optional
             require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
-    }
-
-    /**
-       * @notice  Function allowing congress to pause the smart-contract
-       * @dev     Can be only called by HordCongress
-    */
-    function pause()
-    external
-    onlyHordCongress
-    {
-        _pause();
-    }
-
-    /**
-        * @notice  Function allowing congress to unpause the smart-contract
-        * @dev     Can be only called by HordCongress
-     */
-    function unpause()
-    external
-    onlyHordCongress
-    {
-        _unpause();
     }
 
 }
