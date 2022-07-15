@@ -1,11 +1,11 @@
 {
-    "ropsten": {
-        "HordCongress": "0x76E6daA0b54E29c8108AD5313ba6721261E28fe6",
-        "HordToken": "0x6D67A76F8A11C04F08Be9989dC58eBfc9101C464",
-        "DustToken": "0xCD893D16e889126020b2621A99b98816706585E6",
-        "MatchingMarket": "0x16cB71892d085B74a5B6E31cC54d40679BDeb473",
-        "OrderBookConfiguration": "0x6e8c3E312c5f9bb38967AdFF330653345A3C2B95",
-        "MakerOtcSupportMethods": "0x208eE8503397a415B54Edd7f8d476902062F988f"
+    "goerli": {
+        "HordCongress": "0xBeEE5c010318f2258e8FC774B128411586Fd4dB4",
+        "HordToken": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
+        "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
+        "MatchingMarket": "0x87de9f01464A888ff87466cC44667C50c598b6E9",
+        "OrderBookConfiguration": "0xF11dA474E910c4ED944E1117f8b6A6CD3A1b64Af",
+        "MakerOtcSupportMethods": "0x3Bf29d388FA1C416CE92BDb813258Cca4f09e549"
     },
     "bscTestnet": {
         "HordCongress": "0x5f2dbeEc4a47c7c8e4405790feA978E220AaFbCe",

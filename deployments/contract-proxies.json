@@ -1,12 +1,12 @@
 {
-    "ropsten": {
-        "MaintainersRegistry": "0xA324Ba646B015eBCAeeb4068e40B8e0Eb56a6482",
-        "HordTreasury": "0x057BFC80ffAB54ACDcd7050C01E3999BD82FCd46",
-        "ProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963",
-        "HPoolManager": "0xe696B16674bB8EbD84ad09dB2e4A5F793586D094",
-        "VPoolManager": "0x672ddAfF027715bc5e65Aef66390a35f5c8C7C10",
-        "OrderBookConfiguration": "0x61182125638974e5f2f049341397B130F937c6b7",
-        "MatchingMarket": "0xE761e093CB7BFc74686D1cC2EB4817D5a88b2f53"
+    "goerli": {
+        "MaintainersRegistry": "0x80ABEF71Ce1aaA3CD588EEf0fDFbACA0c8D9185d",
+        "HordTreasury": "0xbB8eb749B78b90ab6B05e1393e32124c0cEF8b64",
+        "HPoolManager": "0x9525505967a8115D00B139eaE530a854BBfD2445",
+        "VPoolManager": "0x7CfA0e026ac4F6D3031Ac364F6B2235F27D150E8",
+        "OrderBookConfiguration": "0x9D0484e98446Aa8266250c034098Dfa8b790199D",
+        "MatchingMarket": "0x728a44F64d30486003D14D46726fa16f323F2Ef5",
+        "ProxyAdmin": "0xe20A1A6cc4e45a6664926D46313415b0FC5a4453"
     },
     "bscTestnet": {
         "MaintainersRegistry": "0x364A17226BBAbB0b571d366056faE6178A553a6a",

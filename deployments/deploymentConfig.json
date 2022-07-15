@@ -1,5 +1,5 @@
 {
-  "ropsten" : {
+  "goerli" : {
     "dustLimit" : 1,
     "totalFeePercent": 25000,
     "percentPrecision": 1000000
