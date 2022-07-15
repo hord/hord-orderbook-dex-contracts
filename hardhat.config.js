@@ -34,21 +34,14 @@ module.exports = {
     },
   },
   networks: {
-    ropsten: {
-      url: "https://ropsten.infura.io/v3/3bf15b15a0a74588b3bb3e455375fb54",
+    goerli: {
+      url: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
       accounts: [process.env.PK || PK],
-      chainId: 3,
-      gasPrice: 40000000000,
-      timeout: 500000
+      chainId: 5,
+      gasPrice: 20000000000,
+      timeout: 10000000
     },
     bscTestnet: {
-      url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      accounts: [process.env.PK || PK],
-      chainId: 97,
-      gasPrice: 40000000000,
-      timeout: 500000
-    },
-    bscTestnetStaging: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       accounts: [process.env.PK || PK],
       chainId: 97,
@@ -66,18 +59,6 @@ module.exports = {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 20000000000,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    matic_testnet: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      chainId: 80001,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    matic_mainnet: {
-      url: "https://rpc-mainnet.matic.network",
-      chainId: 137,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
