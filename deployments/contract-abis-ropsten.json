@@ -397,19 +397,6 @@
                 "inputs": [
                     {
                         "indexed": false,
-                        "internalType": "address",
-                        "name": "account",
-                        "type": "address"
-                    }
-                ],
-                "name": "Paused",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
                         "internalType": "uint256",
                         "name": "amountInPoolTokens",
                         "type": "uint256"
@@ -422,19 +409,6 @@
                     }
                 ],
                 "name": "ProtocolWithdrawFees",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "address",
-                        "name": "account",
-                        "type": "address"
-                    }
-                ],
-                "name": "Unpaused",
                 "type": "event"
             },
             {
@@ -1255,26 +1229,6 @@
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "pause",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "paused",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [
                     {
                         "internalType": "address",
@@ -1390,13 +1344,6 @@
                     }
                 ],
                 "name": "take",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "unpause",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1794,50 +1741,6 @@
                         "type": "address"
                     },
                     {
-                        "internalType": "uint256",
-                        "name": "offerId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "getOffers",
-                "outputs": [
-                    {
-                        "internalType": "uint256[100]",
-                        "name": "ids",
-                        "type": "uint256[100]"
-                    },
-                    {
-                        "internalType": "uint256[100]",
-                        "name": "payAmts",
-                        "type": "uint256[100]"
-                    },
-                    {
-                        "internalType": "uint256[100]",
-                        "name": "buyAmts",
-                        "type": "uint256[100]"
-                    },
-                    {
-                        "internalType": "address[100]",
-                        "name": "owners",
-                        "type": "address[100]"
-                    },
-                    {
-                        "internalType": "uint256[100]",
-                        "name": "timestamps",
-                        "type": "uint256[100]"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "contract IOtc",
-                        "name": "otc",
-                        "type": "address"
-                    },
-                    {
                         "internalType": "address",
                         "name": "buyToken",
                         "type": "address"
@@ -1903,6 +1806,50 @@
                         "internalType": "bool",
                         "name": "takesPartialOrder",
                         "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "contract IOtc",
+                        "name": "otc",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "offerId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getOffersWithId",
+                "outputs": [
+                    {
+                        "internalType": "uint256[100]",
+                        "name": "ids",
+                        "type": "uint256[100]"
+                    },
+                    {
+                        "internalType": "uint256[100]",
+                        "name": "payAmts",
+                        "type": "uint256[100]"
+                    },
+                    {
+                        "internalType": "uint256[100]",
+                        "name": "buyAmts",
+                        "type": "uint256[100]"
+                    },
+                    {
+                        "internalType": "address[100]",
+                        "name": "owners",
+                        "type": "address[100]"
+                    },
+                    {
+                        "internalType": "uint256[100]",
+                        "name": "timestamps",
+                        "type": "uint256[100]"
                     }
                 ],
                 "stateMutability": "view",

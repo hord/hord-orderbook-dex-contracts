@@ -41,6 +41,14 @@ module.exports = {
       gasPrice: 20000000000,
       timeout: 10000000
     },
+    ropsten: {
+      // Infura public nodes
+      url: 'https://ropsten.infura.io/v3/3bf15b15a0a74588b3bb3e455375fb54',
+      accounts: [process.env.PK || PK],
+      chainId: 3,
+      gasPrice: 40000000000,
+      timeout: 500000
+    },
     bscTestnet: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       accounts: [process.env.PK || PK],
