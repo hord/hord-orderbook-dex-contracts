@@ -18,13 +18,13 @@
         "ProxyAdmin": "0xe20A1A6cc4e45a6664926D46313415b0FC5a4453"
     },
     "bscTestnet": {
-        "MaintainersRegistry": "0x364A17226BBAbB0b571d366056faE6178A553a6a",
-        "HordTreasury": "0xd5Ef94C895EAcC0f81FD4Fb0Fc60cc3B167eB283",
+        "MaintainersRegistry": "0x02428Fe314fE3cAfbF5e220c840004e4e50651C3",
+        "HordTreasury": "0xFf7451E69f2FafA7291614D2BAFAF8b96f5FC9E4",
         "ProxyAdmin": "0xeFef022dc8683BE9b465e852D852d6e6df76c659",
-        "HPoolManager": "0x5a16f9adc50cA8Df2958CE64A64B5446c7491c3e",
-        "VPoolManager": "0xd87C1Dfee4E1B2E599433611476bd5DAdaFC113d",
-        "OrderBookConfiguration": "0x9AEbE4331B20e6db264022F534737190B4971950",
-        "MatchingMarket": "0x6724b7D371D3a704d4A3842864675f4Bc0131925"
+        "HPoolManager": "0x784490A6C987439078F773648F6854dE819aA3Ab",
+        "VPoolManager": "0x2e98Ef306F6377e0553A7faB07C2d788Fea9258c",
+        "OrderBookConfiguration": "0x09214853333260D786641B711D21ddcBf0eB36bb",
+        "MatchingMarket": "0x16072D3E886d3754B8Ca016b85b46B4BE5010443"
     },
     "bscMainnetStaging": {
         "MaintainersRegistry": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
