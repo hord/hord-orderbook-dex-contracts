@@ -11,7 +11,7 @@ let config;
 let accounts, owner, ownerAddr, hordCongress, hordCongressAddr, hPoolManager, maintainersRegistry, hordToken, dustToken, vPoolToken, champion, championAddr,
     maintainer, maintainerAddr, matchingMarket, orderBookConfiguration, hordTreasury, bobAddr, bob, aliceAddr, alice, makerOtcSupportMethods;
 let vPoolManager, offerId, amountBUSDToSell, expectAmountOfVPoolTokens, amountVPoolTokenToSell, expectAmountOfBUSD, pos = 0,
-    matchingMarketBUSDBalance, matchingMarketVPoolTokenBalance, amountOfFeesCollected;
+    matchingMarketBUSDBalance, matchingMarketVPoolTokenBalance, amountOfFeesCollected, bestOfferId, worseOfferId, openOffers = 0;
 let dustLimit = 1, totalFeePercent = 25000, percentPrecision = 1000000;
 
 async function setupContractAndAccounts () {
@@ -263,8 +263,8 @@ describe('MatchingMarket', async() => {
 
         });
 
-        describe('MatchingMarket::Canceling', async() => {
-            it('alice should approve amount of tokens which he wants to spend', async() => {
+        describe('MatchingMarket::Kill()', async() => {
+            it('bob should approve amount of tokens which he wants to spend', async() => {
                 amountBUSDToSell = toHordDenomination(10);
                 await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
 
@@ -273,7 +273,7 @@ describe('MatchingMarket', async() => {
                     .to.be.equal(amountBUSDToSell);
             });
 
-            it('should let bob to make sell offer', async() => {
+            it('should let bob to make buy offer', async() => {
                 expectAmountOfVPoolTokens = toHordDenomination(5);
 
                 await matchingMarket.connect(bob).offer(
@@ -285,7 +285,8 @@ describe('MatchingMarket', async() => {
                 );
             });
 
-            it('should check states after calling cancel function ', async() => {
+            it('should check states after kill() function ', async() => {
+                let bobBalanceBefore = await dustToken.balanceOf(bobAddr);
                 let offerId = await matchingMarket.last_offer_id();
 
                 let types = ['uint256'];
@@ -293,16 +294,137 @@ describe('MatchingMarket', async() => {
 
                 let offerIdInBytes32 = encodeParameters(types, values);
                 await matchingMarket.connect(bob).kill(offerIdInBytes32);
+                let bobBalanceAfter = await dustToken.balanceOf(bobAddr);
+
+                expect(bobBalanceBefore)
+                    .to.be.equal(new BigNumber.from(bobBalanceAfter).sub(amountBUSDToSell));
+            });
+        });
+
+        describe('MatchingMarket::Take()', async() => {
+            it('should let bob to make another buy offer', async() => {
+                amountBUSDToSell = toHordDenomination(10);
+                await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
+                expectAmountOfVPoolTokens = toHordDenomination(5);
+
+                await matchingMarket.connect(bob).offer(
+                    amountBUSDToSell,
+                    dustToken.address,
+                    expectAmountOfVPoolTokens,
+                    vPoolToken.address,
+                    pos
+                );
+            });
+
+            it('should check states after take() function', async() => {
+                let maxTakeAmount = toHordDenomination(10);
+                let amountToSell = toHordDenomination(5);
+                let offerId = await matchingMarket.last_offer_id();
+
+                let types = ['uint256'];
+                let values = [offerId];
+
+                let offerIdInBytes32 = encodeParameters(types, values);
+                let aliceBalanceBefore = await vPoolToken.balanceOf(aliceAddr);
+                await vPoolToken.connect(alice).approve(matchingMarket.address, amountToSell);
+                await matchingMarket.connect(alice).take(offerIdInBytes32, maxTakeAmount);
+
+                let aliceBalanceAfter = await vPoolToken.balanceOf(aliceAddr);
+
+                expect(aliceBalanceBefore)
+                    .to.be.equal(new BigNumber.from(aliceBalanceAfter).add(amountToSell));
+            });
+        });
+
+        describe('MathcingMarket::Make sell orders', async() => {
+            it('should make more buy orders', async() => {
+                amountBUSDToSell = toHordDenomination(10);
+                await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
+                expectAmountOfVPoolTokens = toHordDenomination(5);
+
+                await matchingMarket.connect(bob).offer(
+                    amountBUSDToSell,
+                    dustToken.address,
+                    expectAmountOfVPoolTokens,
+                    vPoolToken.address,
+                    pos
+                );
+                openOffers++;
+                worseOfferId = await matchingMarket.last_offer_id();
+
+                amountBUSDToSell = toHordDenomination(12);
+                await dustToken.connect(bob).approve(matchingMarket.address, amountBUSDToSell);
+                expectAmountOfVPoolTokens = toHordDenomination(5);
+
+                await matchingMarket.connect(bob).offer(
+                    amountBUSDToSell,
+                    dustToken.address,
+                    expectAmountOfVPoolTokens,
+                    vPoolToken.address,
+                    pos
+                );
+
+                openOffers++;
+                bestOfferId = await matchingMarket.last_offer_id();
+            });
+        });
+
+        describe('MathcingMarket::Getters', async() => {
+            it('should check values from getMinSell() function', async() => {
+                let resp = await matchingMarket.getMinSell(dustToken.address);
+                let dustLimit = await orderBookConfiguration.dustLimit();
+
+                expect(resp)
+                    .to.be.equal(dustLimit);
+            });
+
+            it('should check values from getBestOffer() function', async() => {
+                let resp = await matchingMarket.getBestOffer(dustToken.address, vPoolToken.address);
+                expect(resp)
+                    .to.be.equal(bestOfferId);
+            });
+
+            it('should check values from getWorseOffer() function', async() => {
+                let resp = await matchingMarket.getWorseOffer(bestOfferId);
+                expect(resp)
+                    .to.be.equal(worseOfferId);
+            });
+
+            it('should check values from getBetterOffer() function', async() => {
+                let resp = await matchingMarket.getBetterOffer(worseOfferId);
+                expect(resp)
+                    .to.be.equal(bestOfferId);
+            });
+
+            it('should check values from getFirstUnsortedOffer() function', async() => {
+                let resp = await matchingMarket.getFirstUnsortedOffer();
+                expect(resp)
+                    .to.be.equal(zeroValue)
+            });
+
+            it('should check values from getNextUnsortedOffer() function', async() => {
+                let resp = await matchingMarket.getNextUnsortedOffer(0);
+                expect(resp)
+                    .to.be.equal(zeroValue)
+            });
+
+            it('should check values from getOfferCount() function', async() => {
+                let resp = await matchingMarket.getOfferCount(dustToken.address, vPoolToken.address);
+                expect(resp)
+                    .to.be.equal(openOffers)
+            });
+
+            it('should check values from getBuyAmount() function', async() => {
+                let resp = await matchingMarket.getBuyAmount(dustToken.address, vPoolToken.address, expectAmountOfVPoolTokens);
+                expect(resp)
+                    .to.be.equal(amountBUSDToSell);
             });
 
             xit('s', async() => {
                 let a = await makerOtcSupportMethods.getOffers(matchingMarket.address, dustToken.address, vPoolToken.address);
                 console.log(a);
             });
-
         });
-
-
 
     });
 
