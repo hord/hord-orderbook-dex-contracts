@@ -1,11 +1,11 @@
 {
     "ropsten": {
-        "MaintainersRegistry": "0x8840C3365fe65d0fAf775C7316572FcC82C60C76",
-        "HordTreasury": "0xC08fd7bb9c3b74d2F19ea694C35b30d14db54340",
-        "HPoolManager": "0x2ec5C2049743F44d53B6d305C3A2f506A781697D",
-        "VPoolManager": "0x7A73Bb9D930403DB7C9a1eFD1365aF514Ff8D83e",
-        "OrderBookConfiguration": "0x8121BA464ad24395A55F4AacF274EB1CdE95D318",
-        "MatchingMarket": "0x7A6518dCc4E90C97Ec747bA79B20326CabBacDf8",
+        "MaintainersRegistry": "0x0615F5BD5377367657a84a7123548b1cD73c8e5b",
+        "HordTreasury": "0xa978D0Aeb2B461E599e022Ec910aee05a7E0CBd8",
+        "HPoolManager": "0xA9C986579f2581Dc2a2CD0E903cb9443182109D0",
+        "VPoolManager": "0x314f72Be5DC63edcf98638DaE03A5fE6c5784b73",
+        "OrderBookConfiguration": "0xCd8Cfcb53F8530f20bf4456c201538D65bfe9F3D",
+        "MatchingMarket": "0xA406342215D79263ffcA3697604fc8a208Ee9d01",
         "ProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963"
     },
     "goerli": {
@@ -18,13 +18,13 @@
         "ProxyAdmin": "0xe20A1A6cc4e45a6664926D46313415b0FC5a4453"
     },
     "bscTestnet": {
-        "MaintainersRegistry": "0x02428Fe314fE3cAfbF5e220c840004e4e50651C3",
-        "HordTreasury": "0xFf7451E69f2FafA7291614D2BAFAF8b96f5FC9E4",
+        "MaintainersRegistry": "0xa2e031bD10ba469FFd65BD939a7BD46aaB44145E",
+        "HordTreasury": "0xa5a638C74FFAc5ca89d471564bdC18558297946d",
         "ProxyAdmin": "0xeFef022dc8683BE9b465e852D852d6e6df76c659",
-        "HPoolManager": "0x784490A6C987439078F773648F6854dE819aA3Ab",
-        "VPoolManager": "0x2e98Ef306F6377e0553A7faB07C2d788Fea9258c",
-        "OrderBookConfiguration": "0x09214853333260D786641B711D21ddcBf0eB36bb",
-        "MatchingMarket": "0x16072D3E886d3754B8Ca016b85b46B4BE5010443"
+        "HPoolManager": "0xeBDBFB4811BE6b792132efCCb26695E08efb1F3b",
+        "VPoolManager": "0xC1d7c8A71C86684B9EDCAd6C84522557894BCB17",
+        "OrderBookConfiguration": "0x8595C2D26D49AD6CEEDE199031eF2e2ADf60e873",
+        "MatchingMarket": "0x7f8863a2555DcE9Aa4C926E5f36066C4b8D8CD18"
     },
     "bscMainnetStaging": {
         "MaintainersRegistry": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
