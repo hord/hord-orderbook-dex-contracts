@@ -21,7 +21,7 @@
         "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
         "MatchingMarket": "0xf911a0F6E466f2AD88E70f09a897108D761c236B",
         "OrderBookConfiguration": "0x5774d55e3f1532edaa270FF429Eb2a6A47A59950",
-        "MakerOtcSupportMethods": "0x7F0c1a10DFBa0f224B722E3CFCB2A6763867A6AF"
+        "MakerOtcSupportMethods": "0xc91853dc037A74de845E81A351C1594C427dCC61"
     },
     "bscMainnetStaging": {
         "HordCongress": "0xB465d030145dfC5327644198fc047d8C00e30825",
