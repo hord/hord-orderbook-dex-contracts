@@ -29,10 +29,11 @@
     "bscMainnetStaging": {
         "MaintainersRegistry": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
         "HordTreasury": "0x9207Be70b680833De55A75986fB77b038d6fC9b6",
-        "ProxyAdmin": "0xc6575aafa3AeD2C77AF84d2971ee2c7576a2D9ff",
+        "ProxyAdmin": "0xec33913093aD856d4b9Bba7261Fd3f397a507Bb2",
         "HPoolManager": "0x8C67dd70864FbA51A056Ee42d0dFD5589F18E3E1",
-        "OrderBookConfiguration": "0x4914aFC81F104b7E40598fa9E0B4e9Bd08062990",
-        "MatchingMarket": "0x112C7C6F628639404106b356Ac968cfd97BDd70B"
+        "VPoolManager": "0xd61D33917E8C429458BC1aBdB956f40555700dac",
+        "OrderBookConfiguration": "0x1bba31cC7eD20708808453885b4CcA621922d400",
+        "MatchingMarket": "0x8ae30dE5381705836888104B8C3dED8b66D5c92c"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
