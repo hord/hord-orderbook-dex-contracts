@@ -7,6 +7,8 @@ require("hardhat-contract-sizer");
 require("solidity-coverage");
 require('@openzeppelin/hardhat-upgrades')
 
+const PK = `0x${"32c069bf3d38a060eacdc072eecd4ef63f0fc48895afbacbe185c97037789875"}`
+
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
