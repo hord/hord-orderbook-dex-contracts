@@ -28,6 +28,8 @@ import "./interfaces/IHPoolManager.sol";
 import "./interfaces/IVPoolManager.sol";
 import "./interfaces/IHordTreasury.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+
 
 contract EventfulMarket {
     event LogItemUpdate(uint id);
@@ -85,7 +87,7 @@ contract EventfulMarket {
     );
 }
 
-contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, ReentrancyGuardUpgradeable {
+contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, ReentrancyGuardUpgradeable, PausableUpgradeable {
 
     uint public last_offer_id; // last offer id to keep track of the last index
     bool public locked; // locked variable for reentrancy attack prevention
@@ -476,6 +478,28 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, Reentrancy
         if (returndata.length > 0) { // Return data is optional
             require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
+    }
+
+    /**
+       * @notice  Function allowing congress to pause the smart-contract
+       * @dev     Can be only called by HordCongress
+    */
+    function pause()
+    external
+    onlyHordCongress
+    {
+        _pause();
+    }
+
+    /**
+        * @notice  Function allowing congress to unpause the smart-contract
+        * @dev     Can be only called by HordCongress
+     */
+    function unpause()
+    external
+    onlyHordCongress
+    {
+        _unpause();
     }
 
 }
