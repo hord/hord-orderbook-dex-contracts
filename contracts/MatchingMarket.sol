@@ -114,7 +114,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @param           id id of the specific order
         * @param           maxTakeAmount maximal amount of tokens user wants to buy from specific order
     */
-    function take(bytes32 id, uint128 maxTakeAmount) public {
+    function take(bytes32 id, uint128 maxTakeAmount) public whenNotPaused {
         require(buy(uint256(id), maxTakeAmount), "Revert in buy function.");
     }
 
@@ -122,7 +122,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         * @notice          function to kill specific order. Calls cancel function which executes the cancellation of the specific order
         * @param           id id of the specific order
     */
-    function kill(bytes32 id) external {
+    function kill(bytes32 id) external whenNotPaused {
         require(cancel(uint256(id)), "Revert in cancel function.");
     }
 
