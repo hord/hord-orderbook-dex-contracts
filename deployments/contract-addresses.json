@@ -24,12 +24,12 @@
         "MakerOtcSupportMethods": "0x5f42CdC2Abaf494157D211C273a9031A3E3a455e"
     },
     "bscMainnetStaging": {
-        "HordCongress": "0xB465d030145dfC5327644198fc047d8C00e30825",
+        "HordCongress": "0x3646F7bB32137DaC656CFFFd52cbCB47E41c4C1D",
         "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
         "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-        "MakerOtcSupportMethods": "0xe3aFd5c5E0330E969e37f015aE24ac1529fFD5C8",
-        "MatchingMarket": "0xF1FC0618f7d4391E1639061acEdB7F6aA4E3A7a5",
-        "OrderBookConfiguration": "0xC15257bc2Ed430C4F9760e8B0308013da00FC731"
+        "MakerOtcSupportMethods": "0x68f819A99E13C07dE1813926Ca60f89B089F5d17",
+        "MatchingMarket": "0xCB7197932C7FE0B3F6B95045696a33182800f86F",
+        "OrderBookConfiguration": "0x5b265Da6A5A4CF5333B93Cebf8eAaB8952Bc67bF"
     },
     "local": {
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
