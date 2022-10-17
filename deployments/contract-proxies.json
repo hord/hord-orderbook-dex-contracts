@@ -6,7 +6,7 @@
         "VPoolManager": "0xD1C6e38C8C2168efBBD53c02d708AacFFa524B76",
         "OrderBookConfiguration": "0xAF23f5f51F5BD4c92F6614cc1823bCDCbE864629",
         "MatchingMarket": "0x9CaAFd64536Ea791DBa430CDFec65F2bbDCb3393",
-        "ProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963"
+        "OrderbookProxyAdmin": "0xF236d3f863304c2A85F72754C1227188d4E0d963"
     },
     "goerli": {
         "MaintainersRegistry": "0x80ABEF71Ce1aaA3CD588EEf0fDFbACA0c8D9185d",
@@ -15,12 +15,12 @@
         "VPoolManager": "0x7CfA0e026ac4F6D3031Ac364F6B2235F27D150E8",
         "OrderBookConfiguration": "0x9D0484e98446Aa8266250c034098Dfa8b790199D",
         "MatchingMarket": "0x728a44F64d30486003D14D46726fa16f323F2Ef5",
-        "ProxyAdmin": "0xe20A1A6cc4e45a6664926D46313415b0FC5a4453"
+        "OrderbookProxyAdmin": "0xe20A1A6cc4e45a6664926D46313415b0FC5a4453"
     },
     "bscTestnet": {
         "MaintainersRegistry": "0xa7E9544FB600f2EaB2d4ADb99098E1F71eE856a7",
         "HordTreasury": "0x91Dace1b6f7AAF8998956489CAfe22B3Ad63D3cC",
-        "ProxyAdmin": "0xc6A73f23B9cde1B4480D75788C5AB206084707E1",
+        "OrderbookProxyAdmin": "0xc6A73f23B9cde1B4480D75788C5AB206084707E1",
         "HPoolManager": "0x9E4CD38Db87cA610c8b5fAC570e33099153F38C9",
         "VPoolManager": "0x4Fa2fD30F625930489fB3A6146BAdE9977aa6EDb",
         "OrderBookConfiguration": "0xDB39a40Cc8e1BBe83162360A10676E3015b1C1d4",
@@ -29,7 +29,7 @@
     "bscMainnetStaging": {
         "MaintainersRegistry": "0xeE930c5098eB20b7df7D4969dbebf4D564762B45",
         "HordTreasury": "0x0b87007Ef2AED8F61EB6916f2dbb75c90af5e87f",
-        "ProxyAdmin": "0x692301b6e6eBe88D95F742Ac84CF62A970837433",
+        "OrderbookProxyAdmin": "0x692301b6e6eBe88D95F742Ac84CF62A970837433",
         "HPoolManager": "0x64f807Ab475c474B266d5777cc9d58535f38EAc0",
         "VPoolManager": "0x4dd2B23c405e0eb755Ed62EfA5eD54f40c325b84",
         "OrderBookConfiguration": "0xa9A50B758122f4c2E04b33d4332c2a52573fFEA7",
@@ -37,7 +37,7 @@
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
-        "ProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
+        "OrderbookProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",
         "HPoolManager": "0x11aE5750086b6F1d3D290399bF85f5672D870F5E",
         "OrderBookConfiguration": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
         "MatchingMarket": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
