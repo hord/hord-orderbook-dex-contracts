@@ -51,7 +51,7 @@ const main = async () => {
     const contracts = getSavedContractAddresses()[hre.network.name];
     const proxies = getSavedContractProxies()[hre.network.name];
     const proxyAdminAbi = getSavedContractProxyAbis()['ProxyAdmin'];
-    const proxyAdmin = await hre.ethers.getContractAt(proxyAdminAbi, proxies['ProxyAdmin']);
+    const proxyAdmin = await hre.ethers.getContractAt(proxyAdminAbi, proxies['OrderbookProxyAdmin']);
 
     const localHordCongressAddress = contracts["HordCongress"];
     const localMakerOtcSupportMethodsAddress = contracts["MakerOtcSupportMethods"];
@@ -86,7 +86,7 @@ const main = async () => {
             );
             const remoteAdmin = await proxyAdmin.getProxyAdmin(proxies[proxy]);
 
-            console.log(u + "Admin Of Proxy === ProxyAdmin:" + e, eval(proxies['ProxyAdmin'] === remoteAdmin), "\n");
+            console.log(u + "Admin Of Proxy === ProxyAdmin:" + e, eval(proxies['OrderbookProxyAdmin'] === remoteAdmin), "\n");
             const localImplementation = contracts[proxy];
             const remoteImplementation = await proxyAdmin.getProxyImplementation(proxies[proxy]);
             console.log(
@@ -98,6 +98,18 @@ const main = async () => {
             );
 
             const proxyInstance = await hre.ethers.getContractAt(proxy, proxies[proxy]);
+
+            let slot;
+
+            if(proxy === 'MatchingMarket') {
+                slot = await web3.eth.getStorageAt(proxyInstance.address, 2);
+                console.log('Slot 0 -', slot);
+                console.log('Is Contract Initialized: ', eval(slot.slice(-1) == '1'));
+            } else if(proxy === 'OrderBookConfiguration') {
+                slot = await web3.eth.getStorageAt(proxyInstance.address, 1);
+                console.log('Slot 0 -', slot);
+                console.log('Is Contract Initialized: ', eval(slot.slice(25, 26) == '1'));
+            }
 
             console.log(u + '\nPrint Storage:' + e);
             for(let i = 0; i < storageLength; i++) {
