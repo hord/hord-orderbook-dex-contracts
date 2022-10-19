@@ -24,6 +24,9 @@
     "totalFeePercent": 25000,
     "percentPrecision": 1000000
   },
+  "bscMainnet": {
+
+  },
   "local": {
     "dustLimit" : 1,
     "totalFeePercent": 25000,

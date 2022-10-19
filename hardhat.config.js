@@ -65,12 +65,12 @@ module.exports = {
       gasPrice: 7000000000,
       timeout: 10000000
     },
-    bsc_mainnet: {
-      url: "https://bsc-dataseed.binance.org/",
+    bscMainnet: {
+      url: 'https://bsc-dataseed.binance.org/',
+      accounts: [process.env.PK || PK],
       chainId: 56,
-      gasPrice: 20000000000,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: 7000000000,
+      timeout: 10000000
     },
     local: {
       url: 'http://localhost:8545',

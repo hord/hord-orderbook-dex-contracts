@@ -35,6 +35,9 @@
         "OrderBookConfiguration": "0xa9A50B758122f4c2E04b33d4332c2a52573fFEA7",
         "MatchingMarket": "0x48D6e892b42B7BA0B725B1713B24c9FcE918e811"
     },
+    "bscMainnet": {
+
+    },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",
         "OrderbookProxyAdmin": "0xbac9c215B39bAd5A5267Cd31aD2aB7b79e665161",

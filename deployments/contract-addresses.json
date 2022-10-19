@@ -31,6 +31,9 @@
         "MatchingMarket": "0xCB7197932C7FE0B3F6B95045696a33182800f86F",
         "OrderBookConfiguration": "0x5b265Da6A5A4CF5333B93Cebf8eAaB8952Bc67bF"
     },
+    "bscMainnet": {
+
+    },
     "local": {
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
