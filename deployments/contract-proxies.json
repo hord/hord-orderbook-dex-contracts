@@ -36,7 +36,13 @@
         "MatchingMarket": "0x48D6e892b42B7BA0B725B1713B24c9FcE918e811"
     },
     "bscMainnet": {
-
+        "MaintainersRegistry": "0xC3f19cE95b3076fcE40fAA2f54f21c532B3d71C0",
+        "HordTreasury": "0x901962C5438F787940A50E09F2974Fe7a71EcF0F",
+        "HPoolManager": "0x0EF3fFe46Ab27Ce706859dCeF203cDDbF65F4ca3",
+        "VPoolManager": "0x1a9b6685E3f958f3Db555272f31cA12ac5Ea660a",
+        "OrderBookConfiguration": "0xB5106Bd6F76459fC3810690B08061ac955861478",
+        "MatchingMarket": "0x2A250E6688C6F2B17f50BD895a1CDe76E828A4F9",
+        "OrderbookProxyAdmin": "0xA34402b45f5386953a9Ea7cA61A36b5DdA8d4DF5"
     },
     "local": {
         "MaintainersRegistry": "0x33b122a6a839fa13Ad1E947E0d37658afeCb0b64",

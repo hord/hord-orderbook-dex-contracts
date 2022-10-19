@@ -32,7 +32,12 @@
         "OrderBookConfiguration": "0x5b265Da6A5A4CF5333B93Cebf8eAaB8952Bc67bF"
     },
     "bscMainnet": {
-
+        "HordToken": "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
+        "DustToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+        "HordCongress": "0xc94EE71b3311244DA701100dC63ADa1671B7Ed31",
+        "MakerOtcSupportMethods": "0x657308511c4a1C7F97421207095EE6ABdfCC82fc",
+        "MatchingMarket": "0xb0cB71C315a2869bd54A6300FfAb6BdeF23331e8",
+        "OrderBookConfiguration": "0x5762794Ad882aEB3b6d05C49C0F7aa4dF484ED34"
     },
     "local": {
         "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
