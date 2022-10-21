@@ -23,8 +23,9 @@
         "OrderbookProxyAdmin": "0xc6A73f23B9cde1B4480D75788C5AB206084707E1",
         "HPoolManager": "0x9E4CD38Db87cA610c8b5fAC570e33099153F38C9",
         "VPoolManager": "0x4Fa2fD30F625930489fB3A6146BAdE9977aa6EDb",
-        "OrderBookConfiguration": "0xDB39a40Cc8e1BBe83162360A10676E3015b1C1d4",
-        "MatchingMarket": "0x14De719a6B9B90d291695a0dE3705776c3b33543"
+        "OrderBookConfiguration": "0x826694422dca495eE33e8fb0E93BA0CbfaFf61Ec",
+        "MatchingMarket": "0x0DE926666C35C8D84719dE76e6890A515d6C161f",
+        "ProxyAdmin": "0xf1bfC5c679e8f2b63216b0C047F7A91Fdb137c07"
     },
     "bscMainnetStaging": {
         "MaintainersRegistry": "0xeE930c5098eB20b7df7D4969dbebf4D564762B45",
