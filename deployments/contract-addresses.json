@@ -1,20 +1,4 @@
 {
-    "ropsten": {
-        "HordCongress": "0x6Edddec675a9Dab41f4bf0817F83D8De92F20724",
-        "HordToken": "0x6D67A76F8A11C04F08Be9989dC58eBfc9101C464",
-        "DustToken": "0x1056B7173309E48deeeD075014b1501e905Fd450",
-        "MakerOtcSupportMethods": "0x1EA680E32a3aC7F7bDB242Ecf8A23E3Cd488d4bA",
-        "MatchingMarket": "0xBc3a4fc11631d6be05c8812D292e38f99C835c71",
-        "OrderBookConfiguration": "0x6e8c3E312c5f9bb38967AdFF330653345A3C2B95"
-    },
-    "goerli": {
-        "HordCongress": "0xBeEE5c010318f2258e8FC774B128411586Fd4dB4",
-        "HordToken": "0x39CE6f6A0eCFc5bBC03A19d391F8c6B4e35F40e2",
-        "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
-        "MatchingMarket": "0x87de9f01464A888ff87466cC44667C50c598b6E9",
-        "OrderBookConfiguration": "0xF11dA474E910c4ED944E1117f8b6A6CD3A1b64Af",
-        "MakerOtcSupportMethods": "0x3Bf29d388FA1C416CE92BDb813258Cca4f09e549"
-    },
     "bscTestnet": {
         "HordCongress": "0x045df9F293695416c6AD2fCAaf0bb564ACEB1FD7",
         "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
@@ -38,15 +22,5 @@
         "MakerOtcSupportMethods": "0x657308511c4a1C7F97421207095EE6ABdfCC82fc",
         "MatchingMarket": "0xb0cB71C315a2869bd54A6300FfAb6BdeF23331e8",
         "OrderBookConfiguration": "0x5762794Ad882aEB3b6d05C49C0F7aa4dF484ED34"
-    },
-    "local": {
-        "HordCongress": "0xE2aC2F31b09627f0a39Cb8b00B42a39FC787674a",
-        "HordToken": "0x3568e530Cc620eB9AAeD6edF42E94e994b3034ba",
-        "HordConfiguration": "0xd6F03FB1aD9B8DA252c28e65e179E9Fc13999f30",
-        "HPoolManager": "0x68513f23c3495c68799E3905AAC477C1Ca9578DE",
-        "DustToken": "0x7a833F84b821aa5aEC75b23CC43DFa71E2790F72",
-        "MatchingMarket": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-        "OrderBookConfiguration": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-        "MakerOtcSupportMethods": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     }
 }
