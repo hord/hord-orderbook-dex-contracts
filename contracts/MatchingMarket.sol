@@ -46,6 +46,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
 
     // dust management
     uint256 public dustLimit;
+    address public hordETHStakingManager;
 
 
     function initialize (
@@ -89,7 +90,9 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
             hPoolManager.isHPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
             hPoolManager.isHPoolToken(address(tokenB)) && address(tokenA) == address(dustToken) ||
             vPoolManager.isVPoolToken(address(tokenA)) && address(tokenB) == address(dustToken) ||
-            vPoolManager.isVPoolToken(address(tokenB)) && address(tokenA) == address(dustToken),
+            vPoolManager.isVPoolToken(address(tokenB)) && address(tokenA) == address(dustToken) ||
+            address(tokenA) == hordETHStakingManager && address(tokenB) == address(dustToken) ||
+            address(tokenB) == hordETHStakingManager && address(tokenA) == address(dustToken),
             "The pair is not valid."
         );
         _;
@@ -105,6 +108,11 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
             "Offer can not be cancelled because user is not owner nor a dust one."
         );
         _;
+    }
+
+    function setHordETHStakingManager(address _hordETHStakingManager) external onlyHordCongress {
+        require(_hordETHStakingManager != address(0), "can not be 0x0 address");
+        hordETHStakingManager = _hordETHStakingManager;
     }
 
     // ---- Public entrypoints ---- //
