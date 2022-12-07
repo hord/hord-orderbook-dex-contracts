@@ -40,7 +40,7 @@ module.exports = {
       url: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
       accounts: [process.env.PK || PK],
       chainId: 5,
-      gasPrice: 20000000000,
+      gasPrice: 7000000000,
       timeout: 10000000
     },
     ropsten: {

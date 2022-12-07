@@ -25,5 +25,14 @@
         "OrderBookConfiguration": "0xB5106Bd6F76459fC3810690B08061ac955861478",
         "MatchingMarket": "0x2A250E6688C6F2B17f50BD895a1CDe76E828A4F9",
         "OrderbookProxyAdmin": "0xA34402b45f5386953a9Ea7cA61A36b5DdA8d4DF5"
+    },
+    "goerli": {
+        "MaintainersRegistry": "0x99B562E339e7395D8cA1c48AB81dC091d28754fD",
+        "HordTreasury": "0x9229Cc53a6497AF295879ff7C34E182c80e9BDf0",
+        "HPoolManager": "0x4A70f7ff1563cB807f81846BAae67100B961b997",
+        "VPoolManager": "0x485e25e1a6753eb0F4C738feCAd5bEA57A156F92",
+        "OrderBookConfiguration": "0x55f6b05873E27e175a3DeFfFa2A34A7a42D998D8",
+        "MatchingMarket": "0x51d4942036A0Cfbb23259C770C8B490e0d738cbe",
+        "ProxyAdmin": "0x9679721abDAe57fef3f7b7226D98E5cb771D59d1"
     }
 }
