@@ -1,14 +1,14 @@
-/out
-*.sw*
-
-/node_modules
-./node_modules
+package-lock.json
 node_modules
-.env
-coverage
-coverage.json
-typechain
+package.lock
 
 #Hardhat files
 cache
 artifacts
+.idea
+.env
+yarn.lock
+.openzeppelin/
+coverage
+coverage.json
+bin/
