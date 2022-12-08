@@ -26,8 +26,8 @@
     "goerli": {
         "HordCongress": "0xC3bb07BF0fD861A4655704e64f4954f9BD3FEA24",
         "HordToken": "0x1eD280Dc9E6BD9b775f1ac9B021C57627a6384A2",
-        "DustToken": "0x8892d8e9db4286352d8C892471BbF0816305a598",
-        "MakerOtcSupportMethods": "0xEF3854ae579Df7211fF6991aA4502064e6444254",
+        "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
+        "MakerOtcSupportMethods": "0x610020b2fD9AEe8D5aDb67E1429Ef5F37ac894d8",
         "MatchingMarket": "0x5F24b897Fdd5Dad7899E8E1b80Ff5E618e422949",
         "OrderBookConfiguration": "0xCF19E3D25b4897ad753e763847F06CDd4710EE9d"
     }
