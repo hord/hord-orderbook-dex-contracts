@@ -46,7 +46,6 @@ contract OrderBookConfiguration is OrderBookUpgradable, Initializable {
     external
     onlyHordCongress
     {
-        require(_dustLimit <= 100, "dustLimit_ is above threshold");
         dustLimit = _dustLimit;
         emit ConfigurationChanged("_dustLimit", dustLimit);
     }
