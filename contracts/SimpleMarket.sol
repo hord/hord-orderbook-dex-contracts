@@ -328,8 +328,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, Reentrancy
             );
         }
 
-        offers[id].timestamp = 0;
-
         emit LogItemUpdate(id);
         emit LogTake(
             bytes32(id),
