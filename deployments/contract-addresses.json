@@ -28,7 +28,7 @@
         "HordToken": "0x1eD280Dc9E6BD9b775f1ac9B021C57627a6384A2",
         "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
         "MakerOtcSupportMethods": "0x610020b2fD9AEe8D5aDb67E1429Ef5F37ac894d8",
-        "MatchingMarket": "0xE0bA413C6B91318EE4C0Aef2D4797B1604698De0",
+        "MatchingMarket": "0x5dCb03b01cD3236bd21D26c588a77d51E947d5c1",
         "OrderBookConfiguration": "0x7EBb0Ce5e85a7d6f388280B29AF182E8ccc1E83c"
     }
 }

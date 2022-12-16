@@ -51,13 +51,7 @@
                     {
                         "indexed": false,
                         "internalType": "uint256",
-                        "name": "championFee",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "internalType": "uint256",
-                        "name": "protocolFee",
+                        "name": "totalFee",
                         "type": "uint256"
                     }
                 ],
@@ -539,6 +533,24 @@
                     }
                 ],
                 "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "contract IERC20",
+                        "name": "pay_gem",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "dust",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "_setMinSell",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
