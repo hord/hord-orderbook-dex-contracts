@@ -82,7 +82,8 @@ contract EventfulMarket {
     );
 
     event FeesTaken(
-        uint256 totalFee
+        uint256 championFee,
+        uint256 protocolFee
     );
 }
 
@@ -297,36 +298,48 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, Reentrancy
 
         if (address(offer.buy_gem) == address(dustToken)) { // offer.buy_gem is BUSD
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(spend);
+            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
+            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
 
             uint256 updatedSpend = spend - totalFee; // take champion and protocol fee from BUSD
 
-            poolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += totalFee;
-            poolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += totalFee;
+            poolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += protocolFee;
+            poolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += protocolFee;
+
+            poolToChampionFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += championFee;
+            poolToChampionFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += championFee;
 
             safeTransferFrom(offer.buy_gem, msg.sender, address(this), totalFee);
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
             safeTransfer(offer.pay_gem, msg.sender, quantity);
 
             emit FeesTaken(
-                totalFee
+                championFee,
+                protocolFee
             );
 
         } else if(address(offer.pay_gem) == address(dustToken)) { // offer.pay_gem is BUSD
-            // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(quantity);
+            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
+            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
 
             uint256 updatedQuantity = quantity - totalFee; // take champion and protocol fee from BUSD
 
-            poolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += totalFee;
-            poolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += totalFee;
+            poolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
+            poolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
+
+            poolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
+            poolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
 
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
             safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
 
             emit FeesTaken(
-                totalFee
+                championFee,
+                protocolFee
             );
         }
+
 
         emit LogItemUpdate(id);
         emit LogTake(

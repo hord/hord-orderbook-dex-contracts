@@ -55,7 +55,8 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
         address _orderbookConfiguration,
         address _hPoolManager,
         address _vPoolManager,
-        address _hordTreasury
+        address _hordTreasury,
+        address _hordETHStakingManager
     )
     external
     initializer
@@ -76,6 +77,7 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
 
         dustToken = IERC20(orderbookConfiguration.dustToken());
         dustLimit = orderbookConfiguration.dustLimit();
+        hordETHStakingManager = _hordETHStakingManager;
 
         _setMinSell(IERC20(dustToken), dustLimit);
     }
