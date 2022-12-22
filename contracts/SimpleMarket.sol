@@ -82,8 +82,7 @@ contract EventfulMarket {
     );
 
     event FeesTaken(
-        uint256 championFee,
-        uint256 protocolFee
+        uint256 totalFee
     );
 }
 
@@ -172,47 +171,6 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, Reentrancy
         return offers[id].timestamp > 0;
     }
 
-    function addTransferFee(uint256 _amount, address _hPoolToken) external {
-        require(hPoolManager.isHPoolToken(msg.sender), "Msg.sender is not HPool contract.");
-
-        uint256 championFee = orderbookConfiguration.calculateChampionFee(_amount);
-        uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(_amount);
-
-        poolToChampionFee[_hPoolToken].availableTransferFeesInPoolTokens += championFee;
-        poolToChampionFee[_hPoolToken].totalTransferFeesInPoolTokens += championFee;
-
-        poolToPlatformFee[_hPoolToken].availableTransferFeesInPoolTokens += protocolFee;
-        poolToPlatformFee[_hPoolToken].totalTransferFeesInPoolTokens += protocolFee;
-    }
-
-    function withdrawChampionTradingAndTransferFee(address pool, uint256 poolId) external nonReentrant {
-        require(hPoolManager.isHPoolToken(pool) || vPoolManager.isVPoolToken(pool), "PoolToken is not valid");
-
-        address _championAddress;
-
-        if(hPoolManager.isHPoolToken(pool)) {
-            (, , _championAddress, , , , , , , , , ) = hPoolManager.getPoolInfo(poolId);
-        } else {
-            (, _championAddress, , , , , ,) = vPoolManager.getPoolInfo(poolId);
-        }
-
-        require(_championAddress == msg.sender, "Only champion can withdraw his poolTokens.");
-
-        uint256 amountInPoolTokens = poolToChampionFee[pool].availableTransferFeesInPoolTokens;
-        poolToChampionFee[pool].availableTransferFeesInPoolTokens = 0;
-
-        bool status = IERC20(pool).transfer(msg.sender, amountInPoolTokens);
-        require(status, "failed transfer");
-
-        uint256 amountInBaseTokens = poolToChampionFee[pool].availableTradingFeesInStableCoin;
-        poolToChampionFee[pool].availableTradingFeesInStableCoin = 0;
-
-        status = IERC20(orderbookConfiguration.dustToken()).transfer(msg.sender, amountInBaseTokens);
-        require(status, "failed transfer");
-
-        emit ChampionWithdrawFees(msg.sender, amountInPoolTokens, amountInBaseTokens);
-    }
-
     function withdrawProtocolFee(address pool) external nonReentrant onlyMaintainer {
         require(hPoolManager.isHPoolToken(pool) || vPoolManager.isVPoolToken(pool), "PoolToken is not valid");
 
@@ -298,45 +256,34 @@ contract SimpleMarket is EventfulMarket, DSMath, OrderBookUpgradable, Reentrancy
 
         if (address(offer.buy_gem) == address(dustToken)) { // offer.buy_gem is BUSD
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(spend);
-            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
-            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee);
 
             uint256 updatedSpend = spend - totalFee; // take champion and protocol fee from BUSD
 
-            poolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += protocolFee;
-            poolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += protocolFee;
-
-            poolToChampionFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += championFee;
-            poolToChampionFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += championFee;
+            poolToPlatformFee[address(offer.pay_gem)].availableTradingFeesInStableCoin += totalFee;
+            poolToPlatformFee[address(offer.pay_gem)].totalTradingFeesInStableCoin += totalFee;
 
             safeTransferFrom(offer.buy_gem, msg.sender, address(this), totalFee);
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, updatedSpend);
             safeTransfer(offer.pay_gem, msg.sender, quantity);
 
             emit FeesTaken(
-                championFee,
-                protocolFee
+                totalFee
             );
 
         } else if(address(offer.pay_gem) == address(dustToken)) { // offer.pay_gem is BUSD
+            // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
             uint256 totalFee = orderbookConfiguration.calculateTotalFee(quantity);
-            uint256 championFee = orderbookConfiguration.calculateChampionFee(totalFee);
-            uint256 protocolFee = orderbookConfiguration.calculateOrderbookFee(totalFee); // In this condition the protocol fee already is on orderbook contract, so we dont need to transfer BUSD to it
 
             uint256 updatedQuantity = quantity - totalFee; // take champion and protocol fee from BUSD
 
-            poolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += protocolFee;
-            poolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += protocolFee;
-
-            poolToChampionFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += championFee;
-            poolToChampionFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += championFee;
+            poolToPlatformFee[address(offer.buy_gem)].availableTradingFeesInStableCoin += totalFee;
+            poolToPlatformFee[address(offer.buy_gem)].totalTradingFeesInStableCoin += totalFee;
 
             safeTransferFrom(offer.buy_gem, msg.sender, offer.owner, spend);
             safeTransfer(offer.pay_gem, msg.sender, updatedQuantity);
 
             emit FeesTaken(
-                championFee,
-                protocolFee
+                totalFee
             );
         }
 
