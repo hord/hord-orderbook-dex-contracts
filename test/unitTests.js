@@ -77,9 +77,9 @@ async function setupContractAndAccounts () {
             dustToken.address
         ],
         [
-            1000000000000000,
-            toHordDenomination(totalFeePercent),
-            toHordDenomination(percentPrecision)
+            toHordDenomination(config.dustLimit),
+            config.totalFeePercent,
+            config.percentPrecision
         ]
     );
 
@@ -132,11 +132,11 @@ describe('MatchingMarket', async() => {
         });
 
         it('should send some hETH and USD to users', async() => {
-            await dustToken.connect(owner).transfer(user1Addr, toHordDenomination(1000));
-            await dustToken.connect(owner).transfer(user2Addr, toHordDenomination(1000));
-            await dustToken.connect(owner).transfer(user3Addr, toHordDenomination(1000));
-            await dustToken.connect(owner).transfer(user4Addr, toHordDenomination(1000));
-            await dustToken.connect(owner).transfer(user5Addr, toHordDenomination(1000));
+            await dustToken.connect(owner).transfer(user1Addr, toHordDenomination(100000));
+            await dustToken.connect(owner).transfer(user2Addr, toHordDenomination(100000));
+            await dustToken.connect(owner).transfer(user3Addr, toHordDenomination(100000));
+            await dustToken.connect(owner).transfer(user4Addr, toHordDenomination(100000));
+            await dustToken.connect(owner).transfer(user5Addr, toHordDenomination(100000));
 
             await hETHToken.connect(owner).transfer(user1Addr, toHordDenomination(1000));
             await hETHToken.connect(owner).transfer(user2Addr, toHordDenomination(1000));
@@ -147,16 +147,10 @@ describe('MatchingMarket', async() => {
     });
 
     describe('MatchingMarket::Offer', async() => {
-        it('should make initial offer', async() => {
-            await hETHToken.connect(user1).approve(matchingMarket.address, toHordDenomination(300));
-
-            await matchingMarket.connect(user1).offer(
-                toHordDenomination(1),
-                hETHToken.address,
-                toHordDenomination(400),
-                dustToken.address,
-                0
-            );
+        it('should make some sell offer', async() => {
+            await hETHToken.connect(user1).approve(matchingMarket.address, toHordDenomination(10));
+            await hETHToken.connect(user3).approve(matchingMarket.address, toHordDenomination(10));
+            await hETHToken.connect(user5).approve(matchingMarket.address, toHordDenomination(10));
 
             await matchingMarket.connect(user1).offer(
                 toHordDenomination(1),
@@ -166,11 +160,32 @@ describe('MatchingMarket', async() => {
                 0
             );
 
-            await matchingMarket.connect(user1).offer(
+            await matchingMarket.connect(user3).offer(
                 toHordDenomination(1),
                 hETHToken.address,
-                toHordDenomination(700),
+                toHordDenomination(200),
                 dustToken.address,
+                0
+            );
+
+            await matchingMarket.connect(user5).offer(
+                toHordDenomination(1),
+                hETHToken.address,
+                toHordDenomination(100),
+                dustToken.address,
+                0
+            );
+
+        });
+
+        it('should make some buy offer', async() => {
+            await dustToken.connect(user2).approve(matchingMarket.address, toHordDenomination(10000));
+
+            await matchingMarket.connect(user2).offer(
+                toHordDenomination(100),
+                dustToken.address,
+                toHordDenomination(1),
+                hETHToken.address,
                 0
             );
 
