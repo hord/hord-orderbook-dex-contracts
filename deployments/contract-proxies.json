@@ -31,8 +31,8 @@
         "HordTreasury": "0x9229Cc53a6497AF295879ff7C34E182c80e9BDf0",
         "HPoolManager": "0x4A70f7ff1563cB807f81846BAae67100B961b997",
         "VPoolManager": "0x485e25e1a6753eb0F4C738feCAd5bEA57A156F92",
-        "OrderBookConfiguration": "0x8355E6CA12ecCf5CFF7d163CC379a0842F0EDE4f",
-        "MatchingMarket": "0x89D2b07bE88081D3F36298eB8CB9dA96020c86B1",
+        "OrderBookConfiguration": "0xc26e0D4F5771Fa13Cc53aEE22a0b26a05B059687",
+        "MatchingMarket": "0x9612F689CB8e2B253576FFF23902A836bC3C0452",
         "ProxyAdmin": "0x9679721abDAe57fef3f7b7226D98E5cb771D59d1"
     }
 }

@@ -33,5 +33,10 @@
     "dustLimit" : 1,
     "totalFeePercent": 20000,
     "percentPrecision": 1000000
+  },
+  "hardhat": {
+    "dustLimit" : 1,
+    "totalFeePercent": 20000,
+    "percentPrecision": 1000000
   }
 }

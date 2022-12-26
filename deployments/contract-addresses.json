@@ -27,8 +27,8 @@
         "HordCongress": "0xC3bb07BF0fD861A4655704e64f4954f9BD3FEA24",
         "HordToken": "0x1eD280Dc9E6BD9b775f1ac9B021C57627a6384A2",
         "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
-        "MakerOtcSupportMethods": "0xCeE1012Ba5A8bD55f009dA2827344Da92271577e",
-        "MatchingMarket": "0x7Be5540B0aa6B81D5f855a16cEB8F003D06B7AfF",
+        "MakerOtcSupportMethods": "0xC840fCf996c119cE0d02BBB471e1248f0028eb84",
+        "MatchingMarket": "0x2904B448D293A3C65bAC8b56D27e2ee426023b81",
         "OrderBookConfiguration": "0x486315Af8F2ae1f1bc0b8d97C9e4A78642e4ac37"
     }
 }
