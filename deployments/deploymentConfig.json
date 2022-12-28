@@ -9,6 +9,11 @@
     "totalFeePercent": 20000,
     "percentPrecision": 1000000
   },
+  "goerliStaging" : {
+    "dustLimit" : 1,
+    "totalFeePercent": 20000,
+    "percentPrecision": 1000000
+  },
   "bscTestnet" : {
     "dustLimit" : 1,
     "totalFeePercent": 20000,

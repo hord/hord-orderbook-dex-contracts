@@ -43,6 +43,13 @@ module.exports = {
       gasPrice: 7000000000,
       timeout: 10000000
     },
+    goerliStaging: {
+      url: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+      accounts: [process.env.PK || PK],
+      chainId: 5,
+      gasPrice: 7000000000,
+      timeout: 10000000
+    },
     ropsten: {
       // Infura public nodes
       url: 'https://ropsten.infura.io/v3/3bf15b15a0a74588b3bb3e455375fb54',
