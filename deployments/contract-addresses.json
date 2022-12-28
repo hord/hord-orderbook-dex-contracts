@@ -30,5 +30,13 @@
         "MakerOtcSupportMethods": "0xC840fCf996c119cE0d02BBB471e1248f0028eb84",
         "MatchingMarket": "0x2904B448D293A3C65bAC8b56D27e2ee426023b81",
         "OrderBookConfiguration": "0x486315Af8F2ae1f1bc0b8d97C9e4A78642e4ac37"
+    },
+    "goerliStaging": {
+        "HordCongress": "0xf077228FE7b72DA6B4aa79A82e9d3AF93A8B14f0",
+        "HordToken": "0x1eD280Dc9E6BD9b775f1ac9B021C57627a6384A2",
+        "DustToken": "0x72005B3f1438e6d0e4141FD3D7c18A4fC2cA0301",
+        "MakerOtcSupportMethods": "0x5FE1073dE31a68b29Ac7e84d4083281C65dC79f2",
+        "MatchingMarket": "0x2904B448D293A3C65bAC8b56D27e2ee426023b81",
+        "OrderBookConfiguration": "0x486315Af8F2ae1f1bc0b8d97C9e4A78642e4ac37"
     }
 }
