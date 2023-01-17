@@ -544,6 +544,13 @@ contract MatchingMarket is MatchingEvents, SimpleMarket {
             }
             // ^ The `rounding` parameter is a compromise borne of a couple days
             // of discussion.
+            //
+            // buy order: (1hETH for 1200USD)
+            // buy order: (1hETH for 100USD)
+            //
+            // someone comes, places sell order: 1hETH for 100USD
+            // bad behavior that we saw:  sold just 0.000001 hETH for 1200USD price, meaning sold just 100USD worth but with the better price
+
             buy(best_maker_id, min(m_pay_amt, t_buy_amt)); // buys if its possible
             t_buy_amt_old = t_buy_amt;
             t_buy_amt = sub(t_buy_amt, min(m_pay_amt, t_buy_amt));

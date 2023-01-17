@@ -257,12 +257,24 @@ describe('MatchingMarket', async() => {
 
             await hETHToken.connect(user4).approve(matchingMarket.address, toHordDenomination(1));
 
+            // await matchingMarket.connect(user4).offer(
+            //     toHordDenomination(1),
+            //     hETHToken.address,
+            //     toHordDenomination(100),
+            //     dustToken.address,
+            //     0
+            // );
             await matchingMarket.connect(user4).sellAllAmount(
                 hETHToken.address,
                 toHordDenomination(1),
                 dustToken.address,
                 toHordDenomination(100)
             );
+
+            //buy/sell - we can put only $ amount, and price - and $ amount is enforced as max
+            // I want to sell, 100$, price=...
+            // I want to buy, 10$, price=...
+
 
             let user3HETHBalanceAfter = await hETHToken.balanceOf(user3Addr);
             let user3USDTBalanceAfter = await dustToken.balanceOf(user3Addr);
@@ -331,12 +343,21 @@ describe('MatchingMarket', async() => {
 
             await dustToken.connect(user7).approve(matchingMarket.address, toHordDenomination(1500));
 
-            await matchingMarket.connect(user7).sellAllAmount(
-                dustToken.address,
+
+            await matchingMarket.connect(user7).offer(
                 toHordDenomination(1500),
+                dustToken.address,
+                toHordDenomination(1),
                 hETHToken.address,
-                toHordDenomination(1)
+                0
             );
+
+            // await matchingMarket.connect(user7).sellAllAmount(
+            //     dustToken.address,
+            //     toHordDenomination(1500),
+            //     hETHToken.address,
+            //     toHordDenomination(1)
+            // );
 
             let user4HETHBalanceAfter = await hETHToken.balanceOf(user4Addr);
             let user4USDTBalanceAfter = await dustToken.balanceOf(user4Addr);
