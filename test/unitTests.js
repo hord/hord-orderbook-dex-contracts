@@ -116,6 +116,10 @@ async function setupContractAndAccounts () {
     await makerOtcSupportMethods.deployed();
 }
 
+function getEthValue(weiValue) {
+    return ethers.utils.formatEther(weiValue);
+}
+
 describe('MatchingMarket', async() => {
 
     before('setup contracts and accounts', async() => {
@@ -144,23 +148,86 @@ describe('MatchingMarket', async() => {
             await dustToken.connect(owner).transfer(user6Addr, toHordDenomination(10000));
             await dustToken.connect(owner).transfer(user7Addr, toHordDenomination(10000));
 
-            await hETHToken.connect(owner).transfer(user1Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user2Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user3Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user4Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user5Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user6Addr, toHordDenomination(1));
-            await hETHToken.connect(owner).transfer(user7Addr, toHordDenomination(1));
+            await hETHToken.connect(owner).transfer(user1Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user2Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user3Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user4Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user5Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user6Addr, toHordDenomination(10));
+            await hETHToken.connect(owner).transfer(user7Addr, toHordDenomination(10));
         });
     });
 
-    // First make 2 buy offers A: 1200$-1HETH and B: 100$-1HETH
-    describe('MatchingMarket::FirstCase', async() => {
-        it('should make some buy offers', async() => {
-            await dustToken.connect(user1).approve(matchingMarket.address, toHordDenomination(12000));
-            await dustToken.connect(user3).approve(matchingMarket.address, toHordDenomination(1000));
+    describe('MatchingMarket:BasicCase', async() => {
+        it('should make basic buy', async() => {
+            console.log('--------------------------------------------------------------------------------------------');
+            await dustToken.connect(user1).approve(matchingMarket.address, toHordDenomination(1000));
+            await hETHToken.connect(user2).approve(matchingMarket.address, toHordDenomination(1));
+
+            let user1HETHBalanceBefore = await hETHToken.balanceOf(user1Addr);
+            let user1USDTBalanceBefore = await dustToken.balanceOf(user1Addr);
+            console.log("User1 wants to buy 2HETH for 1000$");
+            console.log("User1 HETH balance before: " + getEthValue(user1HETHBalanceBefore));
+            console.log("User1 USDT balance before: " + getEthValue(user1USDTBalanceBefore));
 
             await matchingMarket.connect(user1).offer(
+                toHordDenomination(1000),
+                dustToken.address,
+                toHordDenomination(2),
+                hETHToken.address,
+                0
+            );
+
+            let user2HETHBalanceBefore = await hETHToken.balanceOf(user2Addr);
+            let user2USDTBalanceBefore = await dustToken.balanceOf(user2Addr);
+            console.log("User2 wants to sell 1HETH for 500$");
+            console.log("User2 HETH balance before: " + getEthValue(user2HETHBalanceBefore));
+            console.log("User2 USDT balance before: " + getEthValue(user2USDTBalanceBefore));
+
+
+            await matchingMarket.connect(user2).offer(
+                toHordDenomination(1),
+                hETHToken.address,
+                toHordDenomination(500),
+                dustToken.address,
+                0
+            );
+
+            console.log("User1 bought 1HETH for 500$");
+            console.log("User2 sold 1HETH for 500$");
+
+            let user1HETHBalanceAfter = await hETHToken.balanceOf(user1Addr);
+            let user1USDTBalanceAfter = await dustToken.balanceOf(user1Addr);
+            console.log("User1 HETH balance after: " + getEthValue(user1HETHBalanceAfter));
+            console.log("User1 USDT balance after: " + getEthValue(user1USDTBalanceAfter));
+
+            let user2HETHBalanceAfter = await hETHToken.balanceOf(user2Addr);
+            let user2USDTBalanceAfter = await dustToken.balanceOf(user2Addr);
+            console.log("User2 HETH balance after: " + getEthValue(user2HETHBalanceAfter));
+            console.log("User2 USDT balance after: " + getEthValue(user2USDTBalanceAfter));
+
+            console.log('--------------------------------------------------------------------------------------------');
+        });
+
+        it('should cancel all remaining offers', async() => {
+            await matchingMarket.connect(user1).cancel(1);
+        });
+    });
+
+    describe('MatchingMarket::FirstCase', async() => {
+        // First make 2 buy offers A: 1200$-1HETH and B: 100$-1HETH
+        it('should make some buy offers', async() => {
+            console.log('--------------------------------------------------------------------------------------------');
+            await dustToken.connect(user3).approve(matchingMarket.address, toHordDenomination(12000));
+            await dustToken.connect(user5).approve(matchingMarket.address, toHordDenomination(1000));
+
+            let user3HETHBalanceBefore = await hETHToken.balanceOf(user3Addr);
+            let user3USDTBalanceBefore = await dustToken.balanceOf(user3Addr);
+            console.log("User3 wants to buy 1HETH for 1200$");
+            console.log("User3 HETH balance before: " + getEthValue(user3HETHBalanceBefore));
+            console.log("User3 USDT balance before: " + getEthValue(user3USDTBalanceBefore));
+
+            await matchingMarket.connect(user3).offer(
                 toHordDenomination(1200),
                 dustToken.address,
                 toHordDenomination(1),
@@ -168,7 +235,13 @@ describe('MatchingMarket', async() => {
                 0
             );
 
-            await matchingMarket.connect(user3).offer(
+            let user5HETHBalanceBefore = await hETHToken.balanceOf(user5Addr);
+            let user5USDTBalanceBefore = await dustToken.balanceOf(user5Addr);
+            console.log("User5 wants to buy 1HETH for 100$");
+            console.log("User5 HETH balance before: " + getEthValue(user5HETHBalanceBefore));
+            console.log("User5 USDT balance before: " + getEthValue(user5USDTBalanceBefore));
+
+            await matchingMarket.connect(user5).offer(
                 toHordDenomination(100),
                 dustToken.address,
                 toHordDenomination(1),
@@ -176,31 +249,57 @@ describe('MatchingMarket', async() => {
                 0
             );
 
-        });
+            let user4HETHBalanceBefore = await hETHToken.balanceOf(user4Addr);
+            let user4USDTBalanceBefore = await dustToken.balanceOf(user4Addr);
+            console.log("User4 wants to sell 1HETH for 100$");
+            console.log("User4 HETH balance before: " + getEthValue(user4HETHBalanceBefore));
+            console.log("User4 USDT balance before: " + getEthValue(user4USDTBalanceBefore));
 
-        it('should make sell offer', async() => {
-            await hETHToken.connect(user2).approve(matchingMarket.address, toHordDenomination(1));
+            await hETHToken.connect(user4).approve(matchingMarket.address, toHordDenomination(1));
 
-            await matchingMarket.connect(user2).offer(
-                toHordDenomination(1),
+            await matchingMarket.connect(user4).sellAllAmount(
                 hETHToken.address,
-                toHordDenomination(100),
+                toHordDenomination(1),
                 dustToken.address,
-                0
+                toHordDenomination(100)
             );
 
+            let user3HETHBalanceAfter = await hETHToken.balanceOf(user3Addr);
+            let user3USDTBalanceAfter = await dustToken.balanceOf(user3Addr);
+            console.log("User3 HETH balance after: " + getEthValue(user3HETHBalanceAfter));
+            console.log("User3 USDT balance after: " + getEthValue(user3USDTBalanceAfter));
+
+            let user5HETHBalanceAfter = await hETHToken.balanceOf(user5Addr);
+            let user5USDTBalanceAfter = await dustToken.balanceOf(user5Addr);
+            console.log("User5 HETH balance after: " + getEthValue(user5HETHBalanceAfter));
+            console.log("User5 USDT balance after: " + getEthValue(user5USDTBalanceAfter));
+
+            let user4HETHBalanceAfter = await hETHToken.balanceOf(user4Addr);
+            let user4USDTBalanceAfter = await dustToken.balanceOf(user4Addr);
+            console.log("User4 HETH balance after: " + getEthValue(user4HETHBalanceAfter));
+            console.log("User4 USDT balance after: " + getEthValue(user4USDTBalanceAfter));
+
+            console.log('--------------------------------------------------------------------------------------------');
         });
 
-        it('should cancel all offers from first case', async() => {
-            await matchingMarket.connect(user3).cancel(2);
+        it('should cancel all remaining offers', async() => {
+            await matchingMarket.connect(user5).cancel(3);
         });
 
     });
 
     describe('MatchingMarket::SecondCase', async() => {
+        // Make 2 sell offers A: 1HETH-100$ and B: 1HETH-1500$
         it('should make some sell offers', async() => {
-            await hETHToken.connect(user4).approve(matchingMarket.address, toHordDenomination(1));
-            await hETHToken.connect(user6).approve(matchingMarket.address, toHordDenomination(1));
+            console.log('--------------------------------------------------------------------------------------------');
+            await hETHToken.connect(user4).approve(matchingMarket.address, toHordDenomination(2));
+            await hETHToken.connect(user6).approve(matchingMarket.address, toHordDenomination(2));
+
+            let user4HETHBalanceBefore = await hETHToken.balanceOf(user4Addr);
+            let user4USDTBalanceBefore = await dustToken.balanceOf(user4Addr);
+            console.log("User4 wants to sell 1HETH for 100$");
+            console.log("User4 HETH balance before: " + getEthValue(user4HETHBalanceBefore));
+            console.log("User4 USDT balance before: " + getEthValue(user4USDTBalanceBefore));
 
             await matchingMarket.connect(user4).offer(
                 toHordDenomination(1),
@@ -210,6 +309,12 @@ describe('MatchingMarket', async() => {
                 0
             );
 
+            let user6HETHBalanceBefore = await hETHToken.balanceOf(user6Addr);
+            let user6USDTBalanceBefore = await dustToken.balanceOf(user6Addr);
+            console.log("User6 wants to sell 1HETH for 1500$");
+            console.log("User6 HETH balance before: " + getEthValue(user6HETHBalanceBefore));
+            console.log("User6 USDT balance before: " + getEthValue(user6USDTBalanceBefore));
+
             await matchingMarket.connect(user6).offer(
                 toHordDenomination(1),
                 hETHToken.address,
@@ -218,31 +323,54 @@ describe('MatchingMarket', async() => {
                 0
             );
 
-        });
+            let user7HETHBalanceBefore = await hETHToken.balanceOf(user7Addr);
+            let user7USDTBalanceBefore = await dustToken.balanceOf(user7Addr);
+            console.log("User7 wants to buy 1HETH for 1500$");
+            console.log("User7 HETH balance before: " + getEthValue(user7HETHBalanceBefore));
+            console.log("User7 USDT balance before: " + getEthValue(user7USDTBalanceBefore));
 
-        it('s', async() => {
-            let a = await makerOtcSupportMethods.getOffers(matchingMarket.address, hETHToken.address, dustToken.address);
-            console.log(a);
-        });
+            await dustToken.connect(user7).approve(matchingMarket.address, toHordDenomination(1500));
 
-        it('should make buy offer', async() => {
-            await dustToken.connect(user5).approve(matchingMarket.address, toHordDenomination(1500));
-
-            await matchingMarket.connect(user5).offer(
-                toHordDenomination(1500),
+            await matchingMarket.connect(user7).sellAllAmount(
                 dustToken.address,
-                toHordDenomination(1),
+                toHordDenomination(1500),
                 hETHToken.address,
-                0
+                toHordDenomination(1)
             );
 
+            let user4HETHBalanceAfter = await hETHToken.balanceOf(user4Addr);
+            let user4USDTBalanceAfter = await dustToken.balanceOf(user4Addr);
+            console.log("User4 HETH balance after: " + getEthValue(user4HETHBalanceAfter));
+            console.log("User4 USDT balance after: " + getEthValue(user4USDTBalanceAfter));
+
+            let user6HETHBalanceAfter = await hETHToken.balanceOf(user6Addr);
+            let user6USDTBalanceAfter = await dustToken.balanceOf(user6Addr);
+            console.log("User6 HETH balance after: " + getEthValue(user6HETHBalanceAfter));
+            console.log("User6 USDT balance after: " + getEthValue(user6USDTBalanceAfter));
+
+            let user7HETHBalanceAfter = await hETHToken.balanceOf(user7Addr);
+            let user7USDTBalanceAfter = await dustToken.balanceOf(user7Addr);
+            console.log("User7 HETH balance after: " + getEthValue(user7HETHBalanceAfter));
+            console.log("User7 USDT balance after: " + getEthValue(user7USDTBalanceAfter));
+
+            console.log('--------------------------------------------------------------------------------------------');
         });
 
-        it('s', async() => {
-            let a = await makerOtcSupportMethods.getOffers(matchingMarket.address, hETHToken.address, dustToken.address);
-            console.log(a);
+        it('should cancel all remaining offers', async() => {
+            await matchingMarket.connect(user6).cancel(5);
         });
+    });
 
+
+    xit('s', async() => {
+        let a = await makerOtcSupportMethods.getOffers(matchingMarket.address, dustToken.address, hETHToken.address);
+        console.log(a);
+    });
+
+
+    xit('s', async() => {
+        let a = await makerOtcSupportMethods.getOffers(matchingMarket.address, hETHToken.address, dustToken.address);
+        console.log(a);
     });
 
 });
